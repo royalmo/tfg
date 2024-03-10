@@ -1,0 +1,104 @@
+\documentclass{tfgitic}[2022/06/30]
+
+%\usepackage{}
+
+\addbibresource{tfg.bib}
+
+\title{Implementació d'una pantalla inte\l.ligent}
+\subtitle{Creació d'un dispositiu i programari que actualitzi l'orientació
+          d'una pantalla al rotar-la}
+
+\author{Eric Roy Almonacid}
+\advisor{Francisco del Águila López}
+
+\dedication{Per l'avi, que hagués sigut el primer comprador d'aquest producte}
+
+\begin{acknowledgments}
+    Aquest treball no hagués existit si no fos per l'Isaac Iglesias, que em va
+    proposar fer aquest projecte, i a poc a poc ha vist com la seva idea anava
+    convertint-se en un producte.
+
+    Una altra persona a qui dec aquest treball és al meu tutor del projecte, el
+    Francisco del Águila, que m'ha orientat i recolzat durant tot aquest procés.
+
+    També voldria agrair al professorat de l'EPSEM, però en especial al Joan
+    Martínez que, juntamtent amb el meu tutor, m'ha aconsellat durant el disseny
+    de la placa de circuit imprès.
+
+    Finalment, vull donar les gràcies a totes les persones del meu entorn
+    quotidià que, potser fins i tot sense ells saber-ho, han fet que aquests
+    mesos no semblin tan durs. Familiars, amics, companys de feina i d'estudis,
+    aquest treball també és vostre.
+\end{acknowledgments}
+
+\begin{resum}
+    La tendència a generar contingut audiovisual en format vertical és una de
+    les diverses causes per la qual la gent es plantegi tenir una pantalla de
+    l'ordinador en aquesta nova orientació. 
+    Una de les solucions més senzilles i econòmiques és adquirir un suport de
+    monitor que permeti rotar la pantalla sense haver-la de desmuntar, i així
+    disposar fàcilment de les dues orientacions.
+
+    Un inconvenient d'aquest sistema és que, quan es gira la pantalla, s'ha de
+    reconfigurar l'entorn gràfic per adaptar-lo a la nova orientació.
+    Existeixen alguns monitors d'alta gamma que, mitjançant la connexió d'imatge
+    ja existent, poden notificar l'ordinador els canvis d'orientació. Tanmateix,
+    aquests sistemes només funcionen correctament si s'utilitza el suport de
+    pantalla i protocols recomanats.
+
+    Aquest projecte proposa un dispositiu de baix cost que, mitjançant un sensor
+    giroscòpic i una connexió USB, detecta l'orientació de la pantalla i
+    configura l'entorn gràfic adequadament. S'ha posat èmfasi en l'ús de
+    protocols estàndards existents, la compatibilitat entre diferents sistemes
+    operatius i la facilitat d'insta\l.lació i ús dels programes relacionats
+    amb el dispositiu.
+\end{resum}
+
+\begin{abstract}
+    The trend towards generating audiovisual content in vertical format is one
+    of the various reasons why people consider having a computer screen in this
+    new orientation.
+    One of the simplest and most economical solutions is to acquire a monitor
+    stand that allows the screen to be rotated without having to disassemble it,
+    thus easily providing both orientations.
+
+    One drawback of this system is that when the screen is rotated, the graphic
+    environment needs to be reconfigured to adapt to the new orientation.
+    There are some high-end monitors that, through the existing image
+    connection, can notify the computer of orientation changes. However,
+    these systems only work properly if the recommended screen support and
+    protocols are used.
+
+    This project proposes a low-cost device that, using a gyroscope sensor and a
+    USB connection, detects the screen orientation and configures the graphic
+    environment accordingly. Emphasis has been placed on the use of existing
+    standard protocols, compatibility between different operating systems, and
+    the ease of installation and use of device-related programs.
+\end{abstract}
+
+\begin{document}
+
+%\part{Memòria}
+
+\include{chapters/010_introduction}
+\include{chapters/020_objectives}
+
+\chapter{Antecedents}
+\chapter{Estudi econòmic}
+\chapter{Conclusions}
+\chapter{Treball futur}
+
+
+\printbibliography
+
+%\appendix
+%\part{Apèndixs}
+%\chapter{Un apèndix}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% LaTeX-biblatex-use-Biber: t
+%%% End:
