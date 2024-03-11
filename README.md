@@ -10,32 +10,39 @@ informació sobre la titulació al lloc web [itic.cat](https://itic.cat).
 
 ## Estructura del repositori
 
-A `/src` es troba tot el codi font de la documentació.
-<!-- TODO Afegir més directoris? -->
+S'ha intentat estructurar el projecte en diferents carpetes per a facilitar la
+seva comprensió:
+
+- Al directori `/include` es trobarà la classe `tfgitic.cls` i altres possibles
+  extensions necessaries pel document.
+- Al directori `/images` es trobaran les imatges del document.
+- Al directori `/chapters` es trobarà, separat per fitxers, el gruix de la
+  memòria: el contingut de cada capítol.
+- Finalment, al directori  `/misc` es trobarà codi font de gràfics, el fitxer
+  `tfg.bib` que conté totes la informació bibliogràfica, entre d'altres.
+
+Finalment, al directori principal es trobarà el `Makefile` del projecte,
+el fiter `tfg.tex` que encapsula tot el document, i fitxers típics d'un
+repositori de git (`.gitignore`, `README.md` i `LICENSE`).
 
 ## Generar el document PDF
 
 La documentació està escrita en LaTeX. Per a generar el document PDF caldrà
 instal·lar els paquets necessaris. A continuació es detallen les instruccions
-d'instal·lació i generació del PDF provades amb Ubuntu 18.04 LTS.
+d'instal·lació i generació del PDF provades amb Ubuntu 20.04 LTS.
+
+### Instal·lació dels paquets necessaris
 
 En primer lloc, cal instal·lar tots els paquets de LaTeX necesasris:
 
 ```sh
-sudo apt install texlive-full biber pgflive6
+sudo apt install texlive-full biber libpgf6
 ```
 
-Un cop instal·lat tot, cal anar al directory `src/` i executar:
+### Generació del PDF
 
-```sh
-pdflatex tfg.tex
-biber tfg
-pdflatex tfg.tex
-```
-
-Apareixerà un document `tfg.pdf` al mateix directori. S'ha d'executar dues
-vegades la comanda `pdftex` per a poder incloure correctament les referències
-bibliogràfiques.
+Un cop instal·lat tot, podeu generar el pdf mitjançant `make`.
+Apareixerà un document `tfg.pdf` al mateix directori.
 
 ## Llicència
 
