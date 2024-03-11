@@ -1,6 +1,7 @@
 # Implementació d'una pantalla intel·ligent
 
-Aquest repositori conté tot el material necessari per a generar el document principal del treball de final de grau (TFG) en format PDF.
+Aquest repositori conté tot el material necessari per a generar el document
+principal del treball de final de grau (TFG) en format PDF.
 
 Aquest TFG forma part del pla educatiu del **Grau d'Enginyeria de
 Sistemes TIC**, cursat a la Escola Politècnica Superior d'Enginyeria
