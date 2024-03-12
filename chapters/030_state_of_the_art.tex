@@ -25,14 +25,122 @@ i són compatibles amb una gran varietat de sistemes operatius i plataformes
 de hardware \cite{Axelson2015USB}.
 
 \subsection{Arquitectura}
-% Explicar mestre-esclau
+
+L'arquitectura d'\acro{usb} és de tipus mestre-esclau, on el mestre sol ser
+l'ordinador i l'esclau el dispositiu que es connecta. Com es veurà a l'Apartat
+\ref{sec:usb_versions}, s'acabarà utilitzant la versió \acro{usb2}. Per a
+evitar fer molt extens aquest document, només es detallarà l'arquitectura
+d'aquesta versió.
+
+\subsubsection*{Baix nivell}
+
+
+
+
+\subsection{\est{\acro{Usb} Implementers Forum}}
+
+El logo de \acro{usb} i les seves sigles estan sota drets d'autor. L'entitat
+que gestiona qui pot utilitzar-los en el seu producte és el \acro{usb-if},
+provinent de l'anglès \est{\acro{Usb} Implementers Forum}. Aquesta entitat està
+formada per moltes empreses tecnològiques multinacionals \cite{USBGetting}.
+Per a poder dir que un producte ofereix connectivitat \acro{usb}, la empresa
+fabricant necessita el permís de \acro{usb-if}. No només això, per complir
+l'estàndard, cal utilitzar un codi \acro{vid} i \acro{pid} únics per a cada
+producte (no per a cada dispositiu). Aquests codis també els gestiona aquesta
+entitat.
+
+Per a poder obtenir els drets d'ús de la imatge d'\acro{usb} i un codi
+\acro{VID} (i, en conseqüència, 65536 codis \acro{pid}), s'ha de ser o bé
+membre del \acro{usb-if} o bé pagar una llicència anual. El
+primer dels casos val \SI{5000}{\dollar} anualment, mentre que el segon
+val \SI{6000}{\dollar} d'entrada i \SI{3500}{\dollar} cada dos anys
+\cite{USBGetting}. Els membres d'\acro{usb-if} també poden participar en les
+decisions dels nous estàndards d'\acro{usb}.
+
+Com és d'imaginar, aquestes quotes no són assequibles per a petites empreses
+o aficionats que volen treure un producte al mercat. Aquest co\l.lectiu,
+generalment, només desitjaria tenir un identificador (\acro{vid} i \acro{pid})
+únics per a evitar algun possible so\l.lapament amb altres productes, però
+no sol estar interessada en utilitzar la imatge de \acro{usb} per a promocionar
+el seu producte.
+
+Aquest projecte cau en aquest co\l.lectiu. Per a decidir com prosseguir, s'ha
+observat el que fa la comunitat d'aficionats quan es topa amb aquest problema.
+Es recomana llegir la publicació de \cite{Johnson2023usb} si es desitja entendre
+els motius d'\acro{usb-if} per a posar aquests preus o no cedir \acro{vid}
+a projectes de programari i/o maquiari lliure.
+
+Resumidament, en aquests casos es disposa de dues alternatives:
+
+\begin{enumerate}
+    \item Inventar-se un \acro{vid} i \acro{pid}: Ja que en cap moment s'ha
+    signat cap contracte amb l'\acro{usb-if}, i cap llei vigent ho impedeix, es
+    podria escollir un \acro{vid} i \acro{pid} arbritraris i l'\acro{usb-if} no
+    podria dir o fer res al respecte. Si s'escull amb cura, la
+    probabilitat que els codis escollits co\l.lisionin amb el d'un altre
+    producte és molt baixa. Tot i que aquesta metodologia és bona i ràpida per a
+    prototips, no es recomana per a productes comercialitzables, on el risc
+    de co\l.lisió és més alt.
+    \item Aconseguir un únic \acro{pid}: Les entitats que han comprat un codi
+    \acro{vid} a l'\acro{usb-if} disposen de 65536 codis \acro{pid}. La majoria
+    d'entitats no necessiten més de uns pocs codis \acro{pid}, i poden arribar
+    a cedir la resta a projectes com \est{OpenMoko} \cite{OpenMokoUSB}. Aquests
+    projectes s'encarreguen d'assignar codis \acro{pid} a projectes arbitraris.
+    Generalment el seu únic requisit és que el projecte sigui de programari
+    i maquinari lliures. Arran d'això l'\acro{usb-if} va modificar el contracte
+    de cessió de codis \acro{vid} l'any 2012, on citava explícitament que no es
+    podia cedir codis \acro{pid} a tercers \cite{Johnson2023usb}. Per aquest
+    motiu, projectes com \est{OpenMoko} només poden utilitzar com a codis
+    \acro{vid} base aquells que s'hagin adquirit abans d'aquest canvi
+    de condicions.
+\end{enumerate}
+
+El producte d'aquest treball de fi de grau encaixa perfectament en els dos
+grups, en funció del moment del projecte: mentre s'estigui desenvolupant, es
+pot optar per utilitzar codis definits arbitràriament, i en el moment de
+comercialitzar-lo, es pot so\l.licitar un codi \acro{pid} a \est{OpenMoko}.
 
 \subsection{Versions}
-% Explicar USB3
+\label{sec:usb_versions}
+
+Durant els 30 anys de \acro{usb-if} han sorgit diferents versions de
+l'estàndard. Aquestes es poden dividir en grans grups:
+
+\begin{itemize}
+    \item \acro{Usb1}: Aquesta primera versió, projectada l'any 1996, oferia
+    una velocitat màxima de transmissió de \SI{12}{\mega\bit\per\second}.
+    Aquesta versió està deprecada i no s'hauria de crear nous dispositius amb
+    aquesta.
+    \item \acro{Usb2}: La segona versió utilitzava el mateix connector que el
+    seu predecessor, però aprofitava els avenços de la tecnologia per a
+    augmentar la velocitat de transmissió a \SI{480}{\mega\bit\per\second}.
+    \item \acro{Usb3}: Aquesta versió utilitzava nous connectors, però tots
+    eren compatibles amb les versions anteriors. La seva darrera revisió,
+    \acro{usb3.2}, pot transmetre dades a \SI{20}{\giga\bit\per\second}.
+    \item \acro{Usb4}: Encara en fase de desenvolupament, aquesta nova versió
+    utilitzaria només el connector \acro{usb-c} que ja va aparèixer oferint
+    compatibilitat fins al \acro{usb2}. Es calcula que podria quadruplicar
+    la velocitat de transmissió en relació al \acro{usb3.2}.
+\end{itemize}
+
+Les versions de l'estàndard estan dissenades de forma que sempre tenen
+compatibilitat envers les anteriors. Per tant, la recomanació general per als
+desenvolupadors de dispositius és utilitzar la mínima versió possible, sense
+perjudicar el rendiment del dispositiu  \cite{Axelson2015USB}. D'aquesta forma,
+el dispositiu podrà funcionar en un màxim nombre d'ordinadors possible.
+
+Sabent que la primera versió està deprecada, s'ha escollit utilitzar la versió
+\acro{usb2} per a aquest projecte, donat que no es necessita transmetre gran
+volum de dades.
 
 \subsection{Aspectes físics}
 
-% Mida cables, extension cables
+Entre totes les especificacions de l'estàndard \acro{usb} també s'hi troben les
+dels cables. Tot i la ignorància general, els allargadors de \acro{usb}, tinguin
+el connector que tinguin, no estan suportats en l'estàndard, i pot ser que
+hi hagi interferències \cite{Contributors2024USB}. En canvi, sí que
+hi ha definits els \est{Hubs}, que permeten connectar més d'un dispositiu en un
+connector, ja que l'electrònica que inclouen eviten pèrdues de dades.
 
 L'estàndard \acro{usb} disposa de diferents connectors. Es poden distingir en
 3 grans grups: A, B i C:
@@ -95,4 +203,4 @@ informa sobre la intenció d'extendre aquest connector a altres dispositius.
 Tenint present que el dispositiu que es vol crear podria entrar fàcilment en
 aquest grup de perifèrics d'ordinador, s'ha decidit utilitzar un connector de
 tipus \acro{usb-c} per a assegurar-nos la seva possible comercialització dintre
-de la UE.
+de la \acro{UE}.
