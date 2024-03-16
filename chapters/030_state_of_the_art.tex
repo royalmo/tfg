@@ -28,13 +28,44 @@ de hardware \cite{Axelson2015USB}.
 
 L'arquitectura d'\acro{usb} és de tipus mestre-esclau, on el mestre sol ser
 l'ordinador i l'esclau el dispositiu que es connecta. Com es veurà a l'Apartat
-\ref{sec:usb_versions}, s'acabarà utilitzant la versió \acro{usb2}. Per a
+\ref{sec:usb_versions}, s'acabarà utilitzant la versió \acro{usb2}. Per
 evitar fer molt extens aquest document, només es detallarà l'arquitectura
 d'aquesta versió.
 
-\subsubsection*{Baix nivell}
+\subsubsection*{Aspectes físics}
 
+No es detallarà molt el baix nivell ja que s'utilitzarà llibreries que
+compleixen l'estàndard des d'un nivell més alt. Tanmateix, s'ha trobat
+interessant fer una pinzellada de l'estàndard.
 
+El connector \acro{usb2} està composat de 4 cables: \acro{5v}, \acro{gnd},
+\acro{d+} i \acro{d-}. La funció del cable de \acro{5v} és alimentar el
+dispositiu, amb una intensitat de fins a \SI{500}{\milli\amperes}. Aquestes
+prestacions de corrent resulten ser suficients per a la major part dels
+dispositius que compleixen l'estàndard. Sabent que \acro{gnd} és el cable
+necessari per a tancar els circuits, només queda \acro{d+} i \acro{d-} per
+a enviar dades.
+
+Contràriament al que un podria pensar, el flux de dades (i electricitat) no
+està predefinit: en un moment pot ser l'ordinador que utilitzi els dos cables
+per a transmetre dades al dispositiu, i en un altre pot ser a l'inrevés. De fet,
+els dos cables envien sempre el mateix, però invertit. D'aquesta forma es pot
+detectar i corregir interferències molt més fàcilment, ja que aquestes solen
+afectar per igual als dos cables (degut a la seva proximitat dins del
+connector).
+
+És important tenir en compte que la tensió d'operació de l'estàndard \acro{usb2}
+és de \SI{3.3}{\volts}, encara que la tensió que proporciona el cable
+d'alimentació sigui de \SI{5}{\volts}. Aquest detall serà molt important de cara
+al disseny del dispositiu, ja que implicarà, molt probablement, l'ús de dos
+díodes Zener a l'entrada de les línies de transmissió de dades.
+
+\subsubsection*{Aspectes de baix nivell}
+
+Tal i com s'ha comentat en l'apartat anterior, el canal de transmissió que
+proporciona l'estàndard és unidireccional o \est{half-duplex}. En aquest
+apartat es defineixen els tres tipus de 
+% CONTINUE
 
 
 \subsection{\est{\acro{Usb} Implementers Forum}}
@@ -43,7 +74,7 @@ El logo de \acro{usb} i les seves sigles estan sota drets d'autor. L'entitat
 que gestiona qui pot utilitzar-los en el seu producte és el \acro{usb-if},
 provinent de l'anglès \est{\acro{Usb} Implementers Forum}. Aquesta entitat està
 formada per moltes empreses tecnològiques multinacionals \cite{USBGetting}.
-Per a poder dir que un producte ofereix connectivitat \acro{usb}, la empresa
+Per poder dir que un producte ofereix connectivitat \acro{usb}, l'empresa
 fabricant necessita el permís de \acro{usb-if}. No només això, per complir
 l'estàndard, cal utilitzar un codi \acro{vid} i \acro{pid} únics per a cada
 producte (no per a cada dispositiu). Aquests codis també els gestiona aquesta
