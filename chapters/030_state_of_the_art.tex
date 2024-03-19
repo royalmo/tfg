@@ -40,7 +40,7 @@ interessant fer una pinzellada de l'estàndard.
 
 El connector \acro{usb2} està composat de 4 cables: \acro{5v}, \acro{gnd},
 \acro{d+} i \acro{d-}. La funció del cable de \acro{5v} és alimentar el
-dispositiu, amb una intensitat de fins a \SI{500}{\milli\amperes}. Aquestes
+dispositiu, amb una intensitat de fins a \SI{500}{\milli\ampere}. Aquestes
 prestacions de corrent resulten ser suficients per a la major part dels
 dispositius que compleixen l'estàndard. Sabent que \acro{gnd} és el cable
 necessari per a tancar els circuits, només queda \acro{d+} i \acro{d-} per
@@ -55,8 +55,8 @@ afectar per igual als dos cables (degut a la seva proximitat dins del
 connector).
 
 És important tenir en compte que la tensió d'operació de l'estàndard \acro{usb2}
-és de \SI{3.3}{\volts}, encara que la tensió que proporciona el cable
-d'alimentació sigui de \SI{5}{\volts}. Aquest detall serà molt important de cara
+és de \SI{3.3}{\volt}, encara que la tensió que proporciona el cable
+d'alimentació sigui de \SI{5}{\volt}. Aquest detall serà molt important de cara
 al disseny del dispositiu, ja que implicarà, molt probablement, l'ús de dos
 díodes Zener a l'entrada de les línies de transmissió de dades.
 
@@ -64,11 +64,73 @@ díodes Zener a l'entrada de les línies de transmissió de dades.
 
 Tal i com s'ha comentat en l'apartat anterior, el canal de transmissió que
 proporciona l'estàndard és unidireccional o \est{half-duplex}. En aquest
-apartat es defineixen els tres tipus de 
-% CONTINUE
+apartat es defineixen els tres tipus de transaccions.
 
+Una transacció és un seguit d'intercanvi de dades entre l'ordinador i el
+dispositiu. Totes s'inicien des de l'ordinador, encara que el paquet que es
+vulgui enviar sigui en sentit invers. No s'entra en detall sobre el protocol
+de connexió ja que no té importància per a aquest detall.
 
-\subsection{\est{\acro{Usb} Implementers Forum}}
+Existeixen tres tipus de transaccions:
+\begin{itemize}
+    \item Les transaccions \est{OUT} serveixen per a enviar paquets de
+    l'ordinador al dispositiu.
+    \item Les transaccions \est{IN} serveixen per a enviar paquets del
+    dispositiu a l'ordinador. A diferència del tipus anterior, aquesta
+    transacció no la inicia qui vol enviar el paquet. Per a poder
+    solventar aquesta complicació existeix el següent tipus.
+    \item Les transaccions de control serveixen per a poder esbrinar quan el
+    dispositiu necessita enviar dades, pactar velocitats de transmissió, entre
+    d'altres. La transacció de control més important és la \est{SETUP},
+    que serveix per a intercanviar informació inicial entre els dispositius. Més
+    endavant es veuran els tiups de dades que s'intercanvien inicialment.
+\end{itemize}
+
+L'important d'aquest apartat és tenir present que les transaccions \est{IN} i
+\est{OUT} es van dissenyar per a mantenir un intercanvi de dades constant,
+mentre que les transaccions de control, fora de l'etapa de \est{SETUP}, estan
+més pensades per a petits intercanvis de dades, i més irregulars. Més endavant
+resultarà aquesta informació important per a entendre la implementació del
+dispositiu.
+
+\subsubsection*{Metadades}
+
+Durant els intercanvis inicials, durant l'etapa \est{SETUP}, el dispositiu
+comparteix certes metadades a l'ordinador, cosa que el permet identificar-se,
+i descriure les especificacions necessàries. Un dels avantatges més visibles
+d'aquest procés invisible és la funcionalitat \est{plug\&play}, que evita
+insta\l.lar programari per a cada nou dispositiu que es connecta.
+
+Dos codis molt importants en aquest procés són el \acro{vid} i el \acro{pid},
+acrònims de \est{Vendor ID} i \est{Product ID}. El \acro{vid} identifica
+l'organisme que ha emès el dispositiu, i el \acro{pid} identifica el producte.
+Cal tenir present que aquests dos codis son idèntics per a tots els dispositius
+que es produeixin, pel que no té res a veure amb un número de sèrie. El motiu
+pel que es divideix el codi en dos nombres diferents recau en la forma en la
+que s'assignen als dispositius, tal i com s'explicarà més endavant. Tanmateix,
+a efectes tècnics es considera com un únic nombre.
+
+Aquests codis tenen per objectiu que l'ordinador pugui identificar el tipus de
+dispositiu que s'ha connectat. Un dels usos principals d'aquesta funcionalitat
+és la creació de regles \est{udev}, que en els sistemes de Linux assignen
+\est{drivers} en funció dels codis anteriorment esmentats.
+
+Una altra metadada que s'intercanvia a l'inici de la connexió és la classe
+de dispositiu. Aquesta pot diferenciar entre altaveus, micròfons, teclats,
+ratolins, dispositius especials, etcètera. Un dels grups més grans és el
+\acro{hid}, o \est{Human Interface Devices}. Es tracta de dispositius amb els
+que l'usuari pot interactuar. Dintre d'aquests hi ha encara més categories,
+la mes rellevant pel projecte sent la dels sensors.
+
+Quan es defineix un tipus concret de \acro{hid}, s'ha de complir amb
+l'estandard de comunicació associat. D'aquesta forma l'ordinador no necessita
+insta\l.lar programari addicional per a poder comunicar-se amb el dispositiu.
+
+Finalment hi ha altres metadades que poden ser interessants conèixer, com
+poden ser les freqüències en que el dispositiu envia dades o versions de
+l'estàndard.
+
+\subsection{\est{Usb Implementers Forum}}
 
 El logo de \acro{usb} i les seves sigles estan sota drets d'autor. L'entitat
 que gestiona qui pot utilitzar-los en el seu producte és el \acro{usb-if},
@@ -83,8 +145,8 @@ entitat.
 Per a poder obtenir els drets d'ús de la imatge d'\acro{usb} i un codi
 \acro{VID} (i, en conseqüència, 65536 codis \acro{pid}), s'ha de ser o bé
 membre del \acro{usb-if} o bé pagar una llicència anual. El
-primer dels casos val \SI{5000}{\dollar} anualment, mentre que el segon
-val \SI{6000}{\dollar} d'entrada i \SI{3500}{\dollar} cada dos anys
+primer dels casos val \SI{5000}\$ anualment, mentre que el segon
+val \SI{6000}\$ d'entrada i \SI{3500}\$ cada dos anys
 \cite{USBGetting}. Els membres d'\acro{usb-if} també poden participar en les
 decisions dels nous estàndards d'\acro{usb}.
 
@@ -178,7 +240,7 @@ L'estàndard \acro{usb} disposa de diferents connectors. Es poden distingir en
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.6\textwidth]{images/usb_connectors.png}
+    \includegraphics[width=0.4\textwidth]{images/usb_connectors.png}
     \caption{Connectors USB de tipus A i B. \cite{Contributors2024USB}}
     \label{fig:usb_connectors}
 \end{figure}
@@ -205,7 +267,7 @@ L'estàndard \acro{usb} disposa de diferents connectors. Es poden distingir en
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.3\textwidth]{images/usb_c.png}
+    \includegraphics[width=0.2\textwidth]{images/usb_c.png}
     \caption{Connector USB de tipus C. \cite{Contributors2024USB}}
     \label{fig:usb_connectors_c}
 \end{figure}
