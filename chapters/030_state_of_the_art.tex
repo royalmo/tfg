@@ -9,8 +9,8 @@ per a complementar o ampliar algun concepte.
 \section{\acro{Usb}}
 
 Sent la connexió \acro{usb} un dels objectius més cèntrics d'aquest treball de
-fi de grau, s'ha iniciat la recerca aquest cantó. No només s'ha escollit usar
-aquest estàndard per la seva compatibilitat
+fi de grau, s'ha iniciat la recerca per aquest cantó. No només s'ha escollit
+usar aquest estàndard per la seva compatibilitat
 i facilitats que proporciona a l'usuari, sinó que també hi havia un interès
 personal en entendre aquest protocol.
 
@@ -19,14 +19,14 @@ estàndard de comunicació que permet la connexió, intercanvi i transferència 
 dades entre dispositius electrònics com ara ordinadors, telèfons mòbils, i
 impressores. Aquesta tecnologia utilitza uns connectors estàndards que son
 àmpliament reconeguts per la seva facilitat d'ús i versatilitat en una àmplia
-gamma d'aplicacions. Els dispositius USB poden transmetre dades a diferents
-velocitats, des de velocitats molt baixes fins a velocitats molt altes,
-i són compatibles amb una gran varietat de sistemes operatius i plataformes
-de hardware \cite{Axelson2015USB}.
+gamma d'aplicacions. Els dispositius \acro{usb} poden transmetre dades a
+diferents velocitats, des de velocitats molt baixes fins a velocitats molt
+altes, i són compatibles amb una gran varietat de sistemes operatius i
+plataformes de hardware \cite{Axelson2015USB}.
 
 \subsection{Arquitectura}
 
-L'arquitectura d'\acro{usb} és de tipus mestre-esclau, on el mestre sol ser
+L'arquitectura del \acro{usb} és de tipus mestre-esclau, on el mestre sol ser
 l'ordinador i l'esclau el dispositiu que es connecta. Com es veurà a l'Apartat
 \ref{sec:usb_versions}, s'acabarà utilitzant la versió \acro{usb2}. Per
 evitar fer molt extens aquest document, només es detallarà l'arquitectura
@@ -69,33 +69,33 @@ apartat es defineixen els tres tipus de transaccions.
 Una transacció és un seguit d'intercanvi de dades entre l'ordinador i el
 dispositiu. Totes s'inicien des de l'ordinador, encara que el paquet que es
 vulgui enviar sigui en sentit invers. No s'entra en detall sobre el protocol
-de connexió ja que no té importància per a aquest detall.
+de connexió ja que no té importància per a aquest treball.
 
 Existeixen tres tipus de transaccions:
 \begin{itemize}
-    \item Les transaccions \est{OUT} serveixen per a enviar paquets de
+    \item Les transaccions \est{out} serveixen per a enviar paquets de
     l'ordinador al dispositiu.
-    \item Les transaccions \est{IN} serveixen per a enviar paquets del
+    \item Les transaccions \est{in} serveixen per a enviar paquets del
     dispositiu a l'ordinador. A diferència del tipus anterior, aquesta
     transacció no la inicia qui vol enviar el paquet. Per a poder
     solventar aquesta complicació existeix el següent tipus.
     \item Les transaccions de control serveixen per a poder esbrinar quan el
     dispositiu necessita enviar dades, pactar velocitats de transmissió, entre
-    d'altres. La transacció de control més important és la \est{SETUP},
+    d'altres. La transacció de control més important és la \est{setup},
     que serveix per a intercanviar informació inicial entre els dispositius. Més
     endavant es veuran els tiups de dades que s'intercanvien inicialment.
 \end{itemize}
 
-L'important d'aquest apartat és tenir present que les transaccions \est{IN} i
-\est{OUT} es van dissenyar per a mantenir un intercanvi de dades constant,
-mentre que les transaccions de control, fora de l'etapa de \est{SETUP}, estan
+L'important d'aquest apartat és tenir present que les transaccions \est{in} i
+\est{out} es van dissenyar per a mantenir un intercanvi de dades constant,
+mentre que les transaccions de control, fora de l'etapa de \est{setup}, estan
 més pensades per a petits intercanvis de dades, i més irregulars. Més endavant
 resultarà aquesta informació important per a entendre la implementació del
 dispositiu.
 
 \subsubsection*{Metadades}
 
-Durant els intercanvis inicials, durant l'etapa \est{SETUP}, el dispositiu
+Durant els intercanvis inicials, durant l'etapa \est{setup}, el dispositiu
 comparteix certes metadades a l'ordinador, cosa que el permet identificar-se,
 i descriure les especificacions necessàries. Un dels avantatges més visibles
 d'aquest procés invisible és la funcionalitat \est{plug\&play}, que evita
@@ -132,7 +132,7 @@ l'estàndard.
 
 \subsection{\est{Usb Implementers Forum}}
 
-El logo de \acro{usb} i les seves sigles estan sota drets d'autor. L'entitat
+El logo de \acro{usb} i les imatges derivades estan sota drets d'autor. L'entitat
 que gestiona qui pot utilitzar-los en el seu producte és el \acro{usb-if},
 provinent de l'anglès \est{\acro{Usb} Implementers Forum}. Aquesta entitat està
 formada per moltes empreses tecnològiques multinacionals \cite{USBGetting}.
@@ -298,6 +298,11 @@ aquest grup de perifèrics d'ordinador, s'ha decidit utilitzar un connector de
 tipus \acro{usb-c} per a assegurar-nos la seva possible comercialització dintre
 de la \acro{UE}.
 
+\section{Taules d'ús \acro{hid}}
+
+HID USAGE TABLES
+
+\section{V-USB}
 
 \section{\est{Drivers} a Linux}
 
@@ -305,3 +310,8 @@ Un altre dels aspectes importants del projecte és la creació d'un programari
 que pugui fer d'intermediari entre el dispositiu i l'entorn gràfic. Tal i com
 diu el títol de l'apartat, es comentarà només el cas específic dels sistemes
 \acro{UNIX}, concretament amb Linux.
+
+\subsection{udev}
+\subsection{libhid}
+\subsection{libiio}
+\subsection{xrandr}
