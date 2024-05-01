@@ -1,3 +1,76 @@
 \chapter{Conclusions}
 
-- Dificultat fil conductor
+En aquest treball de final de grau s'ha creat un sistema que, mitjançant la
+connexió \acro{usb} i un sensor d'acceleració tridimencional, pot detectar quan
+es gira un monitor de l'ordinador i ordenar al sistema operatiu que canvii
+l'orientació d'aquella pantalla. Tal i com s'ha comentat al principi del
+document, la importància del treball rau en el procés de creació del dispositiu,
+més que en el resultat final. S'ha optat per a crear un dispositiu des de zero,
+utilitzant llibreries i protocols ja establerts, però dissenyant totes les peces
+del sistema per un mateix.
+
+En primer lloc, s'ha cercat informació sobre el protocol \acro{usb} i la
+implementació de petits dispositius. Fruit d'aquesta recerca, s'ha continuat
+investigant en les taules d'ús \acro{hid} i la llibreria \acro{v-usb}.
+Para\l.lelament, s'ha seleccionat el maquinari del sistema, entre els quals hi
+havia el sensor \est{MPU6050}. Aquest sensor es comunica amb el protocol
+\acro{i2c}, que també s'ha hagut d'aprendre i implementar.
+
+Després de la recerca es va dissenyar el circuit electrònic del dispositiu,
+la placa de circuit imprès, i una carcassa creada amb una impressora 3D.
+Tenint tot el disseny físic fet, es va decidir produir-ne 5 unitats.
+
+Un cop la part del dispositiu enllestida s'ha investigat com crear el
+programari necessari per a utilitzar el dispositiu en un entorn Linux. S'ha
+investigat diverses llibreries i finalment s'ha creat un codi en Python que
+comunica totes les peces del sistema. Un cop el codi era funcional, es va
+procedir a convertir-lo en una aplicació robusta i insta\l.lable, creant una
+pàgina de manual, un fitxer de configuració, un fitxer de servei de sistema,
+dependències, entre moltes altres coses.
+
+El següent pas va ser repetir la tasca anterior per a la resta de sistemes
+operatius. En aquest cas, l'objectiu d'aconseguir una aplicació robusta no s'ha
+acabat assolint degut a les limitacions de temps del projecte, però sí que s'ha
+pogut demostrar que també és possible implementar-ho, i que només suposaria
+unes poques setmanes de treball més per a aconseguir resultats igual de bons
+que amb l'entorn Linux.
+
+En aquest projecte també s'ha posat èmfasi en la part legal de la programació.
+Per una banda, s'ha tingut molta cura a l'hora de llicenciar tots els continguts
+creats, i que aquetes llicències no incompleixin les condicions de les
+llicències de les llibreries i altres projectes utilitzats. El clar exemple és
+el compliment de la llicència de la llibreria \acro{v-usb}. Per altra banda,
+s'ha certificat el projecte davant entitats reconegudes, com l'\acro{oshwa}, i
+s'ha fet tot el possible (dins del pressupost d'un projecte d'aquestes
+dimensions) per a obtenir un identificador \acro{vid} i \acro{pid} únics, per a
+evitar co\l.lisions amb altres dispositius \acro{usb}.
+
+Una de les conclusions més inesperades per part de l'autor és que s'ha
+observat que la documentació existent sobre la creació de dispositius
+\acro{usb} no és tan abundant com amb la resta de camps de la informàtica.
+Qualsevol diria que, pel fet de tenir connectors \acro{usb} a tot arreu,
+els tutorials i documentació no haurien d'escassejar. De
+fet, s'ha observat fins i tot errades en les llibreries d'aquest nivell, i s'ha
+publicat correccions a aquestes. A data de la publicació d'aquest treball encara
+no s'ha acceptat la contribució que s'ha fet a la llibreria \est{libiio}.
+
+Si aquest projecte ha arribat a bon port és, en gran part, perquè s'ha sabut
+detectar les errades a temps per a corregir-les. Tanmateix, el fet de iterar
+diverses vegades en el mateix sistema i proposar millores que
+impliquen refer o modificar considerablement el treball que ja s'havia
+considerat definitiu ha fet molt complicada la tasca de redactar aquesta
+documentació seguint un fil conductor lineal. En projectes de diverses persones
+o més grans que aquest no hagués estat possible incorporar canvis trencadors
+a mig projecte, s'hagués acabat el prototip i, un cop anotades les conclusions
+i millores, s'hagués dissenyat un de nou amb aquests canvis. La metodologia
+àgil utilitzada per a aquest projecte té el benefici que no s'ha dedicat més
+temps del necessari a prototips que no són definitius ni aporten res al
+producte final. Tanmateix, ha aportat la complexitat de no poder dividir tan
+fàcilment el projecte per parts, ja que han estat totes molt entrellaçades.
+
+Pel que fa a l'àmbit més personal, aquest treball ha estat una experiència molt
+enriquidora. No solament s'ha aconseguit treballar en totes les branques de la
+titulació, sinó que s'ha posat èmfasi en les parts en les que hi havia més
+interès, però també més desconeixement. La falta de coneixements ha conduït a
+petits errors, però també és una bona forma d'adquirir experiència i evitar
+cometre errades en un futur.
