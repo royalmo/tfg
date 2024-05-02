@@ -1,7 +1,62 @@
-\chapter{Estudi econòmic}
+\chapter{Estudi econòmic i comercialització}
 \label{cap:economia}
 
+Aquest capítol té per objectiu simular el llançament del producte al mercat.
+Hi ha diversos aspectes a tenir en compte, que es trobaran detallats en
+diferents apartats.
+
 \section{Preu del producte}
+
+El primer aspecte important és el preu del producte. Per a poder definir un
+preu de venda, primer s'ha de tenir present quin és el preu de cost. Durant
+el transcurs del projecte s'ha produït una tirada de 5 unitats amb el
+proveïdor \acro{jlcpcb}. A la taula \ref{table:jlcpcb} hi ha el detall dels
+costos de la tirada, juntament amb els costos d'altres parts, com la impressió
+3D i el connector \acro{usb}.
+
+% TAULA
+\begin{table}[]
+\begin{tabular}{ll}
+    Concepte            & Cost   \\
+    Impressió de la PCB & 1,87€  \\
+    Components          &        \\
+    Muntatge de la PCB  & 10,21€ \\
+    Impressió 3D        & 48€    \\
+    Cable USB2.0 A-C    & 5€     \\
+    Enviament 15 dies   & 1,90€ 
+\end{tabular}
+\label{table:jlcpcb}
+\caption{Cost de produir una tirada de 5 dispositius.}
+\end{table}
+% TODO afegir BOM amb preu (?)
+
+Tal i com es pot veure, hi ha certs components on la quantitat més petita
+d'unitats que es poden comprar és superior al que es necessitava. Tenint aquest
+factor en ment i sabent que els preus solen disminuir quan s'augmenten les
+quantitats, s'ha decidit simular la compra de 10000 unitats. A la taula
+\ref{table:pricing10k} es pot consultar el desglossat de preus per a
+grans quantitas.
+
+%% TAULA 2
+
+Així doncs, si es produís aquest producte en massa, el preu de cost rondaria
+els 10€. Tanmateix, el preu de venda sempre hauria de ser més elevat que
+el preu de cost. El marge que es defineixi pot dependre de diversos factors.
+A continuació es detallen 4 aspectes que s'haurien de tenir presents alhora de
+fixar un preu:
+
+- Estat del mercat
+- Quant està disposada a pagar la gent
+- Costos de desenvolupament
+- Costos de venda (mkt, enviament, ...)
+- Marge de benefici
+- Màrqueting psicològic
+
+Així doncs, tenint present les recomanacions anteriors, es podria valorar que
+un bon preu de venda podria ser 19.80€. Aquest preu agafa per referència al
+producte acabat completament, és a dir totes les imperfeccions i millores que
+es citaran al calítol \ref{cap:future_work} haurien d'estar acabades.
+
 \section{Comercialització}
 \subsection{Imatge}
 % Web estàtica, logo, docu
@@ -9,3 +64,5 @@
 Llicencia USB
 \subsection{Llicències del codi}
 Codi obert
+
+\subsection{Inversió inicial de capital}
