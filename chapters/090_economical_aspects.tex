@@ -29,6 +29,7 @@ costos de la tirada, juntament amb els costos d'altres parts, com la impressió
 \caption{Cost de produir una tirada de 5 dispositius.}
 \end{table}
 % TODO afegir BOM amb preu (?)
+ACABAR TAULA
 
 Tal i com es pot veure, hi ha certs components on la quantitat més petita
 d'unitats que es poden comprar és superior al que es necessitava. Tenint aquest
@@ -38,19 +39,34 @@ quantitats, s'ha decidit simular la compra de 10000 unitats. A la taula
 grans quantitas.
 
 %% TAULA 2
+AFEGIR TAULA 2
 
 Així doncs, si es produís aquest producte en massa, el preu de cost rondaria
 els 10€. Tanmateix, el preu de venda sempre hauria de ser més elevat que
 el preu de cost. El marge que es defineixi pot dependre de diversos factors.
-A continuació es detallen 4 aspectes que s'haurien de tenir presents alhora de
-fixar un preu:
+A continuació es detallen alguns aspectes que s'haurien de tenir presents
+a l'hora de fixar un preu:
 
-- Estat del mercat
-- Quant està disposada a pagar la gent
-- Costos de desenvolupament
-- Costos de venda (mkt, enviament, ...)
-- Marge de benefici
-- Màrqueting psicològic
+\begin{itemize}
+    \item Primer de tot s'hauria de realitzar un estudi de mercat, per a veure
+    si hi ha productes similars, i el preu i èxit que tenen. En general es vol
+    que el nou producte tingui preus similars als ja existents.
+    \item Es pot complementar l'estudi anterior amb un estudi del \est{target},
+    és a dir, preguntar als possibles compradors quin preu estan disposats a
+    pagar per al producte.
+    \item S'ha de valorar si es vol tenir en compte els costos de
+    desenvolupament. Si aquest producte no s'hagués creat en el marc d'un TFG,
+    s'hauria hagut de pagar a la persona que ho desenvolupés en funció del
+    temps dedicat. Per a saber quant de percentatge dedicar al salari d'aquesta
+    persona s'ha de fer una estimació del nombre d'unitats que es vendran.
+    \item S'ha d'afegir al preu de cost les despeses que es puguin ocasionar
+    durant la publicitat i venda del producte.
+    \item S'ha de determinar, si s'escau, un marge de benefici pels inversors
+    del projecte.
+    \item Finalment, es pot arrodonir el preu final en funció a altres aspectes,
+    d'entre els quals el psicològic: un producte a 19€ és més llaminer que un
+    altre a 20€ (AFEGIR SOURCE).
+\end{itemize}
 
 Així doncs, tenint present les recomanacions anteriors, es podria valorar que
 un bon preu de venda podria ser 19.80€. Aquest preu agafa per referència al
@@ -58,11 +74,82 @@ producte acabat completament, és a dir totes les imperfeccions i millores que
 es citaran al calítol \ref{cap:future_work} haurien d'estar acabades.
 
 \section{Comercialització}
+
+Un cop es sap el preu del producte i s'està disposat a vendre'l, es pot
+comenar a comercialitzar-lo. Tanmateix, resten alguns aspectes pendents per
+definir, que es detallen en aquesta secció.
+
 \subsection{Imatge}
-% Web estàtica, logo, docu
-\subsection{Llicència USB}
-Llicencia USB
+
+Donar una imatge al producte, al projecte i a l'empresa és una part essencial
+durant el procés de comercialització. Per aquest motiu s'ha de dsetinar una
+partida del pressupost en tasques d'imatge.
+
+La més important sol ser tenir una pàgina web on hi hagi tota la informació
+necessaria de cara al client. És important que hi hagi enllaços per a comprar el
+producte, veure valoracions d'altra gent, i contactar amb l'empresa.
+
+Generar un logo o icona per a les aplicacions i altra documentació també és una
+bona forma d'associar una imatge al producte. També és important que els clients
+recordin el producte per la facilitat d'ús (mitjançant tutorials) i no per
+els maldecaps que els hi pugui haver generat.
+
+Tot i que no s'ha previst vendre en un futur proper el producte, s'ha creat una
+petita icona per a l'aplicació i s'ha creat una pàgina web estàtica molt
+senzilla. Ambdues coses es poden consultar visitant
+\url{https://gyroscreen.ericroy.net} o el repositori del projecte.
+
+A la placa de circuit imprès s'ha afegit l'enllaç a la pàgina web anterior.
+S'ha de tenir present que, si el projecte creixés més, seria convenient tenir
+una domini propi per al producte. Tanmateix, el fet de pertànyer a un domini
+pare fa que heredi la imatge del mateix. Un clar exemple és la pàgina web de
+la titulació que s'està cursant, \url{https://ocwitic.epsem.upc.edu}, que
+hereda el nom de la UPC.
+
 \subsection{Llicències del codi}
-Codi obert
+
+Un punt a acabar de debatre abans de llançar el producte és si es publicarà el
+codi font. Tal i com s'ha vist en les condicions de la llibreria \acro{v-usb}, el
+\est{firmware} s'hauria de penjar amb la llicència \acro{gpl-3}, excepte si es
+vol pagar una llicència comercial, que en funció dels dispositius que es vulguin
+produir s'hauria de pagar més o menys.
+
+Per a simplificar les coses i evitar possibles problemes legals, s'ha decidit
+publicar totes les parts del sistema sota la mateixa llicència que \acro{v-usb}:
+\acro{gpl-3+}. Tanmateix, s'ha deixat clar a la documentació del projecte que
+es pot contactar a l'autor del projecte per si es vol pactar una llicència menys
+restrictiva.
+
+\subsection{Llicència USB}
+
+Tal i com s'ha comentat a l'apartat \ref{subsec:usb-if}, durant el desenvolupament
+del projecte s'ha utilitzat codis \acro{vid} i \acro{pid} arbitraris, tenint
+cura que no fóssin de productes coneguts. Ara bé, al treure el producte al
+mercat és convenient reservar una parella de codis per a aquest dispositiu.
+
+Al mateix apartat s'explica que hi ha entitats que, sense cobrar res, assignen
+identificadors a projectes de codi i maquinari obert. Un d'aquests és
+\est{pid.codes}, que utilitza el sistema co\l.laboratiu de \est{GitHub} per a
+acceptar noves peticions.
+
+Així doncs, s'ha so\l.licitat el \acro{vid/pid} 0x1209, 0xF4F4 per al projecte
+\est{Gyroscreen}. En el moment de l'entrega del treball encara no hi ha hagut
+resposta per part de la persona que manté el projecte. Cal tenir en compte que
+la persona que gestiona \est{pid.codes} no guanya res a canvi, només hi perd
+temps i diners (SOURCE pid.codes/faq), i per això no està sempre pendent de
+les noves peticions.
 
 \subsection{Inversió inicial de capital}
+
+Finalment s'haurà de fer una inversió de diners per a poder produir els
+dispositius. En funció del nombre de dispositius la inversió serà més important
+o menys, però també els beneficis.
+
+Trobar inversors no és cap tasca fàcil. Per això, si es necessita suport
+econòmic, és molt important que s'acabi dedicant un temps prudencial a preparar
+possibles visites o entrevistes amb persones que estiguin disposades a confiar
+en el projecte.
+
+També es poden utilitzar plataformes web co\l.laboratives, com per exemple
+\est{kickstarter}, que agrupa petites aportacions de molts usuaris per a
+aconseguir suficient capital per a un projecte gran.
