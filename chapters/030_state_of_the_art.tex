@@ -301,6 +301,7 @@ tipus \acro{usb-c} per a assegurar-nos la seva possible comercialització dintre
 de la \acro{UE}.
 
 \section{Taules d'ús \acro{hid}}
+\label{sec:hut}
 
 Tal i com s'ha comentat en l'apartat \ref{subsubsec:metadades}, els dispositius
 \acro{hid} utilitzen uns protocols ja establerts per a poder ser utilitzats
@@ -433,7 +434,79 @@ que pugui fer d'intermediari entre el dispositiu i l'entorn gràfic. Tal i com
 diu el títol de l'apartat, es comentarà només el cas específic dels sistemes
 \acro{UNIX}, concretament amb Linux.
 
-\subsection{udev}
-\subsection{libhid}
-\subsection{libiio}
-\subsection{xrandr}
+El \est{kernel} de Linux acostuma a dividir tot en diferents capes, i no és una
+excepció per al que té referència amb aquest projecte. Sempre és recomanable
+treballar amb la capa més alta possible, ja que sovint aixó significa
+estalviar-se feina. Tanmateix, és important comprendre d'on es vé per a
+poder entendre millor els errors i dificultats que es trobaran en aquest treball.
+
+\subsection{Permisos: \acro{udev}}
+
+\acro{Udev} és un gestor de dispositius per a sistemes basats en Linux.
+Té com a objectiu gestionar dinàmicament els dispositius de maquinari del
+sistema, és a dir, és el responsable que si es connecta o desconnecta
+un dispositiu mentre l'ordinador està encès tot funcioni amb normalitat.
+(CITE REFERENCE)
+
+El funcionament d'\acro{udev} es basa en un conjunt de regles,
+que es configuren per
+determinar com han de gestionar-se els dispositius detectats.
+Aquestes regles es poden configurar i modificar, i en el cas d'aquest projecte
+s'utilitzaran exclusivament per a permetre a tots els usuaris utilitzar alguns
+dispositius concrets, siguin quins siguin els permisos. Tanmateix, \acro{udev}
+ofereix molta flexibilitat: es poden executar \est{scripts}, canviar el nom,
+crear un volum, entre moltes altres possibilitats.
+
+Com és d'esperar, només un usuari amb permisos d'administrador podrà configurar
+les regles \acro{udev}, i hi ha molts paràmetres per a configurar al màxim
+aquestes regles. Tanmateix, com que aquestes normes només seran d'utilitat durant
+el procés de desenvolupament del dispositiu, s'ha decidit no entrar gaire en
+detalls de la implementació.
+
+\subsection{Capa 1: \acro{libusb}}
+
+\est{libusb} és una llibreria multiplataforma i disponible per diversos
+llenguatges que permet realitzar una comunicació amb dispositius \acro{usb} en
+la capa més baixa possible. En aquest nivell es poden enviar trames de control,
+entrada o sortida a nivell de bits i bytes. (CITE REFERENCE)
+
+Tot i que la llibreria es va pensar
+incialment per Linux, s'ha portat a Windows i MacOS, convertint-la en la millor
+alternativa per a generar programes multiplataforma que necessitin controladors
+personalitzats.
+
+Tanmatix, aquest projecte es beneficiarà de les capes de més alt nivell, pel que
+serà més fàcil utilitzar les altres llibreries, tot i que això pugui suposar
+efectuar petits canvis entre els diferents sistemes operatius.
+
+A Linux, un dispositiu que es pot controlar per \est{libusb} sol aparéixer com
+a fitxer sota el format \verb|/dev/usbrawX|, on X és el número de dispositiu.
+No gens menys, si un contro\l.lador d'una capa superior està utilitzant
+exclusivament el dispositiu, el \est{kernel} no crearà aquest fitxer, per a
+evitar confusió i so\l.lapaments.
+
+\subsection{Capa 2: \acro{libhid}}
+
+La següent llibreria és la capa immediatament superior a la de l'apartat
+anterior. \est{libhid} permet gestionar dispositius \acro{hid}. Aquesta
+llibreria també s'ha portat a Windows i MacOS i, tal i com s'ha dit a 
+l'apartat \ref{sec:hut}, també permetrà utilitzar dispositius Bluetooth.
+
+Al ser aquesta llibreria una abstracció més elevada, existeixen més aplicacions
+per a provar-la i debugar-la. Sobretot es destaca XXX CITE, que disposa
+d'una interfície molt senzilla d'utilitzar i multiplataforma.
+
+A Linux, un dispositiu que es pot controlar per \est{libhid} sol aparéixer com
+a fitxer sota el format \verb|/dev/hidrawX|, on X és el número de dispositiu.
+De la mateixa forma que amb l'apartat anterior, el dispositiu no apareixerà
+sota aquest format si una capa més alta l'està utilitzant exclusivament.
+
+\subsection{Capa 3: \acro{libiio}}
+
+Finalment, la darrera capa d'abstracció de la pila d'aquest projecte és la
+llibreria \acro{libiio}.
+
+
+\subsection{Entorn gràfic: \acro{Xlib}}
+
+
