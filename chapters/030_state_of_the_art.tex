@@ -505,8 +505,97 @@ sota aquest format si una capa més alta l'està utilitzant exclusivament.
 
 Finalment, la darrera capa d'abstracció de la pila d'aquest projecte és la
 llibreria \acro{libiio}.
+Aquesta llibreria permet interaccionar amb el sistema
+\acro{iio} de Linux. També està disponible per a diversos llenguatges, però
+a diferència de la resta d'abstraccions, no és multiplataforma.
 
+El sistema \acro{iio}, o \est{Industrial Input/Output}, és la capa d'abstracció
+dels sistemes basats en Linux per a qualsevol dispositiu que suposi una entrada
+o sortida per al sistema i no tingui contro\l.ladors dedicats. Per exemple, un
+ratolí o teclat no entraria en aquest grup, ja que disposa de controladors
+propis.
+
+Hi ha moltes formes de veure quines categories de dispositius \acro{hid} es
+converteixen en \acro{iio}, però la més senzilla és consultant el codi
+font de Linux (CITE SOURCE CODE). Pel que fa a aquest projecte, es pot veure
+que esisteix un \est{driver} per a \est{hid_accelerometer_3d}, pel que
+el dispositiu d'aquest treball anirà en aquesta capa superior.
+
+Mitjançant normes \acro{udev} es podria aconseguir que un dispositiu que, per 
+defecte s'assigna a \acro{iio} es quedi una capa més per sota, com seria
+\acro{hid} o \acro{usb}. Tanmateix, \acro{iio} aporta molts beneficis.
+
+\begin{itemize}
+    \item No necessita permisos suplementaris per a llegir les dades dels
+    sensors. Per tant, no s'ha d'afegir a l'usuari en un grup nou ni crear
+    cap regla \acro{udev}.
+    \item Més d'un usuari o procés pot estar llegint simultàniament el sensor.
+    El dispositu creat a \verb|/dev/iio:deviceX| (on X és el número de
+    dispositiu) pot ser llegit simultàniament, de la mateixa forma que ho fan
+    altres fitxers, per exemple \verb|/dev/rand| o \verb|/dev/zero|.
+    \item Al ser una capa superior, no s'ha de gestionar tot el referent al
+    protocol \acro{hid}. Les lectures del sensor venen gairebé completament
+    processades.
+    \item Finalment, al ser una capa superior, també hi tene cabuda altres
+    sensors que podrien servir per al projecte, però que no són \acro{hid}.
+\end{itemize}
+
+Així doncs, es pagarà el preu de generar programari no compatible amb altres
+dispositius a canvi de generar programari robust i a la capa més alta possible
+per Linux. Pot semblar una mala decisió, però es veurà en el següent apartat
+que tampoc seria possible generar un controlador 100\% multiplataforma.
 
 \subsection{Entorn gràfic: \acro{Xlib}}
 
+Finalment, un cop es sap com es farà la lectura de les dades del sensor, cal
+esbrinar com s'aplicarà els canvis de rotació de la pantalla. Els sistemes
+basats en Linux, independentment de l'entorn gràfic que utilitzin (normalment
+\acro{gnome}, però també \acro{kde}), responen a les peticions gràfiques sota
+l'interfície de programació de \est{Xlib}. (CITE)
+
+Es podria fer una bona analogia entre
+els entorns gràfics i els navegadors: els navegadors, a Linux, implementen les
+crides i interfície de \est{www-browser}, tot i estar implementats internament
+de formes diferents. Si es vol implementar una aplicació que necessiti, per
+exemple, un navegador incrustat, però qualsevol navegador serveix, es pot
+indicar com a dependència \est{www-browser} enlloc de, per exmple, \est{firefox}.
+
+\est{Xlib} és una llibreria molt complexa, i té interfícies per a la majoria
+de llenguatges. Tanmateix, sovint és més senzill utilitzar una aplicació de
+la línia de comandes que simplifica la tasca del programador. Aquesta
+aplicació és diu \est{xrandr}, i d'una forma molt senzilla permet llistar
+totes les pantalles connectades a l'ordinador i canviar l'orientació
+d'una d'elles. (CITE XRANDR) Ara bé, els beneficis venen amb un cost: les sessions.
+
+\subsection{Serveis: \est{systemd}}
+
+\subsubsection{\est{Xrandr} i les sessions}
+
+Els sistemes Linux estan construits per a ser el més versàtils possible. Una
+de les possibilitats és que hi hagi diferents clients connectats a la vegada
+a la mateixa màquina. Aquest fet no sorprèn a ningú, ja que és ben sabut que
+diversos usuaris poden connectar-se remotament i simultàniament a la mateixa
+màquina mitjançant \est{ssh}. Ara bé, hi ha diverses formes (com, per exemple,
+la opció \verb|-X| de \est{ssh}) que permeten diferents sessions gràfiques
+simultàniament. (CITE SSH -X)
+
+La complicació rau en que \est{xrandr} utilitza les variables d'entorn per a
+trobar la sessió actual. Aquestes variables es defineixen a l'inici de sessió,
+quan s'inicialitza \est{Xlib}. Això vol dir que, sempre que s'executi
+\est{xrandr} des de la sessió (ja sigui amb un servei de sessió o a través de
+la línia de comandes) no hi haurà problema.
+Tanmateix, si es vol executar \est{xrandr} des d'un servei de sistema o d'un
+terminal remot, el programa no trobarà la sessió actual i serà impossible
+resoldre la comanda.
+
+Hi ha entre dos i tres variables d'entorn importants per al correcte funcionament
+de \est{xrandr}:
+
+\begin{itemize}
+    \item La primera és $DISPLAY
+    \item La segona és $XAUTHORITY
+    \item La tercera és XDG_RUNTIME_DIR=/run/user/1000
+    Finalment, https://unix.stackexchange.com/questions/209746/how-to-resolve-no-protocol-specified-for-su-user
+    xhost +
+\end{itemize}
 
