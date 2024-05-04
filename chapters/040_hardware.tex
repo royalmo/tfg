@@ -1,10 +1,178 @@
 \chapter{Hardware}
+
+En aquest capítol es detallarà tot el procés de realització del maquinari per
+al projecte. La base teòrica del capítol anterior pot resultar de gran utilitat
+per a entendre certes decisions preses durant algunes de les tasques d'aquest
+capítol.
+
+En aquest projecte es vol obtenir una placa de circuit imprès que permeti
+transferir dades d'un sensor d'acceleració a l'ordinador, mitjançant la connexió
+\acro{usb}. S'enviarà a producció la placa i es crearà un encapsulat senzill per
+a evitar que aquesta es pugui omplir de pols o d'altres elements de l'entorn.
+Finalment, es llicenciarà el disseny davant d'una entitat certificadora.
+
 \section{Selecció del sensor}
-\section{Primera versió de la placa}
-\section{Digispark}
+
+El primer pas per a crear la placa és escollir quin sensor utilitzar. Per a
+mesurar la inclinació d'un dispositiu es sol utilitzar un acceleròmetre.
+Mitjançant un càlcul que es veurà més endavant i donades unes condicions es pot
+determinar l'angle en relació a la direcció de la gravetat de la Terra. CITE.
+Aquestes mesures es poden complementar amb un giroscopi, que ofereix més
+precisió al sistema. CITE.
+
+Després de fer una mica de recerca sobre els productes disponibles del mercat,
+i tenint present la precisió que es necessita i el pressupost que es disposa,
+s'ha trobat dues alternatives viables.
+
+\begin{listing}
+    \item El sensors \est{ADXL3xx} es poden trobar a preus molt llaminers i
+    comuniquen la lectura de l'acceleració en 3 dimensions mitjançant 3 línies
+    analògiques. Per tant, la comunicació amb el microcontrolador serà el més
+    senzilla possible. (CITE)
+    \item El sensor \est{MPU6050}, en canvi, es comunica amb el microcontrolador
+    mitjançant el protocol \acro{i2c}. Aquest protocol només necessita dues
+    línies de comunicació, però implica implemenar una mica de lògica per a
+    recuperar les dades. Tanmateix, aquest sensor també ofereix lectures de
+    velocitat angular i temperatura, que podrien ser útils per a futures
+    millores del projecte. (CITE)
+\end{listing}
+
+Així doncs, degut que el segon sensor és només pocs cèntims més car i ofereix
+la possiblitat d'ampliar el projecte en un futur, s'utilitzarà el sensor
+\est{MPU6050} per al sistema.
+
+Aquest sensor es sol vendre amb una placa que estalvia connectar
+certa electrònica i permet provar el sensor sense fer cap soldadura.
+Aquest mòdul, anomenat \est{GY291}, es troba disponible a moltes botigues
+d'electrònica, i s'ha decidit adquirir-ne un parell per al desenvolupament del
+projecte.
+
+TODO POSAR CIRCUIT GY291
+
+El circuit del mòdul \est{GY291} és lliure i es pot consultar fàcilment (CITE).
+Serà molt útil disposar d'aquests esquemàtics per a poder facilitar la tasca de
+dissenyar el circuit.
+
+\section{Primer disseny}
+
+En un primer moment es va decidir per utilitzar un microcontrolador que disposés
+del perifèric \acro{usb} directament al maquinari, per a evitar programar-lo tot.
+Tanmateix, es veurà que no s'acabarà utilitzant aquesta versió degut a motius
+que s'explicaran més endavant. Dit això, s'ha decidit conservar aquest apartat
+per a comprendre millor el procés de desenvolupament del projecte.
+
+El microcontrolador que s'utilitzarà en aquesta versió és l'\acro{AtMega32u4}.
+Aquest proporciona una interfície \acro{usb} integrada, i permet utilitzar la
+interfície \acro{i2c} amb suficient facilitat. S'ha decidit utilitzar un
+osci\l.lador extern per a generar un rellotge de freqüència $16MHz$
+al microcontrolador.
+
+\subsection{Esquemàtic}
+
+El disseny de l'esquemàtic es basa en el disseny del mòdul \est{GY291} i es pot
+consultar a la figura \ref{todo}. Tret del que s'ha comentat en els paràgrafs
+anteriors, la resta de components i connexions no deixen de ser les evidents per
+a un circuit amb aquestes característiques. Tot i això, s'ha decidit posar
+èmfasi en alguns detalls on s'hi ha parat més atenció:
+
+\begin{itemize}
+    \item Al costat de l'alimentació de cada integrat s'hi ha posat un
+    condensador ceràmic de $1nF$ VERIFICAR!!, per a assegurar-se que la tensió
+    d'entrada és prou estable.
+    \item S'ha hagut de posar un regulador lineal en el ciruit, ja que el
+    sensor necessita estar alimentat a $3.3V$, però l'alimentació que proporciona
+    el connector \acro{usb} és de $5V$.
+    \item Al utilitzar un connector de tipus C, tot i communicar-se amb
+    \acro{usb2}, hi ha un parell de cables extres que determinen a quina tensió
+    s'ha d'alimentar el dispositiu. Tal i com es comenta en CITE REFERENCIA,
+    si es desitja utilitzar una alimentació tradicional de $5V$ és suficient
+    utilitzar dos \est{pull-ups} de XX ohms TODO VERIFY.
+    \item El protocol \acro{i2c} necessita que les dues línies de comunicació
+    estiguin amb \est{pull-ups}. Es veurà més endavant en el document el
+    funcionament d'aquest protocol.
+\end{itemize}
+
+\subsection{Placa de circuit imprès}
+
+Un cop acabat el disseny, utilitzant també el programa KiCad, es va començar a
+crear la placa de circuit imprès. El procediment és prou senzill i es sol fer
+de forma iterativa: crear un disseny molt dolent i anar-hi fent millores, fins
+al punt on es considera que ja està prou bé (un disseny mai estarà perfecte).
+
+A la figura \ref{todo} es pot consultar la placa resultant. Com es pot veure,
+no està del tot ben distribuida: això és perquè es va decidir canviar completament
+de disseny abans d'haver-la acabat, i es va pensar que no valia la pena seguir
+invertint temps amb un disseny que no veuria mai la llum.
+
+\subsection{Problema del proper disseny}
+
+Tal i com s'ha dit a l'apartat anterior, no es va acabar de dissenyar la placa
+de circuit imprès degut al redisseny del \est{hardware}. El motiu es ben senzill,
+no s'està utilitzant el microcontrolador adequat per al projecte.
+
+Tal i com s'ha vist a l'esquemàtic, el microcontrolador només necessita 4 potes
+per a informació (2 per \acro{usb} i 2 per \acro{i2c}). Això significa que es
+deixaran al voltant de 20 entrades sense utilitzar. I no només això: aquest
+microcontrolador disposa de molta més memòria de la que mai es necessitarà.(CITE)
+
+El principal motiu per a fer el canvi és doncs el preu. Un \acro{AtMega32u4}
+no és molt car (CITE), però és més barat un dispotitiu \acro{avr} de la sèrie
+\acro{AtTinyXX}, com es veurà en el segïuent apartat.
+
 \section{Segona versió de la placa}
-\section{Electrical design}
-\section{pcb}
-\section{JCLPCB}
+
+
+
+\subsection{Digispark}
+\subsection{Esquemàtic}
+
+Finalment, s'observa que en el diagrama no hi ha cap element amb el que una
+persona pugui interactuar directament amb el dispositiu (polsador, llum, ...).
+Això és a propòsit, ja que es pretén que el dispositiu acabi tancat en una capsa
+i que l'usuari no hagi de tocar-lo mai.
+
+\subsection{Placa de circuit imprès}
+\subsection{Producció de la \acro{pcb}} % JLCPCB
 \section{3D Enclosure}
+
+Quan es va saber que la placa impresa ja no rebria més modificacions físiques,
+es va decidir crear una petita carcassa per a evitar que hi entri pols o les
+ditades el puguin fer malbé. En un futur, aquesta carcassa també podrà protegir
+al dispositiu d'altres agents externs, però en el moment del disseny l'objectiu
+era tenir cura del dispositiu durant la fase de desenvolupament.
+
+Així doncs, es va utilitzar el programa \est{FreeCAD} per a dissenyar una
+carcassa amb dues peces: una superior i una inferior. Aquestes encaixarien entre
+sí i, amb l'ajuda de cola quedarien subjectes. Les mesures s'han pres a partir
+del model de \est{KiCad}, però també s'han corroborat amb la placa física i un
+peu de rei.
+
+A la figura \ref{todo} es poden veure les dues parts dissenyades. Com es pot
+apreciar, només s'hi ha deixat un forat per a permetre el pas del connector
+\acro{usb}. S'ha utilitzat parets de XX mm, i un marge entre les dues peces de
+0.25 mm.
+
+Es va aconseguir imprimir les dues peces amb una de les impressores de
+l'escola, i es va aconseguir el resultat que es pot apreciar a la figura
+\ref{xxx}. Finalment, es va comprovar que totes les peces encaixaven a la
+perfecció i la placa cabia a dintre de la carcassa.
+
 \section{OSHWA}
+
+Un cop es va saber que el disseny físic del projecte era defintiu, es va decidir
+publicar-lo a \acro{OSHWA}. L'\est{Open-Source HardWare Association} és, com el
+nom indica, una associació que vetlla pel maquinari de codi obert. Una de les
+diverses tasques que fa és mantenir un registre de dissenys de maquinari obert,
+sempre que els autors ho autoritzin. CITE
+
+Un dels beneficis de registrar el disseny en el seu sistema és que queda una
+evidència (més) que el projecte s'ha fet, té la llicència que té, i protegeix
+a l'autor contra possibles plagis. El més interessant de tot això és que aquest
+servei s'ofereix gratuïtament: l'associació accepta donacions, però no son
+necessàries per a poder registrar un disseny.
+
+Així doncs, es va registrar el dispositiu a la seva base de dades i, després
+de omplir el formulari i aquest ser revisat per l'associació, el dispositiu
+va ser acceptat i es troba actualment sota la llicència \verb|ES000045|.
+A la figura XX es troba el logo que es pot incloure al projecte, com a
+resultat d'aquesta certificació.
