@@ -94,6 +94,7 @@ resultarà aquesta informació important per a entendre la implementació del
 dispositiu.
 
 \subsubsection*{Metadades}
+\label{subsubsec:metadades}
 
 Durant els intercanvis inicials, durant l'etapa \est{setup}, el dispositiu
 comparteix certes metadades a l'ordinador, cosa que el permet identificar-se,
@@ -301,9 +302,129 @@ de la \acro{UE}.
 
 \section{Taules d'ús \acro{hid}}
 
-HID USAGE TABLES
+Tal i com s'ha comentat en l'apartat \ref{subsubsec:metadades}, els dispositius
+\acro{hid} utilitzen uns protocols ja establerts per a poder ser utilitzats
+sense haver d'insta\l.lar programari nou a l'ordinador (el que es coneix com
+a \est{plug\&play}).
+
+Un cop es presenta un dispositiu com a \acro{hid}
+(mitjançant les metadades), s'ha d'enviar a l'ordinador una nova capçalera de
+metadades, donant més informació sobre el dispositiu. Aquest paquet s'anomena
+\est{\acro{Hid} Report Descriptor} i envia informacions molt detallades de
+quin dispositiu és i com envia les dades.
+
+Per exemple, un ratolí definirà que cada poc temps l'ordinador podrà fer-li
+una petició de noves dades, i que aquestes tindran el format de 3 valors
+de 1 bit (pels 3 botons), i 2 valors de 8 bits (per a saber la disància
+desplaçada en cadascún dels eixos de coordenades). Aquesta capçalera també
+especificarà que el dispositiu és un ratolí. Un cop enviat aquest paquet,
+l'ordinador ja sabrà com comunicar-se amb el
+dispositiu i com interpretar les dades que anirà enviant.
+
+La documentació oficial de \acro{usb} (TODO CITE HID HUT) especifica
+detalladament tots els codis que es poden definir. El que interessarà per a
+aquest treball és la categoria de \textit{Sensors}, i dintre d'aquesta hi ha
+diversos tipus de dispositius. Veurem que el tipus \est{3D Accelerometer} serà
+el més adequat per al projecte.
+
+Aquesta documentació anterior es pot complementar amb una guia d'interpretació
+de la documentació de Linux (TODO CITE DOCS) on es presenten diferents eines
+per a interpretar millor aquests paquets. Tot i que n'hi ha moltes que
+funcionen des del terminal, la més visual i popular és \est{wireshark}.
+
+Un dels altres avantatges d'utilitzar \acro{hid} és que, al ser una capa per
+sobre del protocol \acro{usb}, és independent d'aquest. En altres paraules,
+altres protocols de comunicació poden beneficiar-se també de \acro{hid}, no
+només \acro{usb}. Per aquest motiu, quan es va implementar \est{Bluetooth},
+es va decidir utilitzar també \acro{hid}.
+
+\subsection{Acceleròmetre tridimensional}
+
+Tal i com es veurà més endavant, s'acabarà utilitzant la categoria de
+\est{3D Accelerometer} per a designar el tipus de dispositiu. Aquesta
+categoria (i la resta de dispositius dins del subgrup de sensors) necessita
+reportar un seguit de dades, i no totes són òbvies.
+
+A continuació es detallen les diferents dades que s'ha d'enviar. Tal i com s'ha
+comentat anteriorment, en el \est{\acro{hid} report descriptor} es definirà
+el tipus de dispositiu i el format i valors de les dades que s'enviarà, juntament
+amb la freqüència amb que l'ordinador les pot so\l.licitar.
+
+\begin{itemize}
+    \item En primer lloc, s'ha de comunicar el tipus exacte de dispositiu. En
+    aquest cas, la categoria de sensors i el tipus acceleròmetre tridimensional.
+    \item S'ha de comunicar el tipus de connexió amb l'ordinador: integrat a
+    la mateixa màquina, extern o adjunt. En el cas d'aquest projecte s'utilitzarà
+    el tipus \textit{adjunt}, ja que es troba a molta proximitat de l'ordinador
+    i reportarà dades del mateix (el tipus extern seria per a sensors que
+    mesuren variables d'altres aparells).
+    \item També s'ha de reportar els esdeveniments que pugui tenir el sensor.
+    En aquest cas, no hi ha events a reportar, així que en aquest paquet
+    es definirà solament el tipus genèric \est{No Events}.
+    \item L'estat d'alimentació del dispositiu també serà constant per a
+    aquest dispositiu (no s'implementarà mode \est{sleep} o de baix consum, i
+    la diferència de consum mentre que s'agafen mostres i mentre que
+    s'espera una nova lectura de dades és poc significatiu). Tanmateix, el
+    protocol també ordena enviar-ho de la mateixa forma que la resta d'estats.
+    \item El següent valor a enviar és l'estat del sensor. Aquest sí que serà
+    diferent en funció de les dades que reporti el sensor. Per exemple, pot
+    reportar que hi ha noves dades, que s'està inicialitzant, que hi ha un
+    error en la lectura de dades, entre d'altres.
+    \item Es reportarà també l'interval que proposa el dispositiu entre
+    diferents \est{reports}, és a dir, el temps que separarà cada trama de
+    tipus \acro{in}.
+    \item Finalment, hi ha les dades que es vol enviar. En la capçalera inicial
+    s'especificarà moltes configuracions referent a les dades: valor màxim,
+    mínim, factor d'escala, estat de les dades. Es recomana llegir la
+    documentació proposada o veure exemples per a entendre la immensitat
+    d'aquesta informació.
+\end{itemize}
+
+Un cop enviada aquesta capçalera,
+l'ordinador podrà demanar tantes vegades com vulgui els valors de les dades.
+Concretament, en el cas d'aquest sensor, l'ordinador podrà demanar dos tipus
+de dades: \est{feature} i \est{input}.
+
+\begin{itemize}
+    \item El tipus \est{feature} enviarà l'estat del sensor: connexió, dades,
+    intèrval entre comunicacions, sensitivitat i esdeveniments.
+    \item El tipus \est{input} enviarà l'estat del sensor i, si s'escau, els
+    valors llegits. Aquests valors s'hauran de dividir pel factor especificat
+    a la capçalera per a poder representar decimals. En el cas de l'acceleròmetre,
+    l'unitat a enviar és \textit{g}, i poques vegades aquest valor superarà mai
+    les poques unitats, pel que disposar de decimals és essencial.
+\end{itemize}
+
+La tasca a efectuar quan es dissenyi el programari serà convertir la
+informació anterior en el format desitjat per al protocol \acro{hid}. Per sort,
+existeixen programes i eines que ajuden a generar aquests codis, tal i com
+es veurà més endavant.
 
 \section{V-USB}
+
+Una de les eines que facilita la implementació del protocol \acro{usb} és la
+llibreria \acro{v-usb}, implementada per XXXXX (TODO CITE). Aquesta llibreria
+es distribueix amb la llicència \acro{gpl-2+}, una llicència que obliga a
+distribuir sota la mateixa llicència (o versions posteriors d'aquesta) tots els
+projectes que facin servir la llibreria. La empresa ofreix el concecpte de
+llicència dual: a part de \acro{gpl-2+}, es pot comprar una llicència comercial
+per a poder generar codi sota altres llicències (TODO CITE COMMERCIAL LICENSE).
+
+Aquesta llibreria implementa la capa més baixa de \acro{usb} a l'arquitectura
+\acro{avr}, sense utilitzar perifèrics específics. Així doncs, gràcies a aquesta
+llibreria no serà necessari utilitzar un microcontrolador \acro{avr} dotat amb
+perifèrics \acro{usb}, com podria ser, per exemple l'\acro{AtMega32u4}.
+
+La probabilitat d'acabar utilitzant un microcontrolador \acro{avr} per a aquest
+projecte és molt elevada, degut a la prèvia experiència personal amb aquesta
+arquitectura. També hi ha gran varietat d'exemples i llibreries disponibles per
+a \acro{avr}, cosa que facilitarà la tasca de desenvolupament.
+
+A TODO CITE hi ha el codi font de la llibreria, que s'ha de incloure al del
+projecte que s'estigui desenvolupant, i també s'hi troben exemples de dispositius
+senzills (ratolins i teclats) implementats amb aquesta llibreria. Tanmateix,
+s'ha trobat el repositori de XXX CITE més interessant, ja que conté exemples
+de sensors \acro{hid}.
 
 \section{\est{Drivers} a Linux}
 
