@@ -518,7 +518,7 @@ propis.
 Hi ha moltes formes de veure quines categories de dispositius \acro{hid} es
 converteixen en \acro{iio}, però la més senzilla és consultant el codi
 font de Linux (CITE SOURCE CODE). Pel que fa a aquest projecte, es pot veure
-que esisteix un \est{driver} per a \est{hid_accelerometer_3d}, pel que
+que esisteix un \est{driver} per a \est{hid\_accelerometer\_3d}, pel que
 el dispositiu d'aquest treball anirà en aquesta capa superior.
 
 Mitjançant normes \acro{udev} es podria aconseguir que un dispositiu que, per 
@@ -569,6 +569,39 @@ d'una d'elles. (CITE XRANDR) Ara bé, els beneficis venen amb un cost: les sessi
 
 \subsection{Serveis: \est{systemd}}
 
+El programari que es pretén realitzar per a aquest projecte involucra la
+presència d'un procés que, en tot moment, comprovi les lectures del sensor i
+actualitzi l'orientació de la pantalla. L'usuari és responsable d'insta\l.lar i
+configurar el programa, però un cop configurat, aquest hauria de funcionar
+correctament sempre, fins i tot després de reiniciar l'ordinador.
+
+En els sistemes basats en Linux, els programes que estan en execució tota
+l'estona s'anomenen serveis i els gestiona el propi \est{kernel}, també anomenat
+en aquest context \est{systemd}. (CITE) Hi ha dos tipus de serveis diferents, en
+funció dels privilegis que tenen:
+
+\begin{itemize}
+    \item Els \textit{serveis del sistema} afecten a tots els usuaris i
+    s'executen sota l'usuari i context de \est{root} (excepte si es diu
+    el contrari). Es pot escollir quan s'executen, ja sigui just després de
+    carregar el \est{kernel} a la memòria o després que el primer usuari
+    inicii sessió. Es necessiten permisos d'administrador per a fer modificacions
+    en els serveis de sistema (generalment mitjançant la comanda
+    \verb|systemctl|).
+    \item Els \textit{serveis d'usuari}, en canvi, només afecten a l'usurari
+    que els ha configurat. No es necessiten permisos d'administrador per a
+    configurar-los, i s'executen sota el mateix context, variables d'entorn i
+    usuari que qui els ha configurat. Aquests serveis només es poden executar a
+    partir dels darrers passos de l'arrencada del sistema, ja sigui després
+    d'iniciar sessió o un cop carregat l'entorn gràfic. També utilitzen la
+    comanda \verb|systemctl|, però afegint l'opció \verb|--user|.
+\end{itemize}
+
+És important conéixer la diferència entre els dos tipus mencionats, ja que en
+aquest treball es generarà un servei d'usuari i un de sistema, i cadascún té
+les seves complicacions, tant en el moment d'insta\l.lació com en el moment
+d'execució.
+
 \subsubsection{\est{Xrandr} i les sessions}
 
 Els sistemes Linux estan construits per a ser el més versàtils possible. Una
@@ -588,14 +621,29 @@ Tanmateix, si es vol executar \est{xrandr} des d'un servei de sistema o d'un
 terminal remot, el programa no trobarà la sessió actual i serà impossible
 resoldre la comanda.
 
+TODO ADD CITATIONS
+
 Hi ha entre dos i tres variables d'entorn importants per al correcte funcionament
 de \est{xrandr}:
 
 \begin{itemize}
-    \item La primera és $DISPLAY
-    \item La segona és $XAUTHORITY
-    \item La tercera és XDG_RUNTIME_DIR=/run/user/1000
-    Finalment, https://unix.stackexchange.com/questions/209746/how-to-resolve-no-protocol-specified-for-su-user
-    xhost +
+    \item La variable d'entorn \verb|$DISPLAY| permet identificar el grup de
+    pantalles al que s'està connectat. En general sermpre serà \verb|:0| (o 
+    \verb|:1| pels sistemes més recents), però si hi ha diversos usuaris
+    connectats amb diferents entorns gràfics podria ser un altre nombre.
+    \item La segona variable d'entorn necessària és \verb|$XAUTHORITY|. Aquesta
+    variable conté la direcció del fitxer \est{Xauthority}. Aquest fitxer
+    conté la \est{cookie} que permet consultar i realitzar canvis en la sessió
+    actual. Com és evident, aquest fitxer només es pot consultar per l'usuari
+    propietari de la sessió (i usuaris administradors).
+    \item Finalment hi ha \verb|$XDG_RUNTIME_DIR|, que preten reemplaçar la
+    variable anterior per a portar la direcció del directori que conté el fitxer
+    \est{Xauthority}.
 \end{itemize}
 
+Cal tenir present que un usuari pot restringir qui té accés a modificar la
+seva sessió. Per defecte, es restringeix a tothom que no tingui accés al
+fitxer d'autorització, però mitjançant la comanda \verb|xhost +| es pot permetre
+que tothom pugui efectuar modificacions a la sessió d'aquell usuari. (CITE)
+Tanmateix, es considera aquesta pràctica poc segura, i per aquest motiu no es
+tindrà en compte durant l'elaboració d'aquest treball.
