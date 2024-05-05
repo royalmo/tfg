@@ -121,10 +121,87 @@ no és molt car (CITE), però és més barat un dispotitiu \acro{avr} de la sèr
 
 \section{Segona versió de la placa}
 
+Tal i com s'ha comentat al final de l'apartat anterior, s'ha decidit apostar
+per un microcontrolador més econòmic i senzill degut als pocs requisits que
+demana el sistema. Després de fer una mica de recerca s'ha descobert la
+família de microcontroladors \acro{AtTinyX5}, on la X pot variar en funció de
+la memòria \est{flash} disponible. (CITE)
 
+Aquests microcontroladors disposen de 8 potes, de les quals 2 són per
+l'alimentació. Així doncs, de les 6 potes disponibles encara en sobraran dues
+per si es vol afegir algun perifèric extra. Per a aquesta versió del projecte,
+però, s'ha decidit no donar-hi cap ús.
 
-\subsection{Digispark}
+Tanmateix, abans de produir una placa de circuit imprès, hi havia interès en
+poder provar el microcontrolador per a assegurar-se que seria possible
+realitzar el sistema amb aquest darrer. A través de recerca i recomanacions del
+personal del laboratori de l'escola es va prendre coneixement de l'existència de
+la placa \est{Digispark}.
+
+\subsection{Proves amb \est{Digispark}}
+
+La placa \est{Digispark} es pot comprar a preus molt reduïts i a molts llocs.
+És una placa de circuit imprès equipada d'un \acro{AtTiny85}, un connector
+\acro{usb}, algun component per a regular les tensions, i tot de pins per a
+poder connetar fàcilment qualsevol cable i component al microcontrolador. (CITE)
+
+El microcontrolador ve programat amb un \est{bootloader} que utilitza la
+llibreria \acro{v-usb} per a identificar-se com un port sèrie a l'ordinador
+(és una de les sub-classes \est{hid}) i així poder programar-lo fàcilment.
+És una placa bastant popular, de maquinari obert, i amb molta documentació i
+tutorials disponibles per internet. (CITE)
+
+Es va adquirir un parell d'unitats d'aquesta placa, i es va connectar amb el
+mòdul del sensor giroscopi. Mitjançant tutorials era senzill utilitzar la
+placa \est{Digispark} com si d'un Arduino es tractés. Es podia, per exemple,
+utilitzar la llibreria \est{LittleWire} per a comunicar-se amb el sensor amb el
+protocol \acro{i2c} i llegir les dades necessaries.
+
+Durant el transcurs d'aquestes proves també es va descobrir el projecte
+\est{i2c\_tiny\_usb} (CITE). Aquest projecte ha aconseguit dissenyar una placa
+molt semblant a la de \est{Digispark}, i mitjançant programari (tant del cantó
+del microcontrolador com afegint contro\l.ladors al \est{kernel} de Linux),
+el dispositiu s'identifica com un mestre \acro{i2c} de cara a l'ordinador, i
+apareix a \verb|/dev/i2c-X| on X és el nombre de dispositiu. (CITE)
+
+Aquest projecte ha anat molt bé per a fer proves de precisió del sensor a més
+alt nivell (per exemple, utilitzant la lliberria \acro{i2c} de Python). Tanmateix,
+es va descartar utilitzar-lo per a aquest treball per a dos motius:
+
+\begin{itemize}
+    \item Aquest projecte pretén ser el màxim de versàtil possible i utilitzar
+    els estàndards de més alt nivell. En el capítol anterior s'ha comentat que
+    es volia utilitzar les classes \acro{hid} i el mòdul \acro{iio}. El projecte
+    \est{i2c\_tiny\_usb} utilitza programari propi, i tot i que estigui inclòs
+    en el \est{kernel} de Linux, s'hauria de fer de zero per altres sistemes
+    operatius.
+    \item L'objectiu del projecte és aprendre durant el procés de desenvolupament.
+    Si s'agafa un projecte que ja ho té tot fet no s'adquirirà experiència en
+    aquests camps.
+\end{itemize}
+
+Així doncs, s'ha acabat utilitzant la placa \est{Digispark} per a validar
+que el projecte es podria desenvolupar en aquest maquinari, i un cop es va
+conéixer la bona notícia es va començar a desenvolupar la pròpia placa de circuit
+imprès.
+
 \subsection{Esquemàtic}
+
+L'esquemàtic d'aquesta segona versió no té molts secrets. Consisteix en agafar
+el circuit de la versió anterior i canviar tot el que té a veure amb l'antic
+microcontrolador per al nou. S'ha utilitzat com a referència el circuit de la
+placa \est{Digispark}, tenint en compte que algunes coses, com el regulador de
+tensió extern, no son necessaries per a aquest projecte. (CITE)
+
+En aquest nou circuit s'utilitza el rellogte intern del microcontrolador, que
+ja s'ha vist que és suficient per a comunicar-se per \acro{usb}. Només hi ha
+una novetat a comentar en aquesta segona versió, i és la presència de dos
+díodes Zener en les línies d'\acro{usb}. El motiu rau en el protocol \acro{usb}:
+tot i estar alimentat a $5V$, les línies de dades funcionen a $3V3$. Tal i com
+s'ha comentat a l'apartat \ref{subsub:usb_physic}, els dos díodes asseguren
+que la tensió mai supera aquest llindar.
+
+TODO CIRCUIT
 
 Finalment, s'observa que en el diagrama no hi ha cap element amb el que una
 persona pugui interactuar directament amb el dispositiu (polsador, llum, ...).
@@ -132,8 +209,49 @@ Això és a propòsit, ja que es pretén que el dispositiu acabi tancat en una c
 i que l'usuari no hagi de tocar-lo mai.
 
 \subsection{Placa de circuit imprès}
-\subsection{Producció de la \acro{pcb}} % JLCPCB
-\section{3D Enclosure}
+
+Un cop creat l'esquema elèctric, s'ha pogut començar a dissenyar la placa de
+circuit imprès, de la mateixa manera que amb la versió anterior. Una de les
+tasques més difícils d'aquest procés és escollir \est{footprints} de components
+que estiguin actualment en estoc, i assegurar-se que les línies de tensió
+són una mica més groixudes que la resta. A la figura x es pot veure el resultat
+final d'aquest segon disseny.
+
+S'ha utilitzat,
+sempre que ha sigut possible, components amb \est{footprints} de dimensions 0805,
+ja que amb aqeusta mida es poden soldar a mà. Tot i que no s'ha previst afegir
+manualment els components, el fet d'escollir aquestes mides és una assegurança
+que si s'espatlla o es crema algun component, aquest es podrà canviar.
+Evidentment, en un disseny per a produir-se en massa es pot reduir la mida dels
+components.
+
+Com que a la part de darrere de la placa només hi ha d'anar un parell de vies,
+però cap component, s'ha decidit afegir-hi els crèdits del projecte: autor,
+titulació, logos de l'escola i de maquinari lliure, i enllaç a una possible
+pàgina web.
+
+Tot i haver parat atenció amb els components, es veurà en el següent apartat que
+l'empresa amb qui s'ha encarregat la producció de la placa no tenia disponibles
+alguns d'aquests. Així doncs, s'ha hagut de fer una nova revisió amb petites
+modificacions d'alguns components.
+
+\subsection{Producció de la \acro{pcb}}
+
+Amb la placa de circuit imprès ja preparada, només faltava produir-ne algunes
+unitats. Per recomanacions de la universitat s'ha optat per utilitzar el
+proveïdor \acro{jlcpcb}. Aquest ofereix bons preus, plaços curts i també té el
+servei de muntatge de la placa (és a dir, soldar-hi tots els components). (CITE)
+
+Degut al poc talent i ganes que hi havia en soldar un per un els components, i
+sabent que alguns són molt petits i seria senzill cometre errors, s'ha optat
+per delegar aquesta tasca al proveïdor. Evidentment, el cost de muntatge ha
+sigut el més elevat de tota la comanda, però imprimir i muntar 5 plaques
+ha sortit per menys de 100€, enviament i \acro{iva} inclosos.
+
+El resultat final ha quedat molt professional i es pot veure a la figura
+\ref{asdfasdf}.
+
+\section{Encapsulat}
 
 Quan es va saber que la placa impresa ja no rebria més modificacions físiques,
 es va decidir crear una petita carcassa per a evitar que hi entri pols o les
