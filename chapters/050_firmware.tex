@@ -20,6 +20,7 @@ facilitar la tasca de provar les modificacions fetes. Per aquest motiu, s'ha
 planejat tot un entorn de treball que es detalla en aquest apartat.
 
 \subsection{\est{Bootloader}}
+\label{subsec:bootloader}
 
 Hi ha diverses formes de programar el microcontrolador, però la més adequada
 per al sistema en qüestió, i tenint present que es voldrà programar el dispositiu
@@ -78,5 +79,105 @@ tutorials disponibles per internet.
 
 \section{\acro{I2c}}
 
+Un cop solucionada la comunicació entre el microcontrolador i l'ordinador, toca
+centrar-se en la comunicació entre el microcontrolador i el sensor. Aquesta, tal
+i com s'ha dit en el capítol anterior, es farà mitjançant el protocol \acro{i2c}.
+Aquest protocol utilitza dues línies bidireccionals, una per les dades i una per
+el rellotge, que es connecten a 0V o es deixen a l'aire (i els \est{pull-ups} la
+porten a la tensió d'alimentació).
+
+Si bé hi ha moltes llibreries per a la placa Arduino i altres microcontroladors
+de l'arquitectura \acro{avr}, totes utilitzen perifèrics específics que, en el
+cas de l'\acro{AtTiny85} d'aquest projecte, o estan ja en ús per \acro{v-usb}, o
+no existeixen per a aquest xip. Així doncs, s'ha de aprendre el funcionament a
+baix nivell del protocol i implementar-lo des de zero.
+
+Per sort, aquest protocol no és molt extens i amb unes 300 línies de codi en C
+s'ha pogut implementar el parell de funcions que es necessitava per a dur a
+terme el projecte.
+
+El protocol \acro{i2c}, com s'ha dit anteriorment, és molt versàtil i permet 
+to\l.lerar dispositius amb diferents tensions d'alimentació, més dispositius
+(esclaus, però també mestres) i molta escalabilitat. El mestre és qui inicia
+la transmissió (per tant, dos esclaus no poden parlar entre si), però la
+direcció del flux de dades pot canviar. CITE
+
+El funcionament de \acro{i2c} es pot resumir en poques paraules: el mestre envia
+pel canal una adreça de 7 bits per a saber amb quin dispositiu vol comunicar-se.
+Aquests 7 bits són l'adreça del dispositiu, disponible als \est{datasheets}. Per
+al sensor d'aquest projecte, l'adreça és 0x68 CITE. Després d'aquests 7 bits,
+s'envia un 8è bit que dependrà de si es vol enviar dades o rebre dades del
+dispositiu.
+
+Un cop rebut el \est{acknowledgement} de l'esclau, comença la transmissió de
+dades, que acabarà en funció dels valors de \est{acknowledgement} del mestre, o
+si el mestre envia un senyal de stop. Es recomana llegir el \est{dataheet} del
+sensor a CITE per a entendre el funcionament de \acro{i2c}, ja que està molt ben
+explicat.
+
+\subsection{Funcionament del sensor \est{MPU6050}}
+
+Pel cas concret del sensor d'aquest projecte, hi ha un parell de normes extres
+a part de les que estableix el protocol \acro{i2c} que serveixen per a comunicar-se
+d'una forma fiable amb el sensor.
+
+El sensor \est{MPU6050} defineix en el seu \est{datasheet} un seguit de
+registres, que funcionen de la mateixa forma que els perifèrics en \acro{avr}:
+no son registres comuns per a guardar dades, sinó que és com si hi hagués una
+extensió en els perifèrics del propi microcontrolador. Així doncs, si es llegeix
+el registre 0x50:0x51 REVISAR es podrà consultar el valor mesurat de temperatura
+(sense processar) CITE. També es pot escriure en alguns registres, per exemple
+per a activar o ca\l.librar el sensor.
+
+Per a escriure en un registre només cal enviar per \acro{i2c} (és a dir, escriure)
+l'adreça del registre i el valor a escriure. Si s'envien més bytes, el sensor
+entendrà que s'han d'escriure en els registres posteriors. Pel que fa a la lectura,
+s'ha d'enviar l'adreça del registre i tornar a escriure la capçalera \acro{i2c},
+però en aquest cas, en mode de lectura. El sensor enviarà els continguts del
+registre en qüestió. Si es decideix de seguir llegint (mitjançant un \acro{nack}),
+el sensor enviarà el valor del registre posterior. CITE
+
+Finalment, cal destacar que, pel que fa al sensor, poca configuració se li ha de
+fer per a rebre dades d'acceleració. Només cal desactivar el mode \est{sleep},
+que ve sempre activat per defecte per a estalviar energia, i començar a llegir
+dades. Per els propòsits d'aquest projecte no és rellevant la freqüència de
+dades, qualsevol serà suficient. La precisió de les dades tampoc és tan rellevant
+per als calculs que s'haurà de realitzar.
+
 \section{Programació dels dispositius de producció}
 
+Després de resoldre alguns detalls que no tenen suficient importància per a
+incloure en aquest document, el \est{firmware} ja estava llest per a 
+implantar-se a molts dispositius. Tanmateix, tal i com s'ha dit a
+l'apartat \ref{subsec:bootloader}, no es vol que els productes finals tinguin
+un \est{bootloader}. Per tant, s'ha de cercar una nova forma de programar
+els microcontroladors.
+
+La placa \acro{AtTiny85} ve, per defecte, amb la memòria \est{flash} completament
+buida, és a dir, no té ni \est{bootloader}. La forma més senzilla de poder
+programar-hi alguna cosa és mitjançant \acro{isp}. El protocol
+\est{In-System Programming}, també conegut sota les sigles \acro{icsp} o
+\est{In-Circuit Serial Programming}, és una forma prou estandaritzada per a
+programar o comunicar-se amb microcontroladors programables, sensors, o altres
+dispositius del món dels sistemes encastats. (CITE)
+
+Una comunicació per \acro{isp} necessita 6 cables, o 4 si no es tenen en compte
+les línies d'alimentació. Ara bé, només queden 2 potes disponibles, i \acro{isp}
+necessita d'unes potes específiques (no es poden configurar per codi, ja que
+encara no s'ha programat la placa). Així doncs, la solució més sensata és
+dessoldar el microxip, programar-lo en una placa a part, i tornar-lo a soldar
+a la placa.
+
+Abans de fer aquesta tasca tediosa, però, s'ha decidit consultar amb el
+personal del laboratori de l'escola, que ha recomanat utilitzar una pinça com
+la de la figura \ref{sdfasdf} per a accedir a les potes de l'integrat sense haver
+de dessoldar-lo. Programar així el microcontrolador no és sempre una bona idea,
+sobretot si hi ha elements actius que podrien causar un curtcircuit. Però al estar
+la connexió \acro{usb} a l'aire (no hi ha cable connectat) i la connexió
+\acro{i2c} funciona mitjançant \est{pull-ups}, no hi ha hagut cap problema per
+a programar així l'integrat.
+
+Per a programar per \acro{isp} s'ha utilitzat una placa Arduino amb el codi
+\est{ArduinoISP}, disponible a la pròpia aplicació \est{ArduinoIDE}. (CITE) Un cop
+l'Arduino tenia aquest codi, una simple comanda d'\est{avrdude} s'ha afegit
+al \est{Makefile}, permetent la programació senzilla del dispositiu.
