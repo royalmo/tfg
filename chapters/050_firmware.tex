@@ -1,6 +1,82 @@
 \chapter{Firmware}
-\section{i2c on littlewire}
-whatchdog
-osccal
-\section{canvi a accel3d}
-\section{PID-VID}
+
+En aquest capítol es detallarà tot el referent al codi que anirà dintre de la
+placa de circuit imprès realitzada en el capítol anterior. Degut que les
+connexions entre la placa creada i l'entorn de proves amb la placa \est{Digispark}
+i el mòdul \est{GY291} són idèntiques, el \est{firmware} que es crei servirà
+per les dues plaques.
+
+Tal i com s'ha dit en l'apartat \ref{subsec:hw_digispark}, es va descobrir
+el projecte \est{i2c\_on\_littlewire}, que permet comunicar-se directament amb
+dispositius \acro{i2c} des de l'ordinador. En aquest apartat també es destaquen
+els motius pel que s'ha descartat aquesta possiblitat, però tot i això cal
+mencionar que es va crear un petit codi de C per a demostrar que la comunicació
+era possible. Aquest codi es va basar en els exemples disponibles a (CITE).
+
+\section{Entorn de treball de desenvolupament}
+
+Per a poder desenvolupar amb comoditat el \est{firmware} del projecte és crucial
+facilitar la tasca de provar les modificacions fetes. Per aquest motiu, s'ha
+planejat tot un entorn de treball que es detalla en aquest apartat.
+
+\subsection{\est{Bootloader}}
+
+Hi ha diverses formes de programar el microcontrolador, però la més adequada
+per al sistema en qüestió, i tenint present que es voldrà programar el dispositiu
+moltes vegades, és utilitzar un \est{bootloader} que identifiqui el dispositiu
+com una placa programable durant els primers segons d'operació. Si al cap de
+poc temps que el dispositiu no estigui alimentat l'usuari no ha intentat
+programar-hi res a través de l'ordinador, s'executarà el programa principal
+del microcontrolador.
+
+Aquest \est{bootloader} que s'ha descrit és exactament el que hi ha en la
+placa \est{Digispark} per defecte. Com és evident, en un producte definitiu no
+interessa posar un \est{bootloader} que retardi el començament del programa
+uns segons més, però per a fer proves valdrà la pena aquesta espera.
+
+Programar el \est{Digispark} o una placa equivalent com la d'aquest projecte
+utilitzant el \est{bootloader} definit anteriorment és una tasca molt senzilla.
+Un cop es disposi del fitxer \verb|.hex| que es vol programar al
+microcontrolador, es pot utilitzar programes com \est{avrdude} o
+\est{micronucleus} per a que, mentre s'estigui executant el bootloader, es 
+reprogrami el xip. (CITE)
+
+Per a progrmar la placa amb un sistema basat en Linux s'ha de realitzar una
+tasca extra: els permisos. Un usuari administrador podrà programar la placa
+sense cap problema, però executar com a \est{root} un programa sempre implica
+assumir riscos (CITE). Per això el més recomanat és crear una regla \acro{udev}
+per al dispositiu en qüestió, fent que sigui accessible per a tots els usuaris.
+Es pot consultar un tutorial detallat a (CITE).
+
+\subsection{\est{Makefile}}
+
+Un cop es sap com programar la placa, el següent pas a seguir és crear un
+\est{Makefile} per a poder compilar i programar amb una única comanda.
+No és la primera ni la segona vegada que s'utilitza l'eina \est{make} en
+aquesta titulació però sí que és la primera vegada que s'utilitza amb una placa
+que no sigui un Arduino. Tanmateix, no hi ha gaire diferència, tret de la
+part de programar mencionada en l'apartat anterior.
+
+S'ha preparat i documentat el \est{Makefile} com es mereix: s'ha posat un menú
+d'ajuda, s'ha posat l'opció per a programar els fusibles del microcontrolador
+(aquesta part només s'ha de fer una sola vegada), s'ha posat opcions per a
+eliminar tots els fitxers generats i també per a poder debugar el programa.
+
+\section{\acro{V-usb}}
+
+Amb l'entorn de programació preparat, ja es pot començar a crear el
+\est{firmware} del projecte. Es començarà per la part més complicada: la
+llibreria \acro{v-usb}. Tanmateixa, aquesta té molt bona documentació i
+tutorials disponibles per internet.
+
+\subsection{Ca\l.libració de l'osci\l.loscopi}
+
+\subsection{Identificadors \acro{usb}}
+\subsection{\est{Watchdog}}
+
+\subsection{canvi a accel3d}
+
+\section{\acro{I2c}}
+
+\section{Programació dels dispositius de producció}
+
