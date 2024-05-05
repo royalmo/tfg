@@ -67,15 +67,93 @@ eliminar tots els fitxers generats i també per a poder debugar el programa.
 
 Amb l'entorn de programació preparat, ja es pot començar a crear el
 \est{firmware} del projecte. Es començarà per la part més complicada: la
-llibreria \acro{v-usb}. Tanmateixa, aquesta té molt bona documentació i
+llibreria \acro{v-usb}. Tanmateix, aquesta té molt bona documentació i
 tutorials disponibles per internet.
+
+La tasca d'aquest apartat és aconseguir que l'ordinador identifqui la placa
+com un acceleròmetre tridimensional. Per a arribar a aquesta meta hi haurà un
+seguit de reptes i barreres a superar.
+
+El punt de partida és els codis d'exemples del repositori del projecte (CITE).
+També hi ha un repositori amb bastants exemples, però la majoria només son
+compatibles per a un \acro{AtMega}, i s'haurien d'adaptar de totes formes.
 
 \subsection{Ca\l.libració de l'osci\l.loscopi}
 
+Un dels problemes més grans del microcontrolador que s'està utilitzant és que
+l'osci\l.lador intern que disposa no és compatible amb el que demana el
+protocol \acro{usb}. Es disposa d'una freqüència de XXMHz TODO REVISE i
+\acro{usb2} funciona a XXXMHz.
+
+Aquest problema és ben conegut pels desenvolupadors de \acro{v-usb} i en alguns
+dels exemples s'explica com ca\l.librar l'osci\l.lador intern a una nova
+freqüència basant-se en els intèrvals de temps entre els que es reb senyal
+des de l'ordinador. Es recomana consultar aquests codis CITE si es vol entendre
+millor aquest apartat.
+
+No utilitzar un rellotge compatible amb el protocol \acro{usb} viola les normes
+marcades per la propia entitat \acro{usb-if}. Tanmateix, com s'ha vist en
+apartats anteriors, no es pretén certificar com a \acro{usb} el dispositiu
+(per altres motius no tècnics), pel que mentre funcioni correctament en la
+àmplia majoria de dispositius es considerarà un èxit.
+
 \subsection{Identificadors \acro{usb}}
+
+Parlant de \acro{usb-if}, en aquest punt del projecte és quan s'ha de decidir
+quin \acro{vid-pid} es posa al dispositiu, ni que sigui durant l'època de
+proves. Tal i com s'ha vist en l'apartat \ref{subsec:usb-if}, hi ha dues
+opcions possibles.
+
+Durant el desenvolupament es decidirà utilitzar un parell de codis sense
+consensuar-ho amb ningú. Aquesta és la solució més senzilla i ràpida, ja que per
+a obtenir identificadors a partir d'entitats mencionades anteriorment es sol
+tardar un temps, i acostumen a acceptar únicament projectes acabats o en fase
+de proves finals.
+
+Així doncs, s'ha optat per a agafar el \acro{vid-pid} XXXXXX, que és la parella
+de codis que XXX ofereix per a fer proves individuals CITE. En altres paraules,
+XXX mai assignarà aquests identificadors a un producte que acabi sent
+comercialitzat. Va perfecte doncs per a fer proves durant el desenvolupament del
+projecte.
+
 \subsection{\est{Watchdog}}
 
-\subsection{canvi a accel3d}
+Una altra de les funcionalitats afegides en aquest projecte és el \est{watchdog}.
+Es tracta d'un perifèric disponible en la majoria de xips de l'arquitectura
+\acro{avr} (entre d'altres) que té per objectiu detectar anomalies durant
+l'execució del programa.
+
+Un \est{watchdog} disposa d'un temporitzador que el programa principal ha d'anar
+reiniciant cada poc temps. Si passa més d'un llindar de temps sense que el
+temporitzador ha sigut reiniciat es considera que el programa principal s'ha
+quedat penjat, i el \est{watchdog} actua. Es pot configurar perquè actui de
+diferents maneres, però la més senzilla i popular és reiniciant el programa
+sencer amb un \est{flag} activat, perquè el mateix programa pugui detectar que
+no ha sigut un reinici voluntari, sinó degut a un error previ. CITE
+
+La llibreria \acro{v-usb} disposa d'exemples on s'utilitza un \est{watchdog}, i
+per tant no ha sigut gaire complicació afegir-lo en aquest projecte. És una
+protecció adicional per a assegurar-se que el dispositiu sempre funciona
+correctament, o com a mínim sense errors greus que no permetin l'execució
+normal del programa.
+
+\subsection{Canvi de tipus \acro{hid}}
+
+Finalment, la tasca més complicada d'implantar aquesta llibreria en el marc
+del treball de final de grau és la configuració del nou tipus \acro{hid}:
+acceleròmetre tridimensional.
+
+Resulta que els tutorials documenten molt bé com configurar tota la llibreria,
+però no és cosa seva explicar com es creen o modifiquen \est{Hid Report Descriptors}.
+Tot i que hi ha exemples amb la llibreria que utilitzen la classe \acro{hid},
+aquests són per a simular teclats o ratolins. S'ha hagut de buscar molt per a
+trobar una mica d'inforamció al respecte.
+
+Tanmateix, després de molt prova i error i anar debugant amb l'ajuda de
+\est{wireshark} totes les comunicacions (es recomana configurar \est{wireshark}
+d'acord amb aquest tutorial per a rebre paquets \acro{usb} CITE), s'ha aconseguit
+generar un \est{Hid Report Descriptor} que és correctament llegit per l'ordinador.
+Una de les referències més importants sobre aquesta part és CITE.
 
 \section{\acro{I2c}}
 
