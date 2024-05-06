@@ -1,22 +1,240 @@
-\chapter{software a linux}
+\chapter{\est{Software} a Linux}
+
+La darrera peça del puzzle per a que el sistema pugui funcionar és el
+programari del cantó de l'ordinador. Tal i com s'ha comentat al capítol
+\ref{cap:estat-de-l-art}, el fet d'utilitzar \acro{iio} implica que el
+programari que es disseny per Linux no serà compatible amb la resta de
+sistemes operatius. També s'ha vist que \est{Xlib} només existeix en sistemes
+basats en Linux.
+
+Així doncs, aquest capítol té per objectiu dissenyar un programari senzill però
+robust per a poder utilitzar el sistema en dispositius basats en Linux. Es
+centraran les proves en la distribució de Linux \est{Ubuntu}, concretament en
+les versions 18.04 i 24.04 \acro{lts} (\est{Long-Term Support}), però tot hauria
+de funcionar de la mateixa forma amb la resta de distribucions.
+
 \section{Punt de partida}
-- python
-- config file
-\section{llibreries utilitzades}
-\subsection{pylibiio}
-- pylibiio (fork PR)
-\subsection{pylibudev}
-- pylibudev
-\subsection{pyxrandr}
-- pyxrandr (fork PR)
-% MENCIONAR pyHID
+
+Un bon inici per a aquesta part del projecte és identificar què és el que
+s'espera del programa: com s'ha d'insta\l.lar, com ha de funcionar i com
+s'ha de configurar. D'aquesta forma, es veu els requisits del programa des del
+punt de vista d'un usuari, fent sovint més senzill l'ús de l'aplicació.
+
+Després de donar-hi algunes voltes s'ha decidit utilitzar Python per a
+desenvolupar l'aplicació, degut a la gran disponibilitat de llibreries, el fet
+que ja es troba insta\l.lat per defecte en moltes distribucions de Linux, i
+la simplicitat de programació (en comparació als llenguatges de baix nivell).
+S'ha decidit també aque s'utilitzarà un servei de Linux per al programa principal.
+Això implicarà alguna configuració addicional, però de ben segur que facilitarà
+la vida als usuaris.
+
+Un altre aspecte important del programa és la manera de configurar-lo. Tot i que,
+idealment, el millor per als usuaris finals seria una interfície interactiva,
+Linux sol funcionar amb fitxers per tot. Així doncs, s'ha decidit crear un fitxer
+\verb|.conf| per a guardar les configuracions de l'aplicació. Aquest fitxer té
+un format pactat i descrit a la documentació del programa, i es podrà guardar en
+diferents llocs específics del sistema, on el progrma els buscarà. Crear una
+interfície interactiva que modifiqui aquest fitxer no hauria de ser una tasca
+gens complicada, i podria ser una perfecta ampliació al sistema.
+
+Pel que fa a l'insta\l.lació, es dissenyarà un paquet de Debian (una de les
+distribucions de Linux més populars) que insta\l.larà els requisits i configurarà
+el que faci falta per al bon funcionament del programa, fent aquesta tasca
+possible per a persones que no dominin tant la línia de comandes.
+
+\section{Llibreries utilitzades}
+
+Un cop es sap les tasques que s'haurà de fer és el moment de cercar si hi ha
+alguna eina que pugui simplificar la tasca de desenvolupament. Tal i com s'ha dit
+a l'apartat anterior, Python té moltes llibreries (o mòduls) creats per la
+comunitat i disponibles per tothom. Coneixent les parts més difícils de
+l'aplicació, es pot cercar si algú ja les ha implementat.
+
+\subsection{\est{PyLibiio}}
+
+El primer mòdul cercat és \est{PyLibiio}, que consisteix en la llibreria de
+Linux \est{libiio} portada a Python. CITE REPO. La llibreria compilada acostuma
+a estar insta\l.lada per defecte en la majoria de sistemes basats en Linux, però
+la portabilitat a Python és un afegit que s'ha d'insta\l.lar.
+
+Ja s'ha comentat en el capítol \ref{cap:estat-de-l-art} la importància
+i beneficis d'utilitzar l'entorn de \acro{iio} per al programa d'aquest projecte,
+així que si, a més a més, es pot fer des de l'alt nivell d'abstracció que ofereix
+Python, encara millor.
+
+Aquest mòdul no té molta complexitat, i menys si es segueix com a referència
+algun dels exemples llistats. La majoria dels exemples consistien en replicar
+amb Python les comandes d'exemple de la llibreria \est{libiio}.
+
+Tanmateix, durant les proves de l'exemple de la comanda \verb|iio_info| s'ha
+vist que aquesta no donava els mateixos resultats que el mateix programa implementat
+en C. Quan no s'especifica cap argument en la línia de comandes, s'hauria 
+d'utilitzar el primer grup de dispositius possible. En canvi, el programa d'exemple
+s'aturava sense mostrar cap error.
+
+Així doncs, amb la intenció de contribuir a millorar el projecte, es va
+notificar de l'error i es va crear una \est{Pull Request}, és a dir, es va
+proposar una solució. CITE Aquesta encara està pendent d'aprovació (ja que sembla que
+les persones encarregades de mantenir la llibreria no tenen molt de temps
+disponible).
+
+\subsection{\est{PyLibudev}}
+
+Durant el desenvolupament del programa es va veure la necessitat d'obtenir el
+número de sèrie a partir de l'adreça d'un dispositiu \acro{iio}. Després de fer
+recerca, es va veure que la forma més senzilla era utilitzant una comanda
+de \acro{udev}. I, com no podia ser d'una altra manera, es va cercar si es podia
+estalviar aquesta comanda i utilitzar una llibreria de Python en el seu lloc.
+
+És important evitar utilitzar comandes ja que aquestes són més propenses a
+variar i deixar de funcionar que la pròpia interfície de desenvolupament que
+proporcionen les llibreries, com és el cas de \est{libudev}. Per aquest motiu,
+quan es va conéixer l'existència de \est{PyLibudev} es va fer el canvi en la
+implementació. CITE
+
+Aquesta llibreria també disposava d'exemples, i no s'hi ha trobat cap
+error aparent. Com també ha passat amb el mòdul anterior, la pròpia llibreria
+ja ve insta\l.lada, però la portabilitat a Python s'ha de llistar com una
+dependència del programa.
+
+Quan encara no es sabia del tot segur si es faria servir \acro{iio} o, una capa
+més per sota, el protocol \acro{hid}, també es va cercar si hi havia una
+implementació per Python de la llibreria \est{libhid}. Es va trobar el mòdul
+\est{PyLibhid}, un projecte molt complet amb, fins i tot, eines per a debugar
+interactivament dispositius \acro{hid}. Finalment es va descartar utilitzar
+aquest afegit, ja que es va passar a utilitzar \acro{iio}.
+
+\subsection{\est{PyXrandr}}
+
+Finalment, la tercera i última contribució externa de l'aplicació és el
+mòdul \est{PyXrandr}. A diferència de la resta, aquest mòdul no es troba
+disponible al repositori oficial de Python \est{PyPi} i, per tant, no es pot
+insta\l.lar amb la comanda \est{pip3} o marcar com a dependència quan es crei
+l'aplicació final.
+
+Aquest projecte, disponible a \est{GitHub}, és una abstracció de la comanda
+\est{xrandr} CITE. S'ha vist en l'apartat \ref{subsec:xrandr} que la llibreria
+\est{Xlib} pot ser una mica complicada d'utilitzar, i aquesta comanda no ha
+canviat gaire en bastant temps. Així doncs, es considera una bona alternativa
+per a l'aplicació.
+
+La persona que va desenvolupar \est{PyXrandr} en un primer moment ha deixat de
+mantenir el projecte. A més a més, aquest no va tenir en compte tots els casos
+d'ús, deixant en el codi alguns errors. Ja hi ha gent que ha creat \est{forks}
+(còpies del projecte) i \est{pull reuquests} per a proposar millores, però
+l'autor se n'ha despreocupat. CITE
+
+Així doncs, s'ha realitzat també una còpia del projecte i s'ha fusionat diversos
+canvis proposats per a la comunitat. També s'ha afegit alguna correcció pròpia,
+com el canvi d'orientació per a pantalles principals CITE. Tanmateix, el canvi més
+gran que s'ha fet per a que pugui tot funcionar per a aquest projecte es veurà
+en l'apartat \ref{subsec:systemd_system}.
+
+Com que no es pot llistar aquest programa com a dependència, el més sensat és
+afegir el codi (d'unes 300 línies) al propi repositor del projecte. inicialment
+es va implementar com a un submòdul de \est{git} CITE, però al fer tantes
+modificacions i al voler fusionar tot el programa en un fitxer es va acabar
+copiant i enganxant el contingut necessari.
+
 \section{Desenvolupament del programa}
+
 % Que fa
-\section{Creació del servei systemd}
-\subsection{usuari}
-\subsection{sistema}
-- service
-\section{Creació del paquet de Debian}
-- deb package
-\subsection{Afegit de manual}
-- man page
+% - Configuració
+% - Mitjana mòbil
+% - Diverses pantalles
+
+
+\section{Creació del servei \est{systemd}}
+
+Un cop el programa funcionava correctament amb la línia de comandes és el moment
+de fer-lo funcionar en un segon pla. Tal i com s'ha detallat a l'apartat
+\ref{subsec:systemd}, hi ha dos tipus de serveis que es poden crear, els dos
+amb propòsits diferents. Per a oferir més possibilitats a l'usuari i, sobretot,
+conéixer millor les diferències entre aquests dos tipus, s'ha decidit crear
+un servei per usuari i un servei per al sistema.
+
+\subsection{Servei d'usuari}
+
+
+\subsection{Servei de sistema}
+\label{subsec:systemd_system}
+
+\section{Creació del paquet de \est{Debian}}
+
+Tal i com s'ha vist en l'apartat anterior, el servei de sistema necessita guardar
+els fitxer de configuració i els fitxers executables en llocs molt específics.
+Insta\l.lar el programa a mà, quan es tracta de fer-ho per a tot el sistema,
+pot ser fins i tot una tasca perillosa. Per aquest motiu s'ha decidit crear un
+paquet de Debian per a facilitar el procés d'insta\l.lació.
+
+El més important durant la creació d'un paquet és saber quines dependències
+necessita el programa i quina és la versió més baixa amb la que poden funcionar.
+Per sort, s'ha desenvolupat el programa en un enotrn de Ubuntu 18.04, que fa
+pocs mesos que ha deixat de rebre suport gratuït CITE. Per tant, aquest sistema
+operatiu es considerarà com el més antic que suporta aquesta aplicació. En altres
+paraules, les versions de les dependències insta\l.lades en aquest sistema seran
+les que es posaran en el llistat de dependències del paquet.
+
+També és essencial saber determinar per a quines arquitectures és compatible el
+programa creat. Per exemple, si s'hagués implementat el projecte en C, s'hauria
+de compilar per a cada arquitectura separadament, i crear un paquet per a cada
+una d'elles. En el cas de Python, en canvi, és compatible per a totes les
+plataformes. Per això es posarà \est{all} enlloc de una arquitectura específica,
+com podria ser \est{amd64}.
+
+La següent tasca més important és saber què s'ha d'insta\l.lar i a on. Per sort,
+Debian facilita molt aquesta tasca, i per programes senzills gairebé que és
+bufar i fer ampolles: només cal indicar a on es copia cada fitxer i l'empaquetador
+fa la resta. Per exemple, si es copia un servei de sistema s'encarrega d'arrancar
+el servei, si es copia un fitxer de configuració es mira que no s'estigui
+sobreescrivint una versió anterior, o si es copia una pàgina de manual s'encarrega
+de recarregar la base de dades dels manuals. CITE
+
+La resta de tasques, en canvi, són més aviat diplomàtiques: indicar la llicència
+amb la que es distribueix el programa, l'autor, canvis que s'ha fet des d'una
+versió anterior i organitzar-ho tot en carpetes, tal i com ho vol Debian.
+Es recomana veure el tutorial de CITE si es vol replicar aquests passos.
+
+Finalment, s'ha creat un \est{shell script} per a poder crear fàcilment el
+paquet. Tot i que el nombre de comandes a recordar son poques, és una tasca que
+no es fa sovint, i es prefereix deixar-ho apuntat i ben preparat en algun lloc.
+Es pot consultar en el repositori del treball aquest \est{script}. CITE
+
+\subsection{Pàgina de manual}
+
+Quan el paquet de Debian ja va funcionar correctament s'hagués pogut considerar
+la part de programari per Linux completa. Tanmateix, mentre es creava el paquet,
+l'eina de creació mostrava una alerta indicant que el programa no tenia cap
+pàgina de manual. Això va portar al desig personal d'aprendre com es creaven
+i com s'afegien en un paquet de Debian.
+
+Per això es va cercar en diferents llocs fins que es va trobar l'eina XXX CITE,
+que converteix un fitxer en \est{Markdown} en una pàgina de manual amb el
+format que aquesta necessita. El format de les pàgines de manual es considera
+editable a mà, però la corba d'aprenentatge és prou alta i, segons moltes fonts,
+no val la pena per a pàgines petites o projectes poc ambiciosos. CITE
+
+Un cop creada la pàgina de manual, s'ha d'afegir en les comandes d'insta\l.lació
+que es copïi al directori pertinent aquesta pàgina, i un cop insta\l.lat el
+paquet de nou, només cal executar \verb|man gyroscreen| per a consultar el
+manual d'ús del programa, en anglès.
+
+\subsection{Repositori d'\acro{apt}}
+
+Insta\l.lar el paquet generat es pot fer utilitzant l'eina \verb|dpkg| sense cap
+problema. L'únic inconvenient d'aquesta eina és que no insta\l.la automàticament
+les dependències, però en el \acro{readme} del repositori es detallen tots els
+passos per a seguir en aquests casos.
+
+Si es vulgués distribuir més fàcilment el programa el pas a seguir seria
+penjar el paquet en algun repositori \acro{apt}. Això implicaria tenir un servidor
+web estàtic on poder descarregar els programes. Els usuaris haurien de, en primer
+lloc, afegir la clau pública amb la que es signa el paquet al seu ordinador, i
+llavors podrien afegir el repositori \acro{apt} en el seu llistat de repositoris
+on buscar programes. Finalment, es podria descarregar i insta\l.lar el programa
+utilitzant la comanda \verb|apt| o \verb|apt-get|.
+
+Tanmateix, el que sobre paper sembla molt senzill implica la configuració d'un
+servidor, domini, i haver de signar amb una clau privada els paquets que es
+generi. Per falta de temps s'ha decidit deixar aquesta tasca com a pendent, i
+recuperar-la en un futur si el projecte té prou de suport.
