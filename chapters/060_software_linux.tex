@@ -105,6 +105,7 @@ interactivament dispositius \acro{hid}. Finalment es va descartar utilitzar
 aquest afegit, ja que es va passar a utilitzar \acro{iio}.
 
 \subsection{\est{PyXrandr}}
+\label{subsec:pyxrandr}
 
 Finalment, la tercera i última contribució externa de l'aplicació és el
 mòdul \est{PyXrandr}. A diferència de la resta, aquest mòdul no es troba
@@ -138,11 +139,117 @@ copiant i enganxant el contingut necessari.
 
 \section{Desenvolupament del programa}
 
-% Que fa
-% - Configuració
-% - Mitjana mòbil
-% - Diverses pantalles
+Un cop conegudes totes les peces del programa només falta unir-les entre sí. En
+aquest capítol es detallen només alguns aspectes rellevants en referència al codi
+creat específicament per a aquest programa. Es recomana tenir a proximitat el
+codi font del projecte per a poder entendre millor aquest apartat.
 
+\subsection{Funcionalitats}
+
+Tot i que la funcionalitat principal del programa ja és coneguda, s'ha decidit
+dur aquest programa una mica més enllà, afegint una mica de robustesa i
+escalabilitat. Hi ha moltes petites millores, però en aquest apartat es vol
+destacar-ne només tres de més rellevants:
+
+\begin{itemize}
+    \item El sistema s'ha dissenyat per a suportar diversos dispositius a la
+    vegada. Basant-se en el número de sèrie de cada dispositiu i els codis
+    identificadors de \est{xrandr} per a les pantalles, es pot associar una
+    orientació d'un dispositiu a una pantalla en concret. Així doncs, més
+    d'una pantalla es pot beneficiar del projecte a la vegada.
+    \item S'ha realitzat el concepte de mitjana mòbil o filtre de pas baix per
+    a aplicar les rotacions: fins que no hi hagi $x$ lectures consecutives amb
+    una orientació diferent no s'aplica el canvi. El valor de $x$ no
+    s'especifica, ja que l'usuari el pot configurar al seu gust.
+    \item S'ha aplicat el concepte de \est{offset}. Pot ser que algunes persones
+    insta\l.lin el dispositiu físic amb el cable mirant cap amunt, algunes cap
+    avall, i no es pretén obligar-los a fer-ho d'una única manera. En canvi,
+    s'ha deixat configurable l'orientació en la que es troba el sensor en
+    referència a la pantalla, i cada cop que es llegeixi una lectura s'aplicarà
+    un \est{offset} per a obtenir l'orientació real.
+\end{itemize}
+
+Aquestes millores, juntament amb els detalls mencionats en aquest capítol, han
+convertit un programa que feia la seva tasca en un de robust, escalable i segur.
+
+\subsection{Conversió de l'acceleració en orientació}
+
+Durant tot el document s'ha parlat d'utilitzar un sensor d'acceleració quan el
+que es vol obtenir és l'orientació del dispositiu. No és pas un error, més bé
+un avançament al que s'explicarà en aquest apartat.
+
+Tots els dispositius mòbils utilitzen un acceleròmetre per a esbrinar en quina
+orientació està el dispositiu, tal i com s'ha avançat a l'apartat
+\ref{sec:sensor_selection}. El que no s'ha dit encara és com es passa d'una
+mesura a una altra.
+
+La forma de fer-ho és ben senzilla: sabent que la gravetat de la terra sempre
+apunta cap avall, i que l'acceleració quan el dispositiu està quiet és únicament
+la de la gravetat, només cal saber cap a quina direcció s'està mesurant aquesta
+acceleració per a detectar l'orientació del sensor. A CITE es detalla tota la
+trigonometria que hi ha darrere d'aquesta explicació, que no s'afegeix en aquest
+document ja que no és rellevant pel producte final.
+
+Com s'ha dit al paràgraf anterior, no serà possible utilitzar aquest sistema en
+llocs on no hi hagi gravetat, o el dispositiu estigui rebent acceleracions en
+alguna altra direcció. Per exemple, durant l'enlairament d'un avió els
+dispositius mòbils no responen bé als canvis d'orientació, però un cop
+s'assoleix la velocitat de creuer (i per tant no hi ha acceleració) ja torna
+a funcionar amb normalitat.
+
+Si mai es vulgués mesurar l'orientació d'una forma més robusta es pot combinar
+l'acceleròmetre amb un sensor de velocitat angular. L'acceleròmetre ajuda a
+calibrar el sensor, determinant sempre la direcció de la gravetat. Però un
+cop ca\l.librat, qui dona més precisió és el sensor giroscopic o de velocitat
+angular. Es pot consultar un exemple de sensor amb més precisió a CITE, però no
+s'implementarà en aquest projecte degut a la complexitat afegida i els propòsits
+del projecte (no es cerca precisió).
+
+\subsection{Fitxer de configuració}
+
+La forma principal (i gairebé única, tret d'alguns detalls) de configurar
+l'aplicació és mitjançant un fitxer de configuració. Quan s'executi el programa
+es cercarà en diferents llocs el fitxer de configuració. Si no es troba cap
+fitxer el programa s'aturarà amb un codi d'error. Si el fitxer que es troba
+conté un error, també s'aturarà el programa.
+
+En el repositori del projecte hi ha un exemple de fitxer de configuració molt
+ben documentat i detallat. Aquest fitxer es pot dividir en dues parts:
+
+\begin{itemize}
+    \item La part global, que conté paràmetres (tots amb valors per defecte) per
+    a, per exemple, canviar el temps d'espera entre lectures del sensor, canviar
+    el nombre de mostres per la mitjana mòbil o canviar el llindar en què es
+    considera que el dispositiu està rotat o estirat. Totes aquestes opcions es
+    poden obviar i s'utilitzarà els valors per defectes.
+    \item En segon lloc hi ha un bloc específic per a cada grup sensor-pantalla.
+    Cada bloc necessita l'identificador sèrie del sensor i el connector de la
+    pantalla, així com l'orientació inicial del dispositiu en referència a la
+    pantalla. Totes aquestes opcions son obligatòries.
+\end{itemize}
+
+Cada cop que l'usuari modifiqui el fitxer de configuracions haurà de reiniciar
+el programa. Això significa que si una modificació temporal o a mitges es guarda
+no afectarà al funcionament del programa fins que aquest es reinicii.
+
+\subsection{Agrupació en un fitxer}
+
+A diferència dels programes en C, que almenys els programes de característiques
+similars a les d'aqeust projecte es compilen en un únic fitxer executable, els
+\est{scripts} de Python no s'interpreten en el mateix moment d'execució. Això
+significa que, per a portar un programa d'un lloc a un altre s'ha de moure tot
+el projecte, i no només l'executable. CITE (?)
+
+Moure més d'un fitxer afegeix complexitat en el moment d'insta\l.lació i
+configuració del projecte. Si aquest projecte fós molt gran s'assumirien les
+conseqüències, però degut que si s'ajunten tots els fitxers quedaria un únic
+fitxer de no més de 700 línies, s'ha considerat oportú agrupar tots els mòduls
+en un únic fitxer.
+
+Cal remarcar que els sistemes operatius basats en Linux ja tenen uns directoris
+separats dels dels executables per a posar mòduls extres CITE, però es considera que
+s'afegeix molta dificultat en quant a insta\l.lar el programa (sobretot en un
+context d'usuari) i s'hi guanya poc.
 
 \section{Creació del servei \est{systemd}}
 
@@ -155,9 +262,55 @@ un servei per usuari i un servei per al sistema.
 
 \subsection{Servei d'usuari}
 
+El procediment per a crear un servei de Linux a partir d'un programa de Python
+no és un camí senzill, i s'ha optat per a seguir un tutorial molt ben cuidat i
+detallat CITE. Es recomana fortament utilitzar aquest tutorial si es vol crear
+un servei per Python.
+
+Tanmateix, hi ha un parell de coses que s'han acabat fent diferent en referència
+al servei d'usuari. La intenció de crear un servei d'usuari és permetre que els
+usuaris no administradors puguin utilitzar aquest programa encara que no estigui
+insta\l.lat. Com que totes les dependències no insta\l.lades es poden baixar
+sense permisos d'administrador amb la comanda \verb|pip3| això esdevé una tasca
+molt senzilla.
+
+Només s'ha canviat el lloc on estarà l'executable, a \verb|~/.local/bin| i el
+fitxer de configuracions, a \verb|~/.config/gyroscreen|. La resta es mantindrà
+tot igual.
+
+També s'ha fet que el programa només informi a \est{systemd} que s'ha carregat
+correctament el servei si aquest s'executa amb l'argument \verb|--daemon| a la
+línia de comandes. Així es manté la funcionalitat del programa en entorns fora
+de serveis.
 
 \subsection{Servei de sistema}
 \label{subsec:systemd_system}
+
+Si es pretén insta\l.lar el programa per a tots els usuaris només cal seguir
+els darrers passos del tutorial citat en l'apartat anterior. S'ha de moure de
+lloc l'executable (a \verb|/usr/bin|), i el servei (al lloc on indica el
+tutorial). El fitxer de configuracions també es pot moure a \verb|/etc| en funció
+de si es vol que les configuracions siguin idèntiques per a tots els usuaris o
+puguin canviar entre usuaris.
+
+Tanmateix, la dificultat més gran per a utilitzar el programa com un servei de
+sistema és que no hi ha les variables d'entorn de la sessió, i en conseqüència
+\verb|xrandr| no funciona. S'ha explicat quines variables són i la importància
+que tenen en l'apartat \ref{subsec:xrandr}.
+
+Així doncs, toca modificar considerablement la part de les comandes del
+projecte \est{PyXrandr}, tal i com s'ha mencionat a l'apartat \ref{subsec:pyxrandr}.
+El procediment que s'implementarà per a buscar les variables d'entorn encertades
+no és molt professional, però completament funcional: s'anirà provant per diferents
+opcions de \verb|$DISPLAY| (concretament \verb|:0| i \verb|:1|) i es cercarà
+en diferents directoris predefinits el fitxer \verb|.Xauthority|, com pot ser
+en els directoris de cada usuari o a \verb|/run|.
+
+Si no s'aconsegueix recuperar el context de \est{xrandr} després de tots aquests
+intents s'aturarà el programa amb un codi d'error. Tanmateix, s'ha provat el
+sistema amb diferents versions de Debian i Ubuntu i en totes ha acabat funcionant.
+En un cas extrem, cal recordar que sempre es pot insta\l.lar l'aplicació per a
+que funcioni en el context de la sessió, mitjançant un servei d'usuari.
 
 \section{Creació del paquet de \est{Debian}}
 
