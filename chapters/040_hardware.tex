@@ -71,14 +71,21 @@ al microcontrolador.
 \subsection{Esquemàtic}
 
 El disseny de l'esquemàtic es basa en el disseny del mòdul \est{GY291} i es pot
-consultar a la figura \ref{todo}. Tret del que s'ha comentat en els paràgrafs
+consultar a la figura \ref{fig:sch_v1}. Tret del que s'ha comentat en els paràgrafs
 anteriors, la resta de components i connexions no deixen de ser les evidents per
 a un circuit amb aquestes característiques. Tot i això, s'ha decidit posar
 èmfasi en alguns detalls on s'hi ha parat més atenció:
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/kicad/gyro1_sch.png}
+    \caption{Esquema elèctric de la primera versió.}
+    \label{fig:sch_v1}
+\end{figure}
+
 \begin{itemize}
     \item Al costat de l'alimentació de cada integrat s'hi ha posat un
-    condensador ceràmic de $1nF$ VERIFICAR!!, per a assegurar-se que la tensió
+    condensador ceràmic de $10uF$ VERIFICAR!!, per a assegurar-se que la tensió
     d'entrada és prou estable.
     \item S'ha hagut de posar un regulador lineal en el ciruit, ja que el
     sensor necessita estar alimentat a $3.3V$, però l'alimentació que proporciona
@@ -93,6 +100,10 @@ a un circuit amb aquestes característiques. Tot i això, s'ha decidit posar
     funcionament d'aquest protocol.
 \end{itemize}
 
+Cal destacar que, a diferència de la propera versió, aquest esquema sí que preveu
+una connexió \acro{isp} per a programar la placa i un \acro{led} i polsador per
+a interactuar d'una forma senzilla.
+
 \subsection{Placa de circuit imprès}
 
 Un cop acabat el disseny, utilitzant també el programa KiCad, es va començar a
@@ -100,10 +111,17 @@ crear la placa de circuit imprès. El procediment és prou senzill i es sol fer
 de forma iterativa: crear un disseny molt dolent i anar-hi fent millores, fins
 al punt on es considera que ja està prou bé (un disseny mai estarà perfecte).
 
-A la figura \ref{todo} es pot consultar la placa resultant. Com es pot veure,
+A la figura \ref{fig:pcb_v1} es pot consultar la placa resultant. Com es pot veure,
 no està del tot ben distribuida: això és perquè es va decidir canviar completament
 de disseny abans d'haver-la acabat, i es va pensar que no valia la pena seguir
 invertint temps amb un disseny que no veuria mai la llum.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/kicad/gyro1_pcb.png}
+    \caption{Placa de circuit imprès de la primera versió.}
+    \label{fig:pcb_v1}
+\end{figure}
 
 \subsection{Problema del proper disseny}
 
@@ -203,9 +221,15 @@ tot i estar alimentat a $5V$, les línies de dades funcionen a $3V3$. Tal i com
 s'ha comentat a l'apartat \ref{subsub:usb_physic}, els dos díodes asseguren
 que la tensió mai supera aquest llindar.
 
-TODO CIRCUIT
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\textwidth]{images/kicad/gyro2_sch.png}
+    \caption{Esquema elèctric de la segona versió.}
+    \label{fig:sch_v2}
+\end{figure}
 
-Finalment, s'observa que en el diagrama no hi ha cap element amb el que una
+Finalment, s'observa que en el diagrama de la figura \ref{fig:sch_v2}
+no hi ha cap element amb el que una
 persona pugui interactuar directament amb el dispositiu (polsador, llum, ...).
 Això és a propòsit, ja que es pretén que el dispositiu acabi tancat en una capsa
 i que l'usuari no hagi de tocar-lo mai.
@@ -216,8 +240,16 @@ Un cop creat l'esquema elèctric, s'ha pogut començar a dissenyar la placa de
 circuit imprès, de la mateixa manera que amb la versió anterior. Una de les
 tasques més difícils d'aquest procés és escollir \est{footprints} de components
 que estiguin actualment en estoc, i assegurar-se que les línies de tensió
-són una mica més groixudes que la resta. A la figura x es pot veure el resultat
+són una mica més groixudes que la resta. A la figura \ref{fig:pcb_v2}
+es pot veure el resultat
 final d'aquest segon disseny.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/kicad/gyro2_pcb.png}
+    \caption{Placa de circuit imprès de la segona versió.}
+    \label{fig:pcb_v2}
+\end{figure}
 
 S'ha utilitzat,
 sempre que ha sigut possible, components amb \est{footprints} de dimensions 0805,
@@ -267,10 +299,28 @@ sí i, amb l'ajuda de cola quedarien subjectes. Les mesures s'han pres a partir
 del model de \est{KiCad}, però també s'han corroborat amb la placa física i un
 peu de rei.
 
-A la figura \ref{todo} es poden veure les dues parts dissenyades. Com es pot
+A la figura \ref{fig:3d_freecad} es poden veure les dues parts dissenyades. Com es pot
 apreciar, només s'hi ha deixat un forat per a permetre el pas del connector
 \acro{usb}. S'ha utilitzat parets de XX mm, i un marge entre les dues peces de
 0.25 mm.
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.40\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{images/freecad/3d_bottom.png}
+        \caption{Part inferior.}
+        \label{fig:3d_freecad_bottom}
+    \end{subfigure}
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{images/freecad/3d_top.png}
+        \caption{Part superior.}
+        \label{fig:3d_freecad_top}
+    \end{subfigure}
+    \caption{Disseny 3D de l'encapsulat.}
+    \label{fig:3d_freecad}
+\end{figure}
 
 Es va aconseguir imprimir les dues peces amb una de les impressores de
 l'escola, i es va aconseguir el resultat que es pot apreciar a la figura
