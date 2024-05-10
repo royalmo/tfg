@@ -50,12 +50,32 @@ l'ha proporcionat gratuïtament.
 Tal i com es pot veure, hi ha certs components on la quantitat més petita
 d'unitats que es poden comprar és superior al que es necessitava. Tenint aquest
 factor en ment i sabent que els preus solen disminuir quan s'augmenten les
-quantitats, s'ha decidit simular la compra de 10000 unitats. A la taula
-\ref{table:pricing10k} es pot consultar el desglossat de preus per a
+quantitats, s'ha decidit simular la compra de 10000 unitats.
+
+Per a fer aquesta simulació s'ha cercat als diferetns portals web (de les
+impressions 3D, dels components, ...) el preu aproximat per a aquestes
+quantitatas. Com és evident, els nombre obtinguts són molt aproximats i
+arrodonits, i en cas de voler-ho dur a terme s'haurien de revisar amb més
+cura. A la taula
+\ref{tab:pricing10k} es pot consultar el desglossat de preus per a
 grans quantitas.
 
-%% TAULA 2
-AFEGIR TAULA 2
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{lc}
+        \textbf{Concepte}           & \textbf{Cost} \\ \hline
+        Impressió de la PCB         & 400€          \\
+        Muntatge de la PCB          & 14000€        \\
+        Impressió 3D                & 8100€         \\
+        Cable USB2.0 A-C            & 7800€         \\
+        Enviament 15 dies           & 18,50€        \\
+        Components (total)          & 69200€        \\ \hline
+        \textbf{TOTAL (IVA Inclòs)} & \textbf{$\approx100000€$}  \\ \hline  
+        \textbf{Preu per unitat}    & \textbf{$\approx10€$} 
+        \end{tabular}
+    \caption{Cost de produir una tirada de 10000 dispositius.}
+    \label{tab:pricing10k}
+\end{table}
 
 Així doncs, si es produís aquest producte en massa, el preu de cost rondaria
 els 10€. Tanmateix, el preu de venda sempre hauria de ser més elevat que
@@ -80,8 +100,8 @@ a l'hora de fixar un preu:
     \item S'ha de determinar, si s'escau, un marge de benefici pels inversors
     del projecte.
     \item Finalment, es pot arrodonir el preu final en funció a altres aspectes,
-    d'entre els quals el psicològic: un producte a 19€ és més llaminer que un
-    altre a 20€ (AFEGIR SOURCE).
+    d'entre els quals el psicològic: un producte a 19€ és més cridaner que un
+    altre a 20€ \cite{kumar2017impact}.
 \end{itemize}
 
 Així doncs, tenint present les recomanacions anteriors, es podria valorar que
@@ -111,16 +131,24 @@ recordin el producte per la facilitat d'ús (mitjançant tutorials) i no per
 els maldecaps que els hi pugui haver generat.
 
 Tot i que no s'ha previst vendre en un futur proper el producte, s'ha creat una
-petita icona per a l'aplicació i s'ha creat una pàgina web estàtica molt
+petita icona per a l'aplicació que es pot veure a la Figura \ref{fig:icon},
+i s'ha creat una pàgina web estàtica molt
 senzilla. Ambdues coses es poden consultar visitant
 \url{https://gyroscreen.ericroy.net} o el repositori del projecte.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.2\textwidth]{images/gyroscreen.png}
+    \caption{Icona del projecte.}
+    \label{fig:icon}
+\end{figure}
 
 A la placa de circuit imprès s'ha afegit l'enllaç a la pàgina web anterior.
 S'ha de tenir present que, si el projecte creixés més, seria convenient tenir
 una domini propi per al producte. Tanmateix, el fet de pertànyer a un domini
 pare fa que heredi la imatge del mateix. Un clar exemple és la pàgina web de
 la titulació que s'està cursant, \url{https://ocwitic.epsem.upc.edu}, que
-hereda el nom de la UPC.
+hereda el nom de la \acro{upc}.
 
 \subsection{Llicències del codi}
 
@@ -128,7 +156,7 @@ Un punt a acabar de debatre abans de llançar el producte és si es publicarà e
 codi font. Tal i com s'ha vist en les condicions de la llibreria \acro{v-usb}, el
 \est{firmware} s'hauria de penjar amb la llicència \acro{gpl-3}, excepte si es
 vol pagar una llicència comercial, que en funció dels dispositius que es vulguin
-produir s'hauria de pagar més o menys.
+produir s'hauria de pagar més o menys \cite{VusbLicensing}.
 
 Per a simplificar les coses i evitar possibles problemes legals, s'ha decidit
 publicar totes les parts del sistema sota la mateixa llicència que \acro{v-usb}:
@@ -146,13 +174,13 @@ mercat és convenient reservar una parella de codis per a aquest dispositiu.
 Al mateix apartat s'explica que hi ha entitats que, sense cobrar res, assignen
 identificadors a projectes de codi i maquinari obert. Un d'aquests és
 \est{pid.codes}, que utilitza el sistema co\l.laboratiu de \est{GitHub} per a
-acceptar noves peticions.
+acceptar noves peticions \cite{PidCodes}.
 
 Així doncs, s'ha so\l.licitat el \acro{vid/pid} 0x1209, 0xF4F4 per al projecte
 \est{Gyroscreen}. En el moment de l'entrega del treball encara no hi ha hagut
 resposta per part de la persona que manté el projecte. Cal tenir en compte que
 la persona que gestiona \est{pid.codes} no guanya res a canvi, només hi perd
-temps i diners (SOURCE pid.codes/faq), i per això no està sempre pendent de
+temps i diners \cite{PidCodesFaq}, i per això no està sempre pendent de
 les noves peticions.
 
 \subsection{Inversió inicial de capital}
@@ -168,4 +196,4 @@ en el projecte.
 
 També es poden utilitzar plataformes web co\l.laboratives, com per exemple
 \est{kickstarter}, que agrupa petites aportacions de molts usuaris per a
-aconseguir suficient capital per a un projecte gran.
+aconseguir suficient capital per a un projecte gran \cite{Kickstarter}.

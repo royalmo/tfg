@@ -650,3 +650,34 @@ fitxer d'autorització, però mitjançant la comanda \verb|xhost +| es pot perme
 que tothom pugui efectuar modificacions a la sessió d'aquell usuari. (CITE)
 Tanmateix, es considera aquesta pràctica poc segura, i per aquest motiu no es
 tindrà en compte durant l'elaboració d'aquest treball.
+
+\subsection{\est{Wayland}}
+\label{subsec:wayland}
+
+El servidor gràfic de l'apartat anterior, \est{Xorg}, és un projecte molt vell
+i porta acumulades bastantes funcionalitats i canvis que s'ha fet durant els
+anys. Si bé és molt funcional i popular, es podria crear un entorn gràfic que
+funcionés d'una forma més eficient amb el maquinari actual (el \est{harrdware}
+ha canviat molt des dels seus inicis). Aquesta és la idea que va tenir les
+persones que van impulsar \est{Wayland}.
+
+Creat a l'any 2008, ha anat recuperant totes les funcionalitats de \est{Xorg}
+implementades amb una arquitectura bastant diferent. Tot i seguir sent
+compatible amb alguns aspectes senzills, hi ha molts programes que deixen de
+funcionar amb aquest nou servidor, especialment els que comparteixen pantalla
+o interactuen amb ella. Des de Ubuntu 17.10 que el sistema operatiu deixa
+escollir entre els dos entorns \cite{Wayland}.
+
+Tanmateix, un canvi d'aquesta embargadura no es fa d'una versió per una altra.
+\est{Wayland} encara necessita bastantes millores per a fer-lo completament
+compatible, pel que la seva \acro{api} no és del tot definitiva. Es preveuen
+encara uns anys fins que no s'anuncii la data en la que \est{Xorg} haurà de
+ser utilitzat. I un cop passada aquesta data el més probable és que comandes
+com \verb|xrandr| segueixin funcionant, de la mateixa forma que segueixen
+funcionant eines com \verb|ifconfig|, deprecades des de fa ja molts anys
+\cite{Ifconfig}.
+
+Per aquest motiu s'ha decidit realitzar el projecte utilitzant \est{Xorg}.
+D'aquesta forma s'obtindrà un programari estable, si més no durant els primers
+anys. Així doncs, si el projecte té previsió de continuar més enllà d'aquest
+Treball de Fi de Grau s'haurà de preveure una migració a \est{Wayland}.
