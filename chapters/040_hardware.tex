@@ -17,9 +17,9 @@ Finalment, es llicenciarà el disseny davant d'una entitat certificadora.
 El primer pas per a crear la placa és escollir quin sensor utilitzar. Per a
 mesurar la inclinació d'un dispositiu es sol utilitzar un acceleròmetre.
 Mitjançant un càlcul que es veurà més endavant i donades unes condicions es pot
-determinar l'angle en relació a la direcció de la gravetat de la Terra. CITE.
+determinar l'angle en relació a la direcció de la gravetat de la Terra \cite{PedleyTilt}.
 Aquestes mesures es poden complementar amb un giroscopi, que ofereix més
-precisió al sistema. CITE.
+precisió al sistema \cite{6702711}.
 
 Després de fer una mica de recerca sobre els productes disponibles del mercat,
 i tenint present la precisió que es necessita i el pressupost que es disposa,
@@ -29,13 +29,13 @@ s'ha trobat dues alternatives viables.
     \item El sensors \est{ADXL3xx} es poden trobar a preus molt llaminers i
     comuniquen la lectura de l'acceleració en 3 dimensions mitjançant 3 línies
     analògiques. Per tant, la comunicació amb el microcontrolador serà el més
-    senzilla possible. (CITE)
+    senzilla possible \cite{adxl335}.
     \item El sensor \est{MPU6050}, en canvi, es comunica amb el microcontrolador
     mitjançant el protocol \acro{i2c}. Aquest protocol només necessita dues
     línies de comunicació, però implica implemenar una mica de lògica per a
     recuperar les dades. Tanmateix, aquest sensor també ofereix lectures de
     velocitat angular i temperatura, que podrien ser útils per a futures
-    millores del projecte. (CITE)
+    millores del projecte \cite{mpu6050specs}.
 \end{itemize}
 
 Així doncs, degut que el segon sensor és només pocs cèntims més car i ofereix
@@ -44,15 +44,34 @@ la possiblitat d'ampliar el projecte en un futur, s'utilitzarà el sensor
 
 Aquest sensor es sol vendre amb una placa que estalvia connectar
 certa electrònica i permet provar el sensor sense fer cap soldadura.
-Aquest mòdul, anomenat \est{GY291}, es troba disponible a moltes botigues
+Aquest mòdul, anomenat \est{GY521}, es troba disponible a moltes botigues
 d'electrònica, i s'ha decidit adquirir-ne un parell per al desenvolupament del
-projecte.
+projecte. A la figura \ref{fig:gy521img} es pot veure l'aspecte d'aquest mòdul.
 
-TODO POSAR CIRCUIT GY291
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.3\textwidth]{images/modules/gy521img.jpg}
+    \caption{Mòdul \est{GY521} \cite{gy521}.}
+    \label{fig:gy521img}
+\end{figure}
 
-El circuit del mòdul \est{GY291} és lliure i es pot consultar fàcilment (CITE).
-Serà molt útil disposar d'aquests esquemàtics per a poder facilitar la tasca de
-dissenyar el circuit.
+El circuit del mòdul \est{GY521} és lliure i es pot consultar a la figura
+\ref{fig:gy521sch}. És prou senzill diferenciar la part utilitzada per a
+convertir els 5V d'entrada en 3.3V per a alimentar a l'integrat de la resta
+del circuit. Aquest mòdul també inclou un \acro{led} per a indicar que s'està
+alimentant correctament.
+
+Les connexions del lateral del mòdul fan molt còmode utilitzar-lo en entorns de
+desenvolupament, on es connecten i desconnecten cables constantment. El fet
+de disposar també d'un sistema funcional des d'un primer moment ajuda a
+només centrar-se en la part de més alt nivell: l'aplicació del projecte.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/modules/gy521sch.png}
+    \caption{Esquema elèctric del mòdul \est{GY521} \cite{gy521}.}
+    \label{fig:gy521sch}
+\end{figure}
 
 \section{Primer disseny}
 
@@ -66,11 +85,11 @@ El microcontrolador que s'utilitzarà en aquesta versió és l'\acro{AtMega32u4}
 Aquest proporciona una interfície \acro{usb} integrada, i permet utilitzar la
 interfície \acro{i2c} amb suficient facilitat. S'ha decidit utilitzar un
 osci\l.lador extern per a generar un rellotge de freqüència $16MHz$
-al microcontrolador.
+al microcontrolador \cite{AtMega32u4}.
 
 \subsection{Esquemàtic}
 
-El disseny de l'esquemàtic es basa en el disseny del mòdul \est{GY291} i es pot
+El disseny de l'esquemàtic es basa en el disseny del mòdul \est{GY521} i es pot
 consultar a la figura \ref{fig:sch_v1}. Tret del que s'ha comentat en els paràgrafs
 anteriors, la resta de components i connexions no deixen de ser les evidents per
 a un circuit amb aquestes característiques. Tot i això, s'ha decidit posar
@@ -85,19 +104,22 @@ a un circuit amb aquestes característiques. Tot i això, s'ha decidit posar
 
 \begin{itemize}
     \item Al costat de l'alimentació de cada integrat s'hi ha posat un
-    condensador ceràmic de $10uF$ VERIFICAR!!, per a assegurar-se que la tensió
+    condensador ceràmic de $10uF$ o $0.1uF$ (en funció del que recomanava
+    cada fabricant al seu \est{datasheet}), per a assegurar-se que la tensió
     d'entrada és prou estable.
     \item S'ha hagut de posar un regulador lineal en el ciruit, ja que el
     sensor necessita estar alimentat a $3.3V$, però l'alimentació que proporciona
     el connector \acro{usb} és de $5V$.
     \item Al utilitzar un connector de tipus C, tot i communicar-se amb
     \acro{usb2}, hi ha un parell de cables extres que determinen a quina tensió
-    s'ha d'alimentar el dispositiu. Tal i com es comenta en CITE REFERENCIA,
+    s'ha d'alimentar el dispositiu. Tal i com es comenta en \cite{Axelson2015USB},
     si es desitja utilitzar una alimentació tradicional de $5V$ és suficient
-    utilitzar dos \est{pull-ups} de XX ohms TODO VERIFY.
+    utilitzar dos \est{pull-downs} de 5.1kohms.
     \item El protocol \acro{i2c} necessita que les dues línies de comunicació
     estiguin amb \est{pull-ups}. Es veurà més endavant en el document el
     funcionament d'aquest protocol.
+    \item L'esquema referent al cristall extern per al rellotge del microcontrolador
+    és el recomanat pel fabricant en el mateix \est{datasheet} \cite{AtMega32u4}.
 \end{itemize}
 
 Cal destacar que, a diferència de la propera versió, aquest esquema sí que preveu
@@ -123,7 +145,7 @@ invertint temps amb un disseny que no veuria mai la llum.
     \label{fig:pcb_v1}
 \end{figure}
 
-\subsection{Problema del proper disseny}
+\subsection{Problema del primer disseny}
 
 Tal i com s'ha dit a l'apartat anterior, no es va acabar de dissenyar la placa
 de circuit imprès degut al redisseny del \est{hardware}. El motiu es ben senzill,
@@ -132,10 +154,11 @@ no s'està utilitzant el microcontrolador adequat per al projecte.
 Tal i com s'ha vist a l'esquemàtic, el microcontrolador només necessita 4 potes
 per a informació (2 per \acro{usb} i 2 per \acro{i2c}). Això significa que es
 deixaran al voltant de 20 entrades sense utilitzar. I no només això: aquest
-microcontrolador disposa de molta més memòria de la que mai es necessitarà.(CITE)
+microcontrolador disposa de molta més memòria de la que mai es necessitarà
+\cite{AtMega32u4}.
 
 El principal motiu per a fer el canvi és doncs el preu. Un \acro{AtMega32u4}
-no és molt car (CITE), però és més barat un dispotitiu \acro{avr} de la sèrie
+no és molt car \cite{AvrComparison}, però és més barat un dispotitiu \acro{avr} de la sèrie
 \acro{AtTinyXX}, com es veurà en el segïuent apartat.
 
 \section{Segona versió de la placa}
@@ -144,7 +167,7 @@ Tal i com s'ha comentat al final de l'apartat anterior, s'ha decidit apostar
 per un microcontrolador més econòmic i senzill degut als pocs requisits que
 demana el sistema. Després de fer una mica de recerca s'ha descobert la
 família de microcontroladors \acro{AtTinyX5}, on la X pot variar en funció de
-la memòria \est{flash} disponible. (CITE)
+la memòria \est{flash} disponible \ref{AtTiny85}.
 
 Aquests microcontroladors disposen de 8 potes, de les quals 2 són per
 l'alimentació. Així doncs, de les 6 potes disponibles encara en sobraran dues
@@ -163,13 +186,35 @@ la placa \est{Digispark}.
 La placa \est{Digispark} es pot comprar a preus molt reduïts i a molts llocs.
 És una placa de circuit imprès equipada d'un \acro{AtTiny85}, un connector
 \acro{usb}, algun component per a regular les tensions, i tot de pins per a
-poder connetar fàcilment qualsevol cable i component al microcontrolador. (CITE)
+poder connetar fàcilment qualsevol cable i component al microcontrolador
+\cite{Digispark}. A la figura \ref{fig:digispark} es pot veure l'aspecte físic
+de la placa.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.3\textwidth]{images/modules/digisparkimg.png}
+    \caption{Placa \est{Digispark} \cite{Digispark}.}
+    \label{fig:digispark}
+\end{figure}
+
+Aquesta placa és de maquinari obert, i per tant, també es pot trobar fàcilment
+el seu esquema elèctric. Es pot consultar a la Figura \ref{fig:digisparksch}
+com el circuit és prou senzill, i només hi ha un parell de detalls que mereixen
+la seva explicació, com podria ser l'ús de Díodes Zener. Es comentará en el
+moment del disseny del propi circuit.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/modules/digisparksch.jpg}
+    \caption{Diagrama de la placa \est{Digispark} \cite{Digispark}.}
+    \label{fig:digisparksch}
+\end{figure}
 
 El microcontrolador ve programat amb un \est{bootloader} que utilitza la
 llibreria \acro{v-usb} per a identificar-se com un port sèrie a l'ordinador
 (és una de les sub-classes \est{hid}) i així poder programar-lo fàcilment.
 És una placa bastant popular, de maquinari obert, i amb molta documentació i
-tutorials disponibles per internet. (CITE)
+tutorials disponibles per internet \cite{DigisparkBootloader}.
 
 Es va adquirir un parell d'unitats d'aquesta placa, i es va connectar amb el
 mòdul del sensor giroscopi. Mitjançant tutorials era senzill utilitzar la
@@ -178,11 +223,11 @@ utilitzar la llibreria \est{LittleWire} per a comunicar-se amb el sensor amb el
 protocol \acro{i2c} i llegir les dades necessaries.
 
 Durant el transcurs d'aquestes proves també es va descobrir el projecte
-\est{i2c\_tiny\_usb} (CITE). Aquest projecte ha aconseguit dissenyar una placa
+\est{i2c\_tiny\_usb} \cite{I2cTinyUsb}. Aquest projecte ha aconseguit dissenyar una placa
 molt semblant a la de \est{Digispark}, i mitjançant programari (tant del cantó
 del microcontrolador com afegint contro\l.ladors al \est{kernel} de Linux),
 el dispositiu s'identifica com un mestre \acro{i2c} de cara a l'ordinador, i
-apareix a \verb|/dev/i2c-X| on X és el nombre de dispositiu. (CITE)
+apareix a \verb|/dev/i2c-X| on X és el nombre de dispositiu.
 
 Aquest projecte ha anat molt bé per a fer proves de precisió del sensor a més
 alt nivell (per exemple, utilitzant la lliberria \acro{i2c} de Python). Tanmateix,
@@ -193,7 +238,7 @@ es va descartar utilitzar-lo per a aquest treball per a dos motius:
     els estàndards de més alt nivell. En el capítol anterior s'ha comentat que
     es volia utilitzar les classes \acro{hid} i el mòdul \acro{iio}. El projecte
     \est{i2c\_tiny\_usb} utilitza programari propi, i tot i que estigui inclòs
-    en el \est{kernel} de Linux, s'hauria de fer de zero per altres sistemes
+    en el \est{kernel} de Linux \cite{I2cTinyKernel}, s'hauria de fer de zero per altres sistemes
     operatius.
     \item L'objectiu del projecte és aprendre durant el procés de desenvolupament.
     Si s'agafa un projecte que ja ho té tot fet no s'adquirirà experiència en
@@ -211,7 +256,7 @@ L'esquemàtic d'aquesta segona versió no té molts secrets. Consisteix en agafa
 el circuit de la versió anterior i canviar tot el que té a veure amb l'antic
 microcontrolador per al nou. S'ha utilitzat com a referència el circuit de la
 placa \est{Digispark}, tenint en compte que algunes coses, com el regulador de
-tensió extern, no son necessaries per a aquest projecte. (CITE)
+tensió extern, no son necessaries per a aquest projecte \cite{Digispark}.
 
 En aquest nou circuit s'utilitza el rellogte intern del microcontrolador, que
 ja s'ha vist que és suficient per a comunicar-se per \acro{usb}. Només hi ha
@@ -246,7 +291,7 @@ final d'aquest segon disseny.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/kicad/gyro2_pcb.png}
+    \includegraphics[width=0.75\textwidth]{images/kicad/gyro2_pcb.png}
     \caption{Placa de circuit imprès de la segona versió.}
     \label{fig:pcb_v2}
 \end{figure}
@@ -274,7 +319,8 @@ modificacions d'alguns components.
 Amb la placa de circuit imprès ja preparada, només faltava produir-ne algunes
 unitats. Per recomanacions de la universitat s'ha optat per utilitzar el
 proveïdor \acro{jlcpcb}. Aquest ofereix bons preus, plaços curts i també té el
-servei de muntatge de la placa (és a dir, soldar-hi tots els components). (CITE)
+servei de muntatge de la placa (és a dir, soldar-hi tots els components)
+\cite{JlcPcb}.
 
 Degut al poc talent i ganes que hi havia en soldar un per un els components, i
 sabent que alguns són molt petits i seria senzill cometre errors, s'ha optat
@@ -282,8 +328,27 @@ per delegar aquesta tasca al proveïdor. Evidentment, el cost de muntatge ha
 sigut el més elevat de tota la comanda, però imprimir i muntar 5 plaques
 ha sortit per menys de 100€, enviament i \acro{iva} inclosos.
 
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{images/device/top.jpeg}
+        \caption{Cara superior.}
+        \label{fig:printedpcb_top}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{images/device/bottom.jpeg}
+        \caption{Cara inferior.}
+        \label{fig:printedpcb_bottom}
+    \end{subfigure}
+    \caption{Placa de circuit imprès del projecte.}
+    \label{fig:printedpcb}
+\end{figure}
+
 El resultat final ha quedat molt professional i es pot veure a la figura
-\ref{asdfasdf}.
+\ref{fig:printedpcb}. Es pot veure també com s'ha aprofitat la cara inferior
+per a afegir els crèdits del projecte.
 
 \section{Encapsulat}
 
@@ -301,7 +366,7 @@ peu de rei.
 
 A la figura \ref{fig:3d_freecad} es poden veure les dues parts dissenyades. Com es pot
 apreciar, només s'hi ha deixat un forat per a permetre el pas del connector
-\acro{usb}. S'ha utilitzat parets de XX mm, i un marge entre les dues peces de
+\acro{usb}. S'ha utilitzat parets de 1.5 mm, i un marge entre les dues peces de
 0.25 mm.
 
 \begin{figure}[ht]
@@ -324,16 +389,34 @@ apreciar, només s'hi ha deixat un forat per a permetre el pas del connector
 
 Es va aconseguir imprimir les dues peces amb una de les impressores de
 l'escola, i es va aconseguir el resultat que es pot apreciar a la figura
-\ref{xxx}. Finalment, es va comprovar que totes les peces encaixaven a la
+\ref{fig:3d_real}. Finalment, es va comprovar que totes les peces encaixaven a la
 perfecció i la placa cabia a dintre de la carcassa.
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.50\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{images/device/3d_unmounted.jpeg}
+        \caption{Sense muntar.}
+        \label{fig:3d_real_unmounted}
+    \end{subfigure}
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{images/device/3d_mounted.jpeg}
+        \caption{Muntat.}
+        \label{fig:3d_real_mounted}
+    \end{subfigure}
+    \caption{Disseny 3D de l'encapsulat.}
+    \label{fig:3d_real}
+\end{figure}
 
 \section{OSHWA}
 
 Un cop es va saber que el disseny físic del projecte era defintiu, es va decidir
-publicar-lo a \acro{OSHWA}. L'\est{Open-Source HardWare Association} és, com el
+publicar-lo a \acro{oshwa}. L'\est{Open-Source HardWare Association} és, com el
 nom indica, una associació que vetlla pel maquinari de codi obert. Una de les
 diverses tasques que fa és mantenir un registre de dissenys de maquinari obert,
-sempre que els autors ho autoritzin. CITE
+sempre que els autors ho autoritzin \cite{Oshwa}.
 
 Un dels beneficis de registrar el disseny en el seu sistema és que queda una
 evidència (més) que el projecte s'ha fet, té la llicència que té, i protegeix
@@ -344,5 +427,13 @@ necessàries per a poder registrar un disseny.
 Així doncs, es va registrar el dispositiu a la seva base de dades i, després
 de omplir el formulari i aquest ser revisat per l'associació, el dispositiu
 va ser acceptat i es troba actualment sota la llicència \verb|ES000045|.
-A la figura XX es troba el logo que es pot incloure al projecte, com a
-resultat d'aquesta certificació.
+A la figura \ref{fig:oshwa} es troba el logo que es pot incloure al projecte,
+com a resultat d'aquesta certificació.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/oshwa.png}
+    \caption{Certificació \acro{oshwa} obtinguta per al projecte.}
+    \label{fig:oshwa}
+\end{figure}
+
