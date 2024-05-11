@@ -53,7 +53,7 @@ l'aplicació, es pot cercar si algú ja les ha implementat.
 \subsection{\est{PyLibiio}}
 
 El primer mòdul cercat és \est{PyLibiio}, que consisteix en la llibreria de
-Linux \est{libiio} portada a Python. CITE REPO. La llibreria compilada acostuma
+Linux \est{libiio} portada a Python \cite{Libiio}. La llibreria compilada acostuma
 a estar insta\l.lada per defecte en la majoria de sistemes basats en Linux, però
 la portabilitat a Python és un afegit que s'ha d'insta\l.lar.
 
@@ -74,11 +74,12 @@ s'aturava sense mostrar cap error.
 
 Així doncs, amb la intenció de contribuir a millorar el projecte, es va
 notificar de l'error i es va crear una \est{Pull Request}, és a dir, es va
-proposar una solució. CITE Aquesta encara està pendent d'aprovació (ja que sembla que
+proposar una solució \cite{LibiioPR}. Aquesta encara està pendent d'aprovació
+(ja que sembla que
 les persones encarregades de mantenir la llibreria no tenen molt de temps
 disponible).
 
-\subsection{\est{PyLibudev}}
+\subsection{\est{PyUdev}}
 
 Durant el desenvolupament del programa es va veure la necessitat d'obtenir el
 número de sèrie a partir de l'adreça d'un dispositiu \acro{iio}. Després de fer
@@ -89,8 +90,8 @@ estalviar aquesta comanda i utilitzar una llibreria de Python en el seu lloc.
 És important evitar utilitzar comandes ja que aquestes són més propenses a
 variar i deixar de funcionar que la pròpia interfície de desenvolupament que
 proporcionen les llibreries, com és el cas de \est{libudev}. Per aquest motiu,
-quan es va conéixer l'existència de \est{PyLibudev} es va fer el canvi en la
-implementació. CITE
+quan es va conéixer l'existència de \est{PyUdev} es va fer el canvi en la
+implementació \cite{Pyudev}.
 
 Aquesta llibreria també disposava d'exemples, i no s'hi ha trobat cap
 error aparent. Com també ha passat amb el mòdul anterior, la pròpia llibreria
@@ -100,40 +101,42 @@ dependència del programa.
 Quan encara no es sabia del tot segur si es faria servir \acro{iio} o, una capa
 més per sota, el protocol \acro{hid}, també es va cercar si hi havia una
 implementació per Python de la llibreria \est{libhid}. Es va trobar el mòdul
-\est{PyLibhid}, un projecte molt complet amb, fins i tot, eines per a debugar
-interactivament dispositius \acro{hid}. Finalment es va descartar utilitzar
+\est{CPython-HidApi}, un projecte molt complet amb, fins i tot, eines per a
+debugar interactivament dispositius \acro{hid} \cite{CpythonHid}.
+Finalment es va descartar utilitzar
 aquest afegit, ja que es va passar a utilitzar \acro{iio}.
 
-\subsection{\est{PyXrandr}}
-\label{subsec:pyxrandr}
+\subsection{\est{PyRandr}}
+\label{subsec:pyrandr}
 
 Finalment, la tercera i última contribució externa de l'aplicació és el
-mòdul \est{PyXrandr}. A diferència de la resta, aquest mòdul no es troba
+mòdul \est{PyRandr}. A diferència de la resta, aquest mòdul no es troba
 disponible al repositori oficial de Python \est{PyPi} i, per tant, no es pot
 insta\l.lar amb la comanda \est{pip3} o marcar com a dependència quan es crei
 l'aplicació final.
 
 Aquest projecte, disponible a \est{GitHub}, és una abstracció de la comanda
-\est{xrandr} CITE. S'ha vist en l'apartat \ref{subsec:xrandr} que la llibreria
+\est{xrandr} \cite{Pyrandr}. S'ha vist en l'apartat \ref{subsec:xrandr} que la
+llibreria
 \est{Xlib} pot ser una mica complicada d'utilitzar, i aquesta comanda no ha
 canviat gaire en bastant temps. Així doncs, es considera una bona alternativa
 per a l'aplicació.
 
-La persona que va desenvolupar \est{PyXrandr} en un primer moment ha deixat de
+La persona que va desenvolupar \est{PyRandr} en un primer moment ha deixat de
 mantenir el projecte. A més a més, aquest no va tenir en compte tots els casos
 d'ús, deixant en el codi alguns errors. Ja hi ha gent que ha creat \est{forks}
 (còpies del projecte) i \est{pull reuquests} per a proposar millores, però
-l'autor se n'ha despreocupat. CITE
+l'autor se n'ha despreocupat.
 
 Així doncs, s'ha realitzat també una còpia del projecte i s'ha fusionat diversos
 canvis proposats per a la comunitat. També s'ha afegit alguna correcció pròpia,
-com el canvi d'orientació per a pantalles principals CITE. Tanmateix, el canvi més
+com el canvi d'orientació per a pantalles principals \cite{PyrandrOwn}. Tanmateix, el canvi més
 gran que s'ha fet per a que pugui tot funcionar per a aquest projecte es veurà
 en l'apartat \ref{subsec:systemd_system}.
 
 Com que no es pot llistar aquest programa com a dependència, el més sensat és
-afegir el codi (d'unes 300 línies) al propi repositor del projecte. inicialment
-es va implementar com a un submòdul de \est{git} CITE, però al fer tantes
+afegir el codi (d'unes 300 línies) al propi repositori del projecte. inicialment
+es va implementar com a un submòdul de \est{git}, però al fer tantes
 modificacions i al voler fusionar tot el programa en un fitxer es va acabar
 copiant i enganxant el contingut necessari.
 
@@ -186,7 +189,7 @@ mesura a una altra.
 La forma de fer-ho és ben senzilla: sabent que la gravetat de la terra sempre
 apunta cap avall, i que l'acceleració quan el dispositiu està quiet és únicament
 la de la gravetat, només cal saber cap a quina direcció s'està mesurant aquesta
-acceleració per a detectar l'orientació del sensor. A CITE es detalla tota la
+acceleració per a detectar l'orientació del sensor. A \cite{PedleyTilt} es detalla tota la
 trigonometria que hi ha darrere d'aquesta explicació, que no s'afegeix en aquest
 document ja que no és rellevant pel producte final.
 
@@ -201,7 +204,7 @@ Si mai es vulgués mesurar l'orientació d'una forma més robusta es pot combina
 l'acceleròmetre amb un sensor de velocitat angular. L'acceleròmetre ajuda a
 calibrar el sensor, determinant sempre la direcció de la gravetat. Però un
 cop ca\l.librat, qui dona més precisió és el sensor giroscopic o de velocitat
-angular. Es pot consultar un exemple de sensor amb més precisió a CITE, però no
+angular. Es pot consultar un exemple de sensor amb més precisió a \cite{6702711}, però no
 s'implementarà en aquest projecte degut a la complexitat afegida i els propòsits
 del projecte (no es cerca precisió).
 
@@ -232,13 +235,45 @@ Cada cop que l'usuari modifiqui el fitxer de configuracions haurà de reiniciar
 el programa. Això significa que si una modificació temporal o a mitges es guarda
 no afectarà al funcionament del programa fins que aquest es reinicii.
 
+Un exemple de fitxer de configuració senzill podria ser el següent:
+
+\begin{verbatim}
+# Es poden deixar comentades les configuracions globals si es volen utilitzar
+# els valors per defecte.
+[Global]
+#sample_interval_ms = 1000
+#min_samples_to_change = 5
+#sample_interval_when_change_detected = 300
+#angle_threshold_low = 45
+#angle_threshold_high = 75
+
+# Configuració específica de la primera pantalla
+[PantallaPrincipal]
+# Número de sèrie del dispositiu
+device = A001
+# Identificador `xrandr` de la pantalla
+display = HDMI-1
+# A on apunta el connector en relació amb la pantalla.
+# Pot ser 'Top', 'Bottom', 'Left' o 'Right'
+connector_facing = Right
+
+# Si es vol es pot definir més d'una pantalla
+[PantallaExtra]
+device = A002
+display = eDP-0
+connector_facing = Left
+\end{verbatim}
+
+Al repositori del projecte hi ha el mateix fitxer d'exemple però molt més ben
+documentat. Aquí només s'ha posat els mínims comentaris per a entendre'l.
+
 \subsection{Agrupació en un fitxer}
 
 A diferència dels programes en C, que almenys els programes de característiques
 similars a les d'aqeust projecte es compilen en un únic fitxer executable, els
 \est{scripts} de Python no s'interpreten en el mateix moment d'execució. Això
 significa que, per a portar un programa d'un lloc a un altre s'ha de moure tot
-el projecte, i no només l'executable. CITE (?)
+el projecte, i no només l'executable.
 
 Moure més d'un fitxer afegeix complexitat en el moment d'insta\l.lació i
 configuració del projecte. Si aquest projecte fós molt gran s'assumirien les
@@ -247,7 +282,8 @@ fitxer de no més de 700 línies, s'ha considerat oportú agrupar tots els mòdu
 en un únic fitxer.
 
 Cal remarcar que els sistemes operatius basats en Linux ja tenen uns directoris
-separats dels dels executables per a posar mòduls extres CITE, però es considera que
+separats dels dels executables per a posar mòduls extres \cite{InstallPython3},
+però es considera que
 s'afegeix molta dificultat en quant a insta\l.lar el programa (sobretot en un
 context d'usuari) i s'hi guanya poc.
 
@@ -264,8 +300,8 @@ un servei per usuari i un servei per al sistema.
 
 El procediment per a crear un servei de Linux a partir d'un programa de Python
 no és un camí senzill, i s'ha optat per a seguir un tutorial molt ben cuidat i
-detallat CITE. Es recomana fortament utilitzar aquest tutorial si es vol crear
-un servei per Python.
+detallat \cite{PythonSystemdTutorial}. Es recomana fortament utilitzar aquest
+tutorial si es vol crear un servei per Python.
 
 Tanmateix, hi ha un parell de coses que s'han acabat fent diferent en referència
 al servei d'usuari. La intenció de crear un servei d'usuari és permetre que els
@@ -299,7 +335,7 @@ sistema és que no hi ha les variables d'entorn de la sessió, i en conseqüènc
 que tenen en l'apartat \ref{subsec:xrandr}.
 
 Així doncs, toca modificar considerablement la part de les comandes del
-projecte \est{PyXrandr}, tal i com s'ha mencionat a l'apartat \ref{subsec:pyxrandr}.
+projecte \est{PyRandr}, tal i com s'ha mencionat a l'apartat \ref{subsec:pyrandr}.
 El procediment que s'implementarà per a buscar les variables d'entorn encertades
 no és molt professional, però completament funcional: s'anirà provant per diferents
 opcions de \verb|$DISPLAY| (concretament \verb|:0| i \verb|:1|) i es cercarà
@@ -323,7 +359,8 @@ paquet de Debian per a facilitar el procés d'insta\l.lació.
 El més important durant la creació d'un paquet és saber quines dependències
 necessita el programa i quina és la versió més baixa amb la que poden funcionar.
 Per sort, s'ha desenvolupat el programa en un enotrn de Ubuntu 18.04, que fa
-pocs mesos que ha deixat de rebre suport gratuït CITE. Per tant, aquest sistema
+pocs mesos que ha deixat de rebre suport gratuït \cite{UbuntuSupport}. Per tant,
+aquest sistema
 operatiu es considerarà com el més antic que suporta aquesta aplicació. En altres
 paraules, les versions de les dependències insta\l.lades en aquest sistema seran
 les que es posaran en el llistat de dependències del paquet.
@@ -341,17 +378,17 @@ bufar i fer ampolles: només cal indicar a on es copia cada fitxer i l'empaqueta
 fa la resta. Per exemple, si es copia un servei de sistema s'encarrega d'arrancar
 el servei, si es copia un fitxer de configuració es mira que no s'estigui
 sobreescrivint una versió anterior, o si es copia una pàgina de manual s'encarrega
-de recarregar la base de dades dels manuals. CITE
+de recarregar la base de dades dels manuals.
 
 La resta de tasques, en canvi, són més aviat diplomàtiques: indicar la llicència
 amb la que es distribueix el programa, l'autor, canvis que s'ha fet des d'una
 versió anterior i organitzar-ho tot en carpetes, tal i com ho vol Debian.
-Es recomana veure el tutorial de CITE si es vol replicar aquests passos.
+Es recomana veure el tutorial de \cite{DebCreation} si es vol replicar aquests passos.
 
 Finalment, s'ha creat un \est{shell script} per a poder crear fàcilment el
 paquet. Tot i que el nombre de comandes a recordar son poques, és una tasca que
 no es fa sovint, i es prefereix deixar-ho apuntat i ben preparat en algun lloc.
-Es pot consultar en el repositori del treball aquest \est{script}. CITE
+Es pot consultar en el repositori del treball aquest \est{script}.
 
 \subsection{Pàgina de manual}
 
@@ -361,11 +398,12 @@ l'eina de creació mostrava una alerta indicant que el programa no tenia cap
 pàgina de manual. Això va portar al desig personal d'aprendre com es creaven
 i com s'afegien en un paquet de Debian.
 
-Per això es va cercar en diferents llocs fins que es va trobar l'eina XXX CITE,
+Per això es va cercar en diferents llocs fins que es va trobar l'eina
+\est{pandoc} \cite{PandocTutorial},
 que converteix un fitxer en \est{Markdown} en una pàgina de manual amb el
 format que aquesta necessita. El format de les pàgines de manual es considera
 editable a mà, però la corba d'aprenentatge és prou alta i, segons moltes fonts,
-no val la pena per a pàgines petites o projectes poc ambiciosos. CITE
+no val la pena per a pàgines petites o projectes poc ambiciosos \cite{Manpage}.
 
 Un cop creada la pàgina de manual, s'ha d'afegir en les comandes d'insta\l.lació
 que es copïi al directori pertinent aquesta pàgina, i un cop insta\l.lat el
