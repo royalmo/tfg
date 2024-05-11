@@ -11,7 +11,8 @@ el projecte \est{i2c\_on\_littlewire}, que permet comunicar-se directament amb
 dispositius \acro{i2c} des de l'ordinador. En aquest apartat també es destaquen
 els motius pel que s'ha descartat aquesta possiblitat, però tot i això cal
 mencionar que es va crear un petit codi de C per a demostrar que la comunicació
-era possible. Aquest codi es va basar en els exemples disponibles a (CITE).
+era possible. Aquest codi es va basar en els exemples disponibles a
+\cite{I2cTinyUsb}.
 
 \section{Entorn de treball de desenvolupament}
 
@@ -40,14 +41,14 @@ utilitzant el \est{bootloader} definit anteriorment és una tasca molt senzilla.
 Un cop es disposi del fitxer \verb|.hex| que es vol programar al
 microcontrolador, es pot utilitzar programes com \est{avrdude} o
 \est{micronucleus} per a que, mentre s'estigui executant el bootloader, es 
-reprogrami el xip. (CITE)
+reprogrami el xip \cite{DigisparkBootloader}.
 
 Per a progrmar la placa amb un sistema basat en Linux s'ha de realitzar una
 tasca extra: els permisos. Un usuari administrador podrà programar la placa
 sense cap problema, però executar com a \est{root} un programa sempre implica
-assumir riscos (CITE). Per això el més recomanat és crear una regla \acro{udev}
+assumir riscos. Per això el més recomanat és crear una regla \acro{udev}
 per al dispositiu en qüestió, fent que sigui accessible per a tots els usuaris.
-Es pot consultar un tutorial detallat a (CITE).
+Es pot consultar un tutorial detallat a \cite{CreateUdevRules}.
 
 \subsection{\est{Makefile}}
 
@@ -74,7 +75,7 @@ La tasca d'aquest apartat és aconseguir que l'ordinador identifqui la placa
 com un acceleròmetre tridimensional. Per a arribar a aquesta meta hi haurà un
 seguit de reptes i barreres a superar.
 
-El punt de partida és els codis d'exemples del repositori del projecte (CITE).
+El punt de partida és els codis d'exemples del repositori del projecte \cite{VusbProjects}.
 També hi ha un repositori amb bastants exemples, però la majoria només son
 compatibles per a un \acro{AtMega}, i s'haurien d'adaptar de totes formes.
 
@@ -82,14 +83,14 @@ compatibles per a un \acro{AtMega}, i s'haurien d'adaptar de totes formes.
 
 Un dels problemes més grans del microcontrolador que s'està utilitzant és que
 l'osci\l.lador intern que disposa no és compatible amb el que demana el
-protocol \acro{usb}. Es disposa d'una freqüència de XXMHz TODO REVISE i
-\acro{usb2} funciona a XXXMHz.
+protocol \acro{usb}. Es disposa d'una freqüència de 16.5MHz i
+\acro{usb2} funciona a 1kHz.
 
 Aquest problema és ben conegut pels desenvolupadors de \acro{v-usb} i en alguns
-dels exemples s'explica com ca\l.librar l'osci\l.lador intern a una nova
-freqüència basant-se en els intèrvals de temps entre els que es reb senyal
-des de l'ordinador. Es recomana consultar aquests codis CITE si es vol entendre
-millor aquest apartat.
+dels exemples s'explica com ca\l.librar l'osci\l.lador intern per a poder-se
+comunicar amb \acro{usb2} basant-se en els intèrvals de temps entre els que es
+reb senyal des de l'ordinador. Es recomana consultar aquests codis
+\cite{Vusb} si es vol entendre millor aquest apartat.
 
 No utilitzar un rellotge compatible amb el protocol \acro{usb} viola les normes
 marcades per la propia entitat \acro{usb-if}. Tanmateix, com s'ha vist en
@@ -100,8 +101,8 @@ apartats anteriors, no es pretén certificar com a \acro{usb} el dispositiu
 \subsection{Identificadors \acro{usb}}
 
 Parlant de \acro{usb-if}, en aquest punt del projecte és quan s'ha de decidir
-quin \acro{vid-pid} es posa al dispositiu, ni que sigui durant l'època de
-proves. Tal i com s'ha vist en l'apartat \ref{subsec:usb-if}, hi ha dues
+quin \acro{vid-pid} es posa al dispositiu, si més no, durant el temps de
+desenvolupament. Tal i com s'ha vist en l'apartat \ref{subsec:usb-if}, hi ha dues
 opcions possibles.
 
 Durant el desenvolupament es decidirà utilitzar un parell de codis sense
@@ -110,9 +111,10 @@ a obtenir identificadors a partir d'entitats mencionades anteriorment es sol
 tardar un temps, i acostumen a acceptar únicament projectes acabats o en fase
 de proves finals.
 
-Així doncs, s'ha optat per a agafar el \acro{vid-pid} XXXXXX, que és la parella
-de codis que XXX ofereix per a fer proves individuals CITE. En altres paraules,
-XXX mai assignarà aquests identificadors a un producte que acabi sent
+Així doncs, s'ha optat per a agafar el \acro{vid-pid} 0x16c0-0x09e8, que és la
+parella de codis que els autors de \acro{v-usb} ofereixen per a fer proves
+individuals \cite{Vusb}. En altres paraules, \est{ObDev}, el propietari dels
+codis, mai assignarà aquests identificadors a un producte que acabi sent
 comercialitzat. Va perfecte doncs per a fer proves durant el desenvolupament del
 projecte.
 
@@ -129,7 +131,7 @@ temporitzador ha sigut reiniciat es considera que el programa principal s'ha
 quedat penjat, i el \est{watchdog} actua. Es pot configurar perquè actui de
 diferents maneres, però la més senzilla i popular és reiniciant el programa
 sencer amb un \est{flag} activat, perquè el mateix programa pugui detectar que
-no ha sigut un reinici voluntari, sinó degut a un error previ. CITE
+no ha sigut un reinici voluntari, sinó degut a un error previ \cite{Watchdog}.
 
 La llibreria \acro{v-usb} disposa d'exemples on s'utilitza un \est{watchdog}, i
 per tant no ha sigut gaire complicació afegir-lo en aquest projecte. És una
@@ -151,9 +153,10 @@ trobar una mica d'inforamció al respecte.
 
 Tanmateix, després de molt prova i error i anar debugant amb l'ajuda de
 \est{wireshark} totes les comunicacions (es recomana configurar \est{wireshark}
-d'acord amb aquest tutorial per a rebre paquets \acro{usb} CITE), s'ha aconseguit
+d'acord amb aquest tutorial per a rebre paquets \acro{usb}
+\cite{InstallWireshark}), s'ha aconseguit
 generar un \est{Hid Report Descriptor} que és correctament llegit per l'ordinador.
-Una de les referències més importants sobre aquesta part és CITE.
+Una de les referències més importants sobre aquesta part és \cite{VusbProjects}.
 
 \section{\acro{I2c}}
 
@@ -178,20 +181,20 @@ El protocol \acro{i2c}, com s'ha dit anteriorment, és molt versàtil i permet
 to\l.lerar dispositius amb diferents tensions d'alimentació, més dispositius
 (esclaus, però també mestres) i molta escalabilitat. El mestre és qui inicia
 la transmissió (per tant, dos esclaus no poden parlar entre si), però la
-direcció del flux de dades pot canviar. CITE
+direcció del flux de dades pot canviar \cite{I2c}.
 
 El funcionament de \acro{i2c} es pot resumir en poques paraules: el mestre envia
 pel canal una adreça de 7 bits per a saber amb quin dispositiu vol comunicar-se.
 Aquests 7 bits són l'adreça del dispositiu, disponible als \est{datasheets}. Per
-al sensor d'aquest projecte, l'adreça és 0x68 CITE. Després d'aquests 7 bits,
+al sensor d'aquest projecte, l'adreça és 0x68 \cite{MPU6050reg}. Després d'aquests 7 bits,
 s'envia un 8è bit que dependrà de si es vol enviar dades o rebre dades del
 dispositiu.
 
 Un cop rebut el \est{acknowledgement} de l'esclau, comença la transmissió de
 dades, que acabarà en funció dels valors de \est{acknowledgement} del mestre, o
 si el mestre envia un senyal de stop. Es recomana llegir el \est{dataheet} del
-sensor a CITE per a entendre el funcionament de \acro{i2c}, ja que està molt ben
-explicat.
+sensor a \cite{mpu6050specs} per a entendre el funcionament de \acro{i2c},
+ja que està molt ben explicat.
 
 \subsection{Funcionament del sensor \est{MPU6050}}
 
@@ -203,9 +206,9 @@ El sensor \est{MPU6050} defineix en el seu \est{datasheet} un seguit de
 registres, que funcionen de la mateixa forma que els perifèrics en \acro{avr}:
 no son registres comuns per a guardar dades, sinó que és com si hi hagués una
 extensió en els perifèrics del propi microcontrolador. Així doncs, si es llegeix
-el registre 0x50:0x51 REVISAR es podrà consultar el valor mesurat de temperatura
-(sense processar) CITE. També es pot escriure en alguns registres, per exemple
-per a activar o ca\l.librar el sensor.
+els registres 0x42:0x41 es podrà consultar el valor mesurat de temperatura
+(sense processar) \cite{MPU6050reg}. També es pot escriure en alguns registres,
+per exemple per a activar o ca\l.librar el sensor.
 
 Per a escriure en un registre només cal enviar per \acro{i2c} (és a dir, escriure)
 l'adreça del registre i el valor a escriure. Si s'envien més bytes, el sensor
@@ -213,7 +216,7 @@ entendrà que s'han d'escriure en els registres posteriors. Pel que fa a la lect
 s'ha d'enviar l'adreça del registre i tornar a escriure la capçalera \acro{i2c},
 però en aquest cas, en mode de lectura. El sensor enviarà els continguts del
 registre en qüestió. Si es decideix de seguir llegint (mitjançant un \acro{nack}),
-el sensor enviarà el valor del registre posterior. CITE
+el sensor enviarà el valor del registre posterior \cite{mpu6050specs}.
 
 Finalment, cal destacar que, pel que fa al sensor, poca configuració se li ha de
 fer per a rebre dades d'acceleració. Només cal desactivar el mode \est{sleep},
@@ -237,7 +240,7 @@ programar-hi alguna cosa és mitjançant \acro{isp}. El protocol
 \est{In-System Programming}, també conegut sota les sigles \acro{icsp} o
 \est{In-Circuit Serial Programming}, és una forma prou estandaritzada per a
 programar o comunicar-se amb microcontroladors programables, sensors, o altres
-dispositius del món dels sistemes encastats. (CITE)
+dispositius del món dels sistemes encastats \cite{Isp}.
 
 Una comunicació per \acro{isp} necessita 6 cables, o 4 si no es tenen en compte
 les línies d'alimentació. Ara bé, només queden 2 potes disponibles, i \acro{isp}
@@ -248,14 +251,22 @@ a la placa.
 
 Abans de fer aquesta tasca tediosa, però, s'ha decidit consultar amb el
 personal del laboratori de l'escola, que ha recomanat utilitzar una pinça com
-la de la figura \ref{sdfasdf} per a accedir a les potes de l'integrat sense haver
+la de la figura \ref{fig:programmer} per a accedir a les potes de l'integrat sense haver
 de dessoldar-lo. Programar així el microcontrolador no és sempre una bona idea,
 sobretot si hi ha elements actius que podrien causar un curtcircuit. Però al estar
 la connexió \acro{usb} a l'aire (no hi ha cable connectat) i la connexió
 \acro{i2c} funciona mitjançant \est{pull-ups}, no hi ha hagut cap problema per
 a programar així l'integrat.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/device/programmer.jpeg}
+    \caption{Programador \est{SOC8} amb pinça.}
+    \label{fig:programmer}
+\end{figure}
+
 Per a programar per \acro{isp} s'ha utilitzat una placa Arduino amb el codi
-\est{ArduinoISP}, disponible a la pròpia aplicació \est{ArduinoIDE}. (CITE) Un cop
+\est{ArduinoISP}, disponible a la pròpia aplicació \est{ArduinoIDE}
+\cite{ArduinoIsp}. Un cop
 l'Arduino tenia aquest codi, una simple comanda d'\est{avrdude} s'ha afegit
 al \est{Makefile}, permetent la programació senzilla del dispositiu.
