@@ -323,14 +323,14 @@ especificarà que el dispositiu és un ratolí. Un cop enviat aquest paquet,
 l'ordinador ja sabrà com comunicar-se amb el
 dispositiu i com interpretar les dades que anirà enviant.
 
-La documentació oficial de \acro{usb} (TODO CITE HID HUT) especifica
+La documentació oficial de \acro{usb} \cite{HidHut} especifica
 detalladament tots els codis que es poden definir. El que interessarà per a
 aquest treball és la categoria de \textit{Sensors}, i dintre d'aquesta hi ha
 diversos tipus de dispositius. Veurem que el tipus \est{3D Accelerometer} serà
 el més adequat per al projecte.
 
 Aquesta documentació anterior es pot complementar amb una guia d'interpretació
-de la documentació de Linux (TODO CITE DOCS) on es presenten diferents eines
+de la documentació de Linux \cite{LinuxHid} on es presenten diferents eines
 per a interpretar millor aquests paquets. Tot i que n'hi ha moltes que
 funcionen des del terminal, la més visual i popular és \est{wireshark}.
 
@@ -338,7 +338,7 @@ Un dels altres avantatges d'utilitzar \acro{hid} és que, al ser una capa per
 sobre del protocol \acro{usb}, és independent d'aquest. En altres paraules,
 altres protocols de comunicació poden beneficiar-se també de \acro{hid}, no
 només \acro{usb}. Per aquest motiu, quan es va implementar \est{Bluetooth},
-es va decidir utilitzar també \acro{hid}.
+es va decidir utilitzar també \acro{hid} \cite{BluetoothHid}.
 
 \subsection{Acceleròmetre tridimensional}
 
@@ -405,12 +405,13 @@ es veurà més endavant.
 \section{V-USB}
 
 Una de les eines que facilita la implementació del protocol \acro{usb} és la
-llibreria \acro{v-usb}, implementada per XXXXX (TODO CITE). Aquesta llibreria
+llibreria \acro{v-usb}, implementada per \est{Objective Development}
+\cite{Vusb}. Aquesta llibreria
 es distribueix amb la llicència \acro{gpl-2+}, una llicència que obliga a
 distribuir sota la mateixa llicència (o versions posteriors d'aquesta) tots els
 projectes que facin servir la llibreria. La empresa ofreix el concecpte de
 llicència dual: a part de \acro{gpl-2+}, es pot comprar una llicència comercial
-per a poder generar codi sota altres llicències (TODO CITE COMMERCIAL LICENSE).
+per a poder generar codi sota altres llicències \cite{VusbLicensing}.
 
 Aquesta llibreria implementa la capa més baixa de \acro{usb} a l'arquitectura
 \acro{avr}, sense utilitzar perifèrics específics. Així doncs, gràcies a aquesta
@@ -422,11 +423,11 @@ projecte és molt elevada, degut a la prèvia experiència personal amb aquesta
 arquitectura. També hi ha gran varietat d'exemples i llibreries disponibles per
 a \acro{avr}, cosa que facilitarà la tasca de desenvolupament.
 
-A TODO CITE hi ha el codi font de la llibreria, que s'ha de incloure al del
+A \cite{Vusb} hi ha el codi font de la llibreria, que s'ha d'incloure al
 projecte que s'estigui desenvolupant, i també s'hi troben exemples de dispositius
 senzills (ratolins i teclats) implementats amb aquesta llibreria. Tanmateix,
-s'ha trobat el repositori de XXX CITE més interessant, ja que conté exemples
-de sensors \acro{hid}.
+s'ha trobat el repositori de \cite{VusbProjects} més interessant, ja que conté
+exemples de sensors \acro{hid}.
 
 \section{\est{Drivers} a Linux}
 
@@ -446,8 +447,7 @@ poder entendre millor els errors i dificultats que es trobaran en aquest treball
 \acro{Udev} és un gestor de dispositius per a sistemes basats en Linux.
 Té com a objectiu gestionar dinàmicament els dispositius de maquinari del
 sistema, és a dir, és el responsable que si es connecta o desconnecta
-un dispositiu mentre l'ordinador està encès tot funcioni amb normalitat.
-(CITE REFERENCE)
+un dispositiu mentre l'ordinador està encès tot funcioni amb normalitat \cite{Udev}.
 
 El funcionament d'\acro{udev} es basa en un conjunt de regles,
 que es configuren per
@@ -469,7 +469,7 @@ detalls de la implementació.
 \est{libusb} és una llibreria multiplataforma i disponible per diversos
 llenguatges que permet realitzar una comunicació amb dispositius \acro{usb} en
 la capa més baixa possible. En aquest nivell es poden enviar trames de control,
-entrada o sortida a nivell de bits i bytes. (CITE REFERENCE)
+entrada o sortida a nivell de bits i bytes \cite{Libusb}.
 
 Tot i que la llibreria es va pensar
 incialment per Linux, s'ha portat a Windows i MacOS, convertint-la en la millor
@@ -486,15 +486,17 @@ No gens menys, si un contro\l.lador d'una capa superior està utilitzant
 exclusivament el dispositiu, el \est{kernel} no crearà aquest fitxer, per a
 evitar confusió i so\l.lapaments.
 
-\subsection{Capa 2: \acro{libhid}}
+\subsection{Capa 2: \acro{libhid} i \acro{hidapi}}
 
 La següent llibreria és la capa immediatament superior a la de l'apartat
-anterior. \est{libhid} permet gestionar dispositius \acro{hid}. Aquesta
-llibreria també s'ha portat a Windows i MacOS i, tal i com s'ha dit a 
+anterior. \est{libhid} permet gestionar dispositius \acro{hid}. D'questa
+llibreria ha nascut \est{hidapi}, que la engloba i la converteix en
+una abstracció compatibla amb altres sistemes operatius, com
+FreeBSD, Windows i MacOS \cite{Libhid}. Tal i com s'ha dit a 
 l'apartat \ref{sec:hut}, també permetrà utilitzar dispositius Bluetooth.
 
 Al ser aquesta llibreria una abstracció més elevada, existeixen més aplicacions
-per a provar-la i debugar-la. Sobretot es destaca XXX CITE, que disposa
+per a provar-la i debugar-la. Sobretot es destaca \cite{LibhidUI}, que disposa
 d'una interfície molt senzilla d'utilitzar i multiplataforma.
 
 A Linux, un dispositiu que es pot controlar per \est{libhid} sol aparéixer com
@@ -514,11 +516,11 @@ El sistema \acro{iio}, o \est{Industrial Input/Output}, és la capa d'abstracci�
 dels sistemes basats en Linux per a qualsevol dispositiu que suposi una entrada
 o sortida per al sistema i no tingui contro\l.ladors dedicats. Per exemple, un
 ratolí o teclat no entraria en aquest grup, ja que disposa de controladors
-propis.
+propis \cite{Iio}.
 
 Hi ha moltes formes de veure quines categories de dispositius \acro{hid} es
 converteixen en \acro{iio}, però la més senzilla és consultant el codi
-font de Linux (CITE SOURCE CODE). Pel que fa a aquest projecte, es pot veure
+font de Linux \cite{KernelIioAccel}. Pel que fa a aquest projecte, es pot veure
 que esisteix un \est{driver} per a \est{hid\_accelerometer\_3d}, pel que
 el dispositiu d'aquest treball anirà en aquesta capa superior.
 
@@ -546,28 +548,6 @@ dispositius a canvi de generar programari robust i a la capa més alta possible
 per Linux. Pot semblar una mala decisió, però es veurà en el següent apartat
 que tampoc seria possible generar un controlador 100\% multiplataforma.
 
-\subsection{Entorn gràfic: \acro{Xlib}}
-
-Finalment, un cop es sap com es farà la lectura de les dades del sensor, cal
-esbrinar com s'aplicarà els canvis de rotació de la pantalla. Els sistemes
-basats en Linux, independentment de l'entorn gràfic que utilitzin (normalment
-\acro{gnome}, però també \acro{kde}), responen a les peticions gràfiques sota
-l'interfície de programació de \est{Xlib}. (CITE)
-
-Es podria fer una bona analogia entre
-els entorns gràfics i els navegadors: els navegadors, a Linux, implementen les
-crides i interfície de \est{www-browser}, tot i estar implementats internament
-de formes diferents. Si es vol implementar una aplicació que necessiti, per
-exemple, un navegador incrustat, però qualsevol navegador serveix, es pot
-indicar com a dependència \est{www-browser} enlloc de, per exmple, \est{firefox}.
-
-\est{Xlib} és una llibreria molt complexa, i té interfícies per a la majoria
-de llenguatges. Tanmateix, sovint és més senzill utilitzar una aplicació de
-la línia de comandes que simplifica la tasca del programador. Aquesta
-aplicació és diu \est{xrandr}, i d'una forma molt senzilla permet llistar
-totes les pantalles connectades a l'ordinador i canviar l'orientació
-d'una d'elles. (CITE XRANDR) Ara bé, els beneficis venen amb un cost: les sessions.
-
 \subsection{Serveis: \est{systemd}}
 \label{subsec:systemd}
 
@@ -579,7 +559,7 @@ correctament sempre, fins i tot després de reiniciar l'ordinador.
 
 En els sistemes basats en Linux, els programes que estan en execució tota
 l'estona s'anomenen serveis i els gestiona el propi \est{kernel}, també anomenat
-en aquest context \est{systemd}. (CITE) Hi ha dos tipus de serveis diferents, en
+en aquest context \est{systemd} \cite{Systemd}. Hi ha dos tipus de serveis diferents, en
 funció dels privilegis que tenen:
 
 \begin{itemize}
@@ -604,6 +584,28 @@ aquest treball es generarà un servei d'usuari i un de sistema, i cadascún té
 les seves complicacions, tant en el moment d'insta\l.lació com en el moment
 d'execució.
 
+\subsection{Entorn gràfic: \acro{Xlib}}
+
+Finalment, un cop es sap com es farà la lectura de les dades del sensor, cal
+esbrinar com s'aplicarà els canvis de rotació de la pantalla. Els sistemes
+basats en Linux, independentment de l'entorn gràfic que utilitzin (normalment
+\acro{gnome}, però també \acro{kde}), responen a les peticions gràfiques sota
+l'interfície de programació de \est{Xlib} \cite{Xlib}.
+
+Es podria fer una bona analogia entre
+els entorns gràfics i els navegadors: els navegadors, a Linux, implementen les
+crides i interfície de \est{www-browser}, tot i estar implementats internament
+de formes diferents. Si es vol implementar una aplicació que necessiti, per
+exemple, un navegador incrustat, però qualsevol navegador serveix, es pot
+indicar com a dependència \est{www-browser} enlloc de, per exmple, \est{firefox}.
+
+\est{Xlib} és una llibreria molt complexa, i té interfícies per a la majoria
+de llenguatges. Tanmateix, sovint és més senzill utilitzar una aplicació de
+la línia de comandes que simplifica la tasca del programador. Aquesta
+aplicació és diu \est{xrandr}, i d'una forma molt senzilla permet llistar
+totes les pantalles connectades a l'ordinador i canviar l'orientació
+d'una d'elles \cite{Xrandr}. Ara bé, els beneficis venen amb un cost: les sessions.
+
 \subsection{\est{Xrandr} i les sessions}
 \label{subsec:xrandr}
 
@@ -613,7 +615,7 @@ a la mateixa màquina. Aquest fet no sorprèn a ningú, ja que és ben sabut que
 diversos usuaris poden connectar-se remotament i simultàniament a la mateixa
 màquina mitjançant \est{ssh}. Ara bé, hi ha diverses formes (com, per exemple,
 la opció \verb|-X| de \est{ssh}) que permeten diferents sessions gràfiques
-simultàniament. (CITE SSH -X)
+simultàniament \cite{ManSSH}.
 
 La complicació rau en que \est{xrandr} utilitza les variables d'entorn per a
 trobar la sessió actual. Aquestes variables es defineixen a l'inici de sessió,
@@ -624,10 +626,8 @@ Tanmateix, si es vol executar \est{xrandr} des d'un servei de sistema o d'un
 terminal remot, el programa no trobarà la sessió actual i serà impossible
 resoldre la comanda.
 
-TODO ADD CITATIONS
-
 Hi ha entre dos i tres variables d'entorn importants per al correcte funcionament
-de \est{xrandr}:
+de \est{xrandr} \cite{XrandrVars}:
 
 \begin{itemize}
     \item La variable d'entorn \verb|$DISPLAY| permet identificar el grup de
@@ -647,7 +647,7 @@ de \est{xrandr}:
 Cal tenir present que un usuari pot restringir qui té accés a modificar la
 seva sessió. Per defecte, es restringeix a tothom que no tingui accés al
 fitxer d'autorització, però mitjançant la comanda \verb|xhost +| es pot permetre
-que tothom pugui efectuar modificacions a la sessió d'aquell usuari. (CITE)
+que tothom pugui efectuar modificacions a la sessió d'aquell usuari \cite{xhost}.
 Tanmateix, es considera aquesta pràctica poc segura, i per aquest motiu no es
 tindrà en compte durant l'elaboració d'aquest treball.
 
