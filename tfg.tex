@@ -2,6 +2,9 @@
 
 % Per a mostrar dues imatges en una sola figura.
 \usepackage{subcaption}
+% Per a mostrar el símbol de Euro
+\usepackage{eurosym}
+\DeclareSIUnit{\EUR}{\text{\euro}}
 
 \addbibresource{misc/tfg.bib}
 
@@ -22,9 +25,9 @@
     Una altra persona a qui dec aquest treball és al meu tutor del projecte, el
     Francisco del Águila, que m'ha orientat i recolzat durant tot aquest procés.
 
-    També voldria agrair al professorat de l'EPSEM, però en especial al Joan
-    Martínez que, juntamtent amb el meu tutor, m'ha aconsellat durant el disseny
-    de la placa de circuit imprès.
+    També voldria agrair al professorat de l'\acro{epsem}, però en especial al
+    Joan Martínez que, juntamtent amb el meu tutor, m'ha aconsellat durant el
+    disseny de la placa de circuit imprès.
 
     L'absència de faltes lingüístiques en aquest document és un mèrit de la
     meva parella, l'Aida Vers, que ha realitzat una correcció exhaustiva del
@@ -52,7 +55,7 @@
     pantalla i protocols recomanats.
 
     Aquest projecte proposa un dispositiu de baix cost que, mitjançant un sensor
-    giroscòpic i una connexió USB, detecta l'orientació de la pantalla i
+    giroscòpic i una connexió \acro{usb}, detecta l'orientació de la pantalla i
     configura l'entorn gràfic adequadament. S'ha posat èmfasi en l'ús de
     protocols estàndards existents, la compatibilitat entre diferents sistemes
     operatius i la facilitat d'insta\l.lació i ús dels programes relacionats
@@ -75,7 +78,7 @@
     protocols are used.
 
     This project proposes a low-cost device that, using a gyroscope sensor and a
-    USB connection, detects the screen orientation and configures the graphic
+    \acro{usb} connection, detects the screen orientation and configures the graphic
     environment accordingly. Emphasis has been placed on the use of existing
     standard protocols, compatibility between different operating systems, and
     the ease of installation and use of device-related programs.

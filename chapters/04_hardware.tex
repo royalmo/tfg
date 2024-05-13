@@ -17,7 +17,8 @@ Finalment, es llicenciarà el disseny davant d'una entitat certificadora.
 El primer pas per a crear la placa és escollir quin sensor utilitzar. Per a
 mesurar la inclinació d'un dispositiu es sol utilitzar un acceleròmetre.
 Mitjançant un càlcul que es veurà més endavant i donades unes condicions es pot
-determinar l'angle en relació a la direcció de la gravetat de la Terra \cite{PedleyTilt}.
+determinar l'angle en relació a la direcció de la gravetat de la Terra
+\cite{PedleyTilt}.
 Aquestes mesures es poden complementar amb un giroscopi, que ofereix més
 precisió al sistema \cite{6702711}.
 
@@ -84,7 +85,8 @@ per a comprendre millor el procés de desenvolupament del projecte.
 El microcontrolador que s'utilitzarà en aquesta versió és l'\acro{AtMega32u4}.
 Aquest proporciona una interfície \acro{usb} integrada, i permet utilitzar la
 interfície \acro{i2c} amb suficient facilitat. S'ha decidit utilitzar un
-osci\l.lador extern per a generar un rellotge de freqüència $16MHz$
+osci\l.lador extern per a generar un rellotge de freqüència
+\SI[round-mode=places,round-precision=0]{16}{\mega\hertz}
 al microcontrolador \cite{AtMega32u4}.
 
 \subsection{Esquemàtic}
@@ -104,17 +106,24 @@ a un circuit amb aquestes característiques. Tot i això, s'ha decidit posar
 
 \begin{itemize}
     \item Al costat de l'alimentació de cada integrat s'hi ha posat un
-    condensador ceràmic de $10uF$ o $0.1uF$ (en funció del que recomanava
+    condensador ceràmic de
+    \SI[round-mode=places,round-precision=0]{10}{\micro\farad} o
+    \SI[round-mode=places,round-precision=1]{0.1}{\micro\farad}
+    (en funció del que recomanava
     cada fabricant al seu \est{datasheet}), per a assegurar-se que la tensió
     d'entrada és prou estable.
     \item S'ha hagut de posar un regulador lineal en el ciruit, ja que el
-    sensor necessita estar alimentat a $3.3V$, però l'alimentació que proporciona
-    el connector \acro{usb} és de $5V$.
+    sensor necessita estar alimentat a
+    \SI[round-mode=places,round-precision=1]{3.3}{\volt},
+    però l'alimentació que proporciona
+    el connector \acro{usb} és de \SI[round-mode=places,round-precision=0]{5}{\volt}.
     \item Al utilitzar un connector de tipus C, tot i communicar-se amb
     \acro{usb2}, hi ha un parell de cables extres que determinen a quina tensió
     s'ha d'alimentar el dispositiu. Tal i com es comenta en \cite{Axelson2015USB},
-    si es desitja utilitzar una alimentació tradicional de $5V$ és suficient
-    utilitzar dos \est{pull-downs} de 5.1kohms.
+    si es desitja utilitzar una alimentació tradicional de 
+    \SI[round-mode=places,round-precision=0]{5}{\volt} és suficient
+    utilitzar dos \est{pull-downs} de
+    \SI[round-mode=places,round-precision=1]{5.1}{\kilo\ohm}.
     \item El protocol \acro{i2c} necessita que les dues línies de comunicació
     estiguin amb \est{pull-ups}. Es veurà més endavant en el document el
     funcionament d'aquest protocol.
@@ -227,7 +236,7 @@ Durant el transcurs d'aquestes proves també es va descobrir el projecte
 molt semblant a la de \est{Digispark}, i mitjançant programari (tant del cantó
 del microcontrolador com afegint contro\l.ladors al \est{kernel} de Linux),
 el dispositiu s'identifica com un mestre \acro{i2c} de cara a l'ordinador, i
-apareix a \verb|/dev/i2c-X| on X és el nombre de dispositiu.
+apareix a \fitx{/dev/i2c-X} on X és el nombre de dispositiu.
 
 Aquest projecte ha anat molt bé per a fer proves de precisió del sensor a més
 alt nivell (per exemple, utilitzant la lliberria \acro{i2c} de Python). Tanmateix,
@@ -262,7 +271,9 @@ En aquest nou circuit s'utilitza el rellogte intern del microcontrolador, que
 ja s'ha vist que és suficient per a comunicar-se per \acro{usb}. Només hi ha
 una novetat a comentar en aquesta segona versió, i és la presència de dos
 díodes Zener en les línies d'\acro{usb}. El motiu rau en el protocol \acro{usb}:
-tot i estar alimentat a $5V$, les línies de dades funcionen a $3V3$. Tal i com
+tot i estar alimentat a \SI[round-mode=places,round-precision=0]{5}{\volt},
+les línies de dades funcionen a
+\SI[round-mode=places,round-precision=1]{3.3}{\volt}. Tal i com
 s'ha comentat a l'apartat \ref{subsub:usb_physic}, els dos díodes asseguren
 que la tensió mai supera aquest llindar.
 
@@ -275,7 +286,7 @@ que la tensió mai supera aquest llindar.
 
 Finalment, s'observa que en el diagrama de la figura \ref{fig:sch_v2}
 no hi ha cap element amb el que una
-persona pugui interactuar directament amb el dispositiu (polsador, llum, ...).
+persona pugui interactuar directament amb el dispositiu (polsador, llum, \dots).
 Això és a propòsit, ja que es pretén que el dispositiu acabi tancat en una capsa
 i que l'usuari no hagi de tocar-lo mai.
 
@@ -314,7 +325,7 @@ l'empresa amb qui s'ha encarregat la producció de la placa no tenia disponibles
 alguns d'aquests. Així doncs, s'ha hagut de fer una nova revisió amb petites
 modificacions d'alguns components.
 
-\subsection{Producció de la \acro{pcb}}
+\subsection{Producció de la pcb}
 
 Amb la placa de circuit imprès ja preparada, només faltava produir-ne algunes
 unitats. Per recomanacions de la universitat s'ha optat per utilitzar el
@@ -326,7 +337,8 @@ Degut al poc talent i ganes que hi havia en soldar un per un els components, i
 sabent que alguns són molt petits i seria senzill cometre errors, s'ha optat
 per delegar aquesta tasca al proveïdor. Evidentment, el cost de muntatge ha
 sigut el més elevat de tota la comanda, però imprimir i muntar 5 plaques
-ha sortit per menys de 100€, enviament i \acro{iva} inclosos.
+ha sortit per menys de \SI[round-mode=places,round-precision=0]{100}{\EUR},
+enviament i \acro{iva} inclosos.
 
 \begin{figure}[ht]
     \centering
@@ -366,8 +378,8 @@ peu de rei.
 
 A la figura \ref{fig:3d_freecad} es poden veure les dues parts dissenyades. Com es pot
 apreciar, només s'hi ha deixat un forat per a permetre el pas del connector
-\acro{usb}. S'ha utilitzat parets de 1.5 mm, i un marge entre les dues peces de
-0.25 mm.
+\acro{usb}. S'ha utilitzat parets de \SI{1.5}{\milli\meter}, i un marge entre
+les dues peces de \SI{0.25}{\milli\meter}.
 
 \begin{figure}[ht]
     \centering

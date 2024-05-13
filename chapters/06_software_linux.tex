@@ -9,7 +9,7 @@ basats en Linux.
 
 Així doncs, aquest capítol té per objectiu dissenyar un programari senzill però
 robust per a poder utilitzar el sistema en dispositius basats en Linux. Es
-centraran les proves en la distribució de Linux \est{Ubuntu}, concretament en
+centraran les proves en la distribució de Linux Ubuntu, concretament en
 les versions 18.04 i 24.04 \acro{lts} (\est{Long-Term Support}), però tot hauria
 de funcionar de la mateixa forma amb la resta de distribucions.
 
@@ -31,7 +31,7 @@ la vida als usuaris.
 Un altre aspecte important del programa és la manera de configurar-lo. Tot i que,
 idealment, el millor per als usuaris finals seria una interfície interactiva,
 Linux sol funcionar amb fitxers per tot. Així doncs, s'ha decidit crear un fitxer
-\verb|.conf| per a guardar les configuracions de l'aplicació. Aquest fitxer té
+\fitx{.conf} per a guardar les configuracions de l'aplicació. Aquest fitxer té
 un format pactat i descrit a la documentació del programa, i es podrà guardar en
 diferents llocs específics del sistema, on el progrma els buscarà. Crear una
 interfície interactiva que modifiqui aquest fitxer no hauria de ser una tasca
@@ -66,7 +66,7 @@ Aquest mòdul no té molta complexitat, i menys si es segueix com a referència
 algun dels exemples llistats. La majoria dels exemples consistien en replicar
 amb Python les comandes d'exemple de la llibreria \est{libiio}.
 
-Tanmateix, durant les proves de l'exemple de la comanda \verb|iio_info| s'ha
+Tanmateix, durant les proves de l'exemple de la comanda \ord|iio_info| s'ha
 vist que aquesta no donava els mateixos resultats que el mateix programa implementat
 en C. Quan no s'especifica cap argument en la línia de comandes, s'hauria 
 d'utilitzar el primer grup de dispositius possible. En canvi, el programa d'exemple
@@ -112,11 +112,11 @@ aquest afegit, ja que es va passar a utilitzar \acro{iio}.
 Finalment, la tercera i última contribució externa de l'aplicació és el
 mòdul \est{PyRandr}. A diferència de la resta, aquest mòdul no es troba
 disponible al repositori oficial de Python \est{PyPi} i, per tant, no es pot
-insta\l.lar amb la comanda \est{pip3} o marcar com a dependència quan es crei
+insta\l.lar amb la comanda \ord|pip3| o marcar com a dependència quan es crei
 l'aplicació final.
 
 Aquest projecte, disponible a \est{GitHub}, és una abstracció de la comanda
-\est{xrandr} \cite{Pyrandr}. S'ha vist en l'apartat \ref{subsec:xrandr} que la
+\ord|xrandr| \cite{Pyrandr}. S'ha vist en l'apartat \ref{subsec:xrandr} que la
 llibreria
 \est{Xlib} pot ser una mica complicada d'utilitzar, i aquesta comanda no ha
 canviat gaire en bastant temps. Així doncs, es considera una bona alternativa
@@ -157,14 +157,14 @@ destacar-ne només tres de més rellevants:
 \begin{itemize}
     \item El sistema s'ha dissenyat per a suportar diversos dispositius a la
     vegada. Basant-se en el número de sèrie de cada dispositiu i els codis
-    identificadors de \est{xrandr} per a les pantalles, es pot associar una
+    identificadors de \ord|xrandr| per a les pantalles, es pot associar una
     orientació d'un dispositiu a una pantalla en concret. Així doncs, més
     d'una pantalla es pot beneficiar del projecte a la vegada.
     \item S'ha realitzat el concepte de mitjana mòbil o filtre de pas baix per
     a aplicar les rotacions: fins que no hi hagi $x$ lectures consecutives amb
     una orientació diferent no s'aplica el canvi. El valor de $x$ no
     s'especifica, ja que l'usuari el pot configurar al seu gust.
-    \item S'ha aplicat el concepte de \est{offset}. Pot ser que algunes persones
+    \item S'ha aplicat el concepte d'\est{offset}. Pot ser que algunes persones
     insta\l.lin el dispositiu físic amb el cable mirant cap amunt, algunes cap
     avall, i no es pretén obligar-los a fer-ho d'una única manera. En canvi,
     s'ha deixat configurable l'orientació en la que es troba el sensor en
@@ -189,7 +189,8 @@ mesura a una altra.
 La forma de fer-ho és ben senzilla: sabent que la gravetat de la terra sempre
 apunta cap avall, i que l'acceleració quan el dispositiu està quiet és únicament
 la de la gravetat, només cal saber cap a quina direcció s'està mesurant aquesta
-acceleració per a detectar l'orientació del sensor. A \cite{PedleyTilt} es detalla tota la
+acceleració per a detectar l'orientació del sensor. A \cite{PedleyTilt} es
+detalla tota la
 trigonometria que hi ha darrere d'aquesta explicació, que no s'afegeix en aquest
 document ja que no és rellevant pel producte final.
 
@@ -204,7 +205,8 @@ Si mai es vulgués mesurar l'orientació d'una forma més robusta es pot combina
 l'acceleròmetre amb un sensor de velocitat angular. L'acceleròmetre ajuda a
 calibrar el sensor, determinant sempre la direcció de la gravetat. Però un
 cop ca\l.librat, qui dona més precisió és el sensor giroscopic o de velocitat
-angular. Es pot consultar un exemple de sensor amb més precisió a \cite{6702711}, però no
+angular. Es pot consultar un exemple de sensor amb més precisió a
+\cite{6702711}, però no
 s'implementarà en aquest projecte degut a la complexitat afegida i els propòsits
 del projecte (no es cerca precisió).
 
@@ -307,15 +309,15 @@ Tanmateix, hi ha un parell de coses que s'han acabat fent diferent en referènci
 al servei d'usuari. La intenció de crear un servei d'usuari és permetre que els
 usuaris no administradors puguin utilitzar aquest programa encara que no estigui
 insta\l.lat. Com que totes les dependències no insta\l.lades es poden baixar
-sense permisos d'administrador amb la comanda \verb|pip3| això esdevé una tasca
+sense permisos d'administrador amb la comanda \ord|pip3| això esdevé una tasca
 molt senzilla.
 
-Només s'ha canviat el lloc on estarà l'executable, a \verb|~/.local/bin| i el
-fitxer de configuracions, a \verb|~/.config/gyroscreen|. La resta es mantindrà
+Només s'ha canviat el lloc on estarà l'executable, a \fitx{~/.local/bin} i el
+fitxer de configuracions, a \fitx{~/.config/gyroscreen}. La resta es mantindrà
 tot igual.
 
 També s'ha fet que el programa només informi a \est{systemd} que s'ha carregat
-correctament el servei si aquest s'executa amb l'argument \verb|--daemon| a la
+correctament el servei si aquest s'executa amb l'argument \ord|--daemon| a la
 línia de comandes. Així es manté la funcionalitat del programa en entorns fora
 de serveis.
 
@@ -324,14 +326,14 @@ de serveis.
 
 Si es pretén insta\l.lar el programa per a tots els usuaris només cal seguir
 els darrers passos del tutorial citat en l'apartat anterior. S'ha de moure de
-lloc l'executable (a \verb|/usr/bin|), i el servei (al lloc on indica el
-tutorial). El fitxer de configuracions també es pot moure a \verb|/etc| en funció
+lloc l'executable (a \fitx{/usr/bin}), i el servei (al lloc on indica el
+tutorial). El fitxer de configuracions també es pot moure a \fitx{/etc} en funció
 de si es vol que les configuracions siguin idèntiques per a tots els usuaris o
 puguin canviar entre usuaris.
 
 Tanmateix, la dificultat més gran per a utilitzar el programa com un servei de
 sistema és que no hi ha les variables d'entorn de la sessió, i en conseqüència
-\verb|xrandr| no funciona. S'ha explicat quines variables són i la importància
+\ord|xrandr| no funciona. S'ha explicat quines variables són i la importància
 que tenen en l'apartat \ref{subsec:xrandr}.
 
 Així doncs, toca modificar considerablement la part de les comandes del
@@ -339,8 +341,8 @@ projecte \est{PyRandr}, tal i com s'ha mencionat a l'apartat \ref{subsec:pyrandr
 El procediment que s'implementarà per a buscar les variables d'entorn encertades
 no és molt professional, però completament funcional: s'anirà provant per diferents
 opcions de \verb|$DISPLAY| (concretament \verb|:0| i \verb|:1|) i es cercarà
-en diferents directoris predefinits el fitxer \verb|.Xauthority|, com pot ser
-en els directoris de cada usuari o a \verb|/run|.
+en diferents directoris predefinits el fitxer \fitx{.Xauthority}, com pot ser
+en els directoris de cada usuari o a \fitx{/run}.
 
 Si no s'aconsegueix recuperar el context de \est{xrandr} després de tots aquests
 intents s'aturarà el programa amb un codi d'error. Tanmateix, s'ha provat el
@@ -348,7 +350,7 @@ sistema amb diferents versions de Debian i Ubuntu i en totes ha acabat funcionan
 En un cas extrem, cal recordar que sempre es pot insta\l.lar l'aplicació per a
 que funcioni en el context de la sessió, mitjançant un servei d'usuari.
 
-\section{Creació del paquet de \est{Debian}}
+\section{Creació del paquet de Debian}
 
 Tal i com s'ha vist en l'apartat anterior, el servei de sistema necessita guardar
 els fitxer de configuració i els fitxers executables en llocs molt específics.
@@ -369,8 +371,8 @@ També és essencial saber determinar per a quines arquitectures és compatible 
 programa creat. Per exemple, si s'hagués implementat el projecte en C, s'hauria
 de compilar per a cada arquitectura separadament, i crear un paquet per a cada
 una d'elles. En el cas de Python, en canvi, és compatible per a totes les
-plataformes. Per això es posarà \est{all} enlloc de una arquitectura específica,
-com podria ser \est{amd64}.
+plataformes. Per això es posarà \texttt{all} enlloc de una arquitectura específica,
+com podria ser \texttt{amd64}.
 
 La següent tasca més important és saber què s'ha d'insta\l.lar i a on. Per sort,
 Debian facilita molt aquesta tasca, i per programes senzills gairebé que és
@@ -399,7 +401,7 @@ pàgina de manual. Això va portar al desig personal d'aprendre com es creaven
 i com s'afegien en un paquet de Debian.
 
 Per això es va cercar en diferents llocs fins que es va trobar l'eina
-\est{pandoc} \cite{PandocTutorial},
+\ord|pandoc| \cite{PandocTutorial},
 que converteix un fitxer en \est{Markdown} en una pàgina de manual amb el
 format que aquesta necessita. El format de les pàgines de manual es considera
 editable a mà, però la corba d'aprenentatge és prou alta i, segons moltes fonts,
@@ -407,12 +409,12 @@ no val la pena per a pàgines petites o projectes poc ambiciosos \cite{Manpage}.
 
 Un cop creada la pàgina de manual, s'ha d'afegir en les comandes d'insta\l.lació
 que es copïi al directori pertinent aquesta pàgina, i un cop insta\l.lat el
-paquet de nou, només cal executar \verb|man gyroscreen| per a consultar el
+paquet de nou, només cal executar \ord|man gyroscreen| per a consultar el
 manual d'ús del programa, en anglès.
 
-\subsection{Repositori d'\acro{apt}}
+\subsection{Repositori d'APT}
 
-Insta\l.lar el paquet generat es pot fer utilitzant l'eina \verb|dpkg| sense cap
+Insta\l.lar el paquet generat es pot fer utilitzant l'eina \ord|dpkg| sense cap
 problema. L'únic inconvenient d'aquesta eina és que no insta\l.la automàticament
 les dependències, però en el \acro{readme} del repositori es detallen tots els
 passos per a seguir en aquests casos.
@@ -423,7 +425,7 @@ web estàtic on poder descarregar els programes. Els usuaris haurien de, en prim
 lloc, afegir la clau pública amb la que es signa el paquet al seu ordinador, i
 llavors podrien afegir el repositori \acro{apt} en el seu llistat de repositoris
 on buscar programes. Finalment, es podria descarregar i insta\l.lar el programa
-utilitzant la comanda \verb|apt| o \verb|apt-get|.
+utilitzant l'ordre \ord|apt| o \ord|apt-get|.
 
 Tanmateix, el que sobre paper sembla molt senzill implica la configuració d'un
 servidor, domini, i haver de signar amb una clau privada els paquets que es

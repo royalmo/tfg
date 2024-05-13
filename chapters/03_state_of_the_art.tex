@@ -22,7 +22,7 @@ impressores. Aquesta tecnologia utilitza uns connectors estàndards que son
 gamma d'aplicacions. Els dispositius \acro{usb} poden transmetre dades a
 diferents velocitats, des de velocitats molt baixes fins a velocitats molt
 altes, i són compatibles amb una gran varietat de sistemes operatius i
-plataformes de hardware \cite{Axelson2015USB}.
+maquinari \cite{Axelson2015USB}.
 
 \subsection{Arquitectura}
 
@@ -41,7 +41,8 @@ interessant fer una pinzellada de l'estàndard.
 
 El connector \acro{usb2} està composat de 4 cables: \acro{5v}, \acro{gnd},
 \acro{d+} i \acro{d-}. La funció del cable de \acro{5v} és alimentar el
-dispositiu, amb una intensitat de fins a \SI{500}{\milli\ampere}. Aquestes
+dispositiu, amb una intensitat de fins a
+\SI[round-mode=places,round-precision=0]{500}{\milli\ampere}. Aquestes
 prestacions de corrent resulten ser suficients per a la major part dels
 dispositius que compleixen l'estàndard. Sabent que \acro{gnd} és el cable
 necessari per a tancar els circuits, només queda \acro{d+} i \acro{d-} per
@@ -56,8 +57,12 @@ afectar per igual als dos cables (degut a la seva proximitat dins del
 connector).
 
 És important tenir en compte que la tensió d'operació de l'estàndard \acro{usb2}
-és de \SI{3.3}{\volt}, encara que la tensió que proporciona el cable
-d'alimentació sigui de \SI{5}{\volt}. Aquest detall serà molt important de cara
+és de
+\SI[round-mode=places,round-precision=1]{3.3}{\volt}, encara que la tensió que
+proporciona el cable
+d'alimentació sigui de
+\SI[round-mode=places,round-precision=0]{5}{\volt}.
+Aquest detall serà molt important de cara
 al disseny del dispositiu, ja que implicarà, molt probablement, l'ús de dos
 díodes Zener a l'entrada de les línies de transmissió de dades.
 
@@ -74,22 +79,22 @@ de connexió ja que no té importància per a aquest treball.
 
 Existeixen tres tipus de transaccions:
 \begin{itemize}
-    \item Les transaccions \est{out} serveixen per a enviar paquets de
+    \item Les transaccions \emph{out} serveixen per a enviar paquets de
     l'ordinador al dispositiu.
-    \item Les transaccions \est{in} serveixen per a enviar paquets del
+    \item Les transaccions \emph{in} serveixen per a enviar paquets del
     dispositiu a l'ordinador. A diferència del tipus anterior, aquesta
     transacció no la inicia qui vol enviar el paquet. Per a poder
     solventar aquesta complicació existeix el següent tipus.
     \item Les transaccions de control serveixen per a poder esbrinar quan el
     dispositiu necessita enviar dades, pactar velocitats de transmissió, entre
-    d'altres. La transacció de control més important és la \est{setup},
+    d'altres. La transacció de control més important és la \emph{setup},
     que serveix per a intercanviar informació inicial entre els dispositius. Més
     endavant es veuran els tiups de dades que s'intercanvien inicialment.
 \end{itemize}
 
-L'important d'aquest apartat és tenir present que les transaccions \est{in} i
-\est{out} es van dissenyar per a mantenir un intercanvi de dades constant,
-mentre que les transaccions de control, fora de l'etapa de \est{setup}, estan
+L'important d'aquest apartat és tenir present que les transaccions \emph{in} i
+\emph{out} es van dissenyar per a mantenir un intercanvi de dades constant,
+mentre que les transaccions de control, fora de l'etapa de \emph{setup}, estan
 més pensades per a petits intercanvis de dades, i més irregulars. Més endavant
 resultarà aquesta informació important per a entendre la implementació del
 dispositiu.
@@ -97,7 +102,7 @@ dispositiu.
 \subsubsection*{Metadades}
 \label{subsubsec:metadades}
 
-Durant els intercanvis inicials, durant l'etapa \est{setup}, el dispositiu
+Durant els intercanvis inicials, durant l'etapa \emph{setup}, el dispositiu
 comparteix certes metadades a l'ordinador, cosa que el permet identificar-se,
 i descriure les especificacions necessàries. Un dels avantatges més visibles
 d'aquest procés invisible és la funcionalitat \est{plug\&play}, que evita
@@ -114,7 +119,7 @@ a efectes tècnics es considera com un únic nombre.
 
 Aquests codis tenen per objectiu que l'ordinador pugui identificar el tipus de
 dispositiu que s'ha connectat. Un dels usos principals d'aquesta funcionalitat
-és la creació de regles \est{udev}, que en els sistemes de Linux assignen
+és la creació de regles \acro{udev}, que en els sistemes de Linux assignen
 \est{drivers} en funció dels codis anteriorment esmentats.
 
 Una altra metadada que s'intercanvia a l'inici de la connexió és la classe
@@ -132,7 +137,7 @@ Finalment hi ha altres metadades que poden ser interessants conèixer, com
 poden ser les freqüències en que el dispositiu envia dades o versions de
 l'estàndard.
 
-\subsection{\est{Usb Implementers Forum}}
+\subsection{\est{USB Implementers Forum}}
 \label{subsec:usb-if}
 
 El logo de \acro{usb} i les imatges derivades estan sota drets d'autor. L'entitat
@@ -146,10 +151,13 @@ producte (no per a cada dispositiu). Aquests codis també els gestiona aquesta
 entitat.
 
 Per a poder obtenir els drets d'ús de la imatge d'\acro{usb} i un codi
-\acro{VID} (i, en conseqüència, 65536 codis \acro{pid}), s'ha de ser o bé
+\acro{VID} (i, en conseqüència, \num[round-mode=places,round-precision=0]{65536}
+codis \acro{pid}), s'ha de ser o bé
 membre del \acro{usb-if} o bé pagar una llicència anual. El
-primer dels casos val \SI{5000}\$ anualment, mentre que el segon
-val \SI{6000}\$ d'entrada i \SI{3500}\$ cada dos anys
+primer dels casos val \SI[round-mode=places,round-precision=0]{5000}{\$}
+anualment, mentre que el segon
+val \SI[round-mode=places,round-precision=0]{6000}{\$}
+%d'entrada i \SI{3500}{\$} cada dos anys
 \cite{USBGetting}. Els membres d'\acro{usb-if} també poden participar en les
 decisions dels nous estàndards d'\acro{usb}.
 
@@ -178,7 +186,8 @@ Resumidament, en aquests casos es disposa de dues alternatives:
     prototips, no es recomana per a productes comercialitzables, on el risc
     de co\l.lisió és més alt.
     \item Aconseguir un únic \acro{pid}: Les entitats que han comprat un codi
-    \acro{vid} a l'\acro{usb-if} disposen de 65536 codis \acro{pid}. La majoria
+    \acro{vid} a l'\acro{usb-if} disposen de
+    \num[round-mode=places,round-precision=0]{65536} codis \acro{pid}. La majoria
     d'entitats no necessiten més de uns pocs codis \acro{pid}, i poden arribar
     a cedir la resta a projectes com \est{OpenMoko} \cite{OpenMokoUSB}. Aquests
     projectes s'encarreguen d'assignar codis \acro{pid} a projectes arbitraris.
@@ -204,15 +213,18 @@ l'estàndard. Aquestes es poden dividir en grans grups:
 
 \begin{itemize}
     \item \acro{Usb1}: Aquesta primera versió, projectada l'any 1996, oferia
-    una velocitat màxima de transmissió de \SI{12}{\mega\bit\per\second}.
+    una velocitat màxima de transmissió de
+    \SI[round-mode=places,round-precision=0]{12}{\mega\bit\per\second}.
     Aquesta versió està deprecada i no s'hauria de crear nous dispositius amb
     aquesta.
     \item \acro{Usb2}: La segona versió utilitzava el mateix connector que el
     seu predecessor, però aprofitava els avenços de la tecnologia per a
-    augmentar la velocitat de transmissió a \SI{480}{\mega\bit\per\second}.
+    augmentar la velocitat de transmissió a
+    \SI[round-mode=places,round-precision=0]{480}{\mega\bit\per\second}.
     \item \acro{Usb3}: Aquesta versió utilitzava nous connectors, però tots
     eren compatibles amb les versions anteriors. La seva darrera revisió,
-    \acro{usb3.2}, pot transmetre dades a \SI{20}{\giga\bit\per\second}.
+    \acro{usb3.2}, pot transmetre dades a
+    \SI[round-mode=places,round-precision=0]{20}{\giga\bit\per\second}.
     \item \acro{Usb4}: Encara en fase de desenvolupament, aquesta nova versió
     utilitzaria només el connector \acro{usb-c} que ja va aparèixer oferint
     compatibilitat fins al \acro{usb2}. Es calcula que podria quadruplicar
@@ -244,7 +256,7 @@ L'estàndard \acro{usb} disposa de diferents connectors. Es poden distingir en
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.4\textwidth]{images/usb_connectors.png}
-    \caption{Connectors USB de tipus A i B. \cite{Contributors2024USB}}
+    \caption{Connectors \acro{usb} de tipus A i B. \cite{Contributors2024USB}}
     \label{fig:usb_connectors}
 \end{figure}
 
@@ -271,7 +283,7 @@ L'estàndard \acro{usb} disposa de diferents connectors. Es poden distingir en
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.2\textwidth]{images/usb_c.png}
-    \caption{Connector USB de tipus C. \cite{Contributors2024USB}}
+    \caption{Connector \acro{usb} de tipus C. \cite{Contributors2024USB}}
     \label{fig:usb_connectors_c}
 \end{figure}
 
@@ -299,9 +311,9 @@ informa sobre la intenció d'extendre aquest connector a altres dispositius.
 Tenint present que el dispositiu que es vol crear podria entrar fàcilment en
 aquest grup de perifèrics d'ordinador, s'ha decidit utilitzar un connector de
 tipus \acro{usb-c} per a assegurar-nos la seva possible comercialització dintre
-de la \acro{UE}.
+de la \acro{ue}.
 
-\section{Taules d'ús \acro{hid}}
+\section{Taules d'ús HID}
 \label{sec:hut}
 
 Tal i com s'ha comentat en l'apartat \ref{subsubsec:metadades}, els dispositius
@@ -325,7 +337,7 @@ dispositiu i com interpretar les dades que anirà enviant.
 
 La documentació oficial de \acro{usb} \cite{HidHut} especifica
 detalladament tots els codis que es poden definir. El que interessarà per a
-aquest treball és la categoria de \textit{Sensors}, i dintre d'aquesta hi ha
+aquest treball és la categoria de \emph{Sensors}, i dintre d'aquesta hi ha
 diversos tipus de dispositius. Veurem que el tipus \est{3D Accelerometer} serà
 el més adequat per al projecte.
 
@@ -357,7 +369,7 @@ amb la freqüència amb que l'ordinador les pot so\l.licitar.
     aquest cas, la categoria de sensors i el tipus acceleròmetre tridimensional.
     \item S'ha de comunicar el tipus de connexió amb l'ordinador: integrat a
     la mateixa màquina, extern o adjunt. En el cas d'aquest projecte s'utilitzarà
-    el tipus \textit{adjunt}, ja que es troba a molta proximitat de l'ordinador
+    el tipus \emph{adjunt}, ja que es troba a molta proximitat de l'ordinador
     i reportarà dades del mateix (el tipus extern seria per a sensors que
     mesuren variables d'altres aparells).
     \item També s'ha de reportar els esdeveniments que pugui tenir el sensor.
@@ -393,7 +405,7 @@ de dades: \est{feature} i \est{input}.
     \item El tipus \est{input} enviarà l'estat del sensor i, si s'escau, els
     valors llegits. Aquests valors s'hauran de dividir pel factor especificat
     a la capçalera per a poder representar decimals. En el cas de l'acceleròmetre,
-    l'unitat a enviar és \textit{g}, i poques vegades aquest valor superarà mai
+    l'unitat a enviar és $g$, i poques vegades aquest valor superarà mai
     les poques unitats, pel que disposar de decimals és essencial.
 \end{itemize}
 
@@ -434,7 +446,7 @@ exemples de sensors \acro{hid}.
 Un altre dels aspectes importants del projecte és la creació d'un programari
 que pugui fer d'intermediari entre el dispositiu i l'entorn gràfic. Tal i com
 diu el títol de l'apartat, es comentarà només el cas específic dels sistemes
-\acro{UNIX}, concretament amb Linux.
+\acro{unix}, concretament amb Linux.
 
 El \est{kernel} de Linux acostuma a dividir tot en diferents capes, i no és una
 excepció per al que té referència amb aquest projecte. Sempre és recomanable
@@ -481,7 +493,7 @@ serà més fàcil utilitzar les altres llibreries, tot i que això pugui suposar
 efectuar petits canvis entre els diferents sistemes operatius.
 
 A Linux, un dispositiu que es pot controlar per \est{libusb} sol aparéixer com
-a fitxer sota el format \verb|/dev/usbrawX|, on X és el número de dispositiu.
+a fitxer sota el format \fitx{/dev/usbrawX}, on X és el número de dispositiu.
 No gens menys, si un contro\l.lador d'una capa superior està utilitzant
 exclusivament el dispositiu, el \est{kernel} no crearà aquest fitxer, per a
 evitar confusió i so\l.lapaments.
@@ -500,7 +512,7 @@ per a provar-la i debugar-la. Sobretot es destaca \cite{LibhidUI}, que disposa
 d'una interfície molt senzilla d'utilitzar i multiplataforma.
 
 A Linux, un dispositiu que es pot controlar per \est{libhid} sol aparéixer com
-a fitxer sota el format \verb|/dev/hidrawX|, on X és el número de dispositiu.
+a fitxer sota el format \fitx{/dev/hidrawX}, on X és el número de dispositiu.
 De la mateixa forma que amb l'apartat anterior, el dispositiu no apareixerà
 sota aquest format si una capa més alta l'està utilitzant exclusivament.
 
@@ -533,9 +545,9 @@ defecte s'assigna a \acro{iio} es quedi una capa més per sota, com seria
     sensors. Per tant, no s'ha d'afegir a l'usuari en un grup nou ni crear
     cap regla \acro{udev}.
     \item Més d'un usuari o procés pot estar llegint simultàniament el sensor.
-    El dispositu creat a \verb|/dev/iio:deviceX| (on X és el número de
+    El dispositu creat a \fitx{/dev/iio:deviceX} (on X és el número de
     dispositiu) pot ser llegit simultàniament, de la mateixa forma que ho fan
-    altres fitxers, per exemple \verb|/dev/rand| o \verb|/dev/zero|.
+    altres fitxers, per exemple \fitx{/dev/rand} o \fitx{/dev/zero}.
     \item Al ser una capa superior, no s'ha de gestionar tot el referent al
     protocol \acro{hid}. Les lectures del sensor venen gairebé completament
     processades.
@@ -563,20 +575,19 @@ en aquest context \est{systemd} \cite{Systemd}. Hi ha dos tipus de serveis difer
 funció dels privilegis que tenen:
 
 \begin{itemize}
-    \item Els \textit{serveis del sistema} afecten a tots els usuaris i
+    \item Els \emph{serveis del sistema} afecten a tots els usuaris i
     s'executen sota l'usuari i context de \est{root} (excepte si es diu
     el contrari). Es pot escollir quan s'executen, ja sigui just després de
     carregar el \est{kernel} a la memòria o després que el primer usuari
     inicii sessió. Es necessiten permisos d'administrador per a fer modificacions
-    en els serveis de sistema (generalment mitjançant la comanda
-    \verb|systemctl|).
-    \item Els \textit{serveis d'usuari}, en canvi, només afecten a l'usurari
+    en els serveis de sistema (generalment mitjançant l'ordre \ord|systemctl|).
+    \item Els \emph{serveis d'usuari}, en canvi, només afecten a l'usurari
     que els ha configurat. No es necessiten permisos d'administrador per a
     configurar-los, i s'executen sota el mateix context, variables d'entorn i
     usuari que qui els ha configurat. Aquests serveis només es poden executar a
     partir dels darrers passos de l'arrencada del sistema, ja sigui després
-    d'iniciar sessió o un cop carregat l'entorn gràfic. També utilitzen la
-    comanda \verb|systemctl|, però afegint l'opció \verb|--user|.
+    d'iniciar sessió o un cop carregat l'entorn gràfic. També utilitzen l'ordre
+    \ord|systemctl|, però afegint l'opció \ord|--user|.
 \end{itemize}
 
 És important conéixer la diferència entre els dos tipus mencionats, ja que en
@@ -614,7 +625,7 @@ de les possibilitats és que hi hagi diferents clients connectats a la vegada
 a la mateixa màquina. Aquest fet no sorprèn a ningú, ja que és ben sabut que
 diversos usuaris poden connectar-se remotament i simultàniament a la mateixa
 màquina mitjançant \est{ssh}. Ara bé, hi ha diverses formes (com, per exemple,
-la opció \verb|-X| de \est{ssh}) que permeten diferents sessions gràfiques
+la opció \ord|-X| de \est{ssh}) que permeten diferents sessions gràfiques
 simultàniament \cite{ManSSH}.
 
 La complicació rau en que \est{xrandr} utilitza les variables d'entorn per a
@@ -635,7 +646,7 @@ de \est{xrandr} \cite{XrandrVars}:
     \verb|:1| pels sistemes més recents), però si hi ha diversos usuaris
     connectats amb diferents entorns gràfics podria ser un altre nombre.
     \item La segona variable d'entorn necessària és \verb|$XAUTHORITY|. Aquesta
-    variable conté la direcció del fitxer \est{Xauthority}. Aquest fitxer
+    variable conté la direcció del fitxer \fitx{Xauthority}. Aquest fitxer
     conté la \est{cookie} que permet consultar i realitzar canvis en la sessió
     actual. Com és evident, aquest fitxer només es pot consultar per l'usuari
     propietari de la sessió (i usuaris administradors).
@@ -646,7 +657,7 @@ de \est{xrandr} \cite{XrandrVars}:
 
 Cal tenir present que un usuari pot restringir qui té accés a modificar la
 seva sessió. Per defecte, es restringeix a tothom que no tingui accés al
-fitxer d'autorització, però mitjançant la comanda \verb|xhost +| es pot permetre
+fitxer d'autorització, però mitjançant l'ordre \ord|xhost +| es pot permetre
 que tothom pugui efectuar modificacions a la sessió d'aquell usuari \cite{xhost}.
 Tanmateix, es considera aquesta pràctica poc segura, i per aquest motiu no es
 tindrà en compte durant l'elaboració d'aquest treball.
@@ -665,16 +676,16 @@ Creat a l'any 2008, ha anat recuperant totes les funcionalitats de \est{Xorg}
 implementades amb una arquitectura bastant diferent. Tot i seguir sent
 compatible amb alguns aspectes senzills, hi ha molts programes que deixen de
 funcionar amb aquest nou servidor, especialment els que comparteixen pantalla
-o interactuen amb ella. Des de Ubuntu 17.10 que el sistema operatiu deixa
+o interactuen amb ella. Des d'Ubuntu 17.10 que el sistema operatiu deixa
 escollir entre els dos entorns \cite{Wayland}.
 
 Tanmateix, un canvi d'aquesta embargadura no es fa d'una versió per una altra.
 \est{Wayland} encara necessita bastantes millores per a fer-lo completament
 compatible, pel que la seva \acro{api} no és del tot definitiva. Es preveuen
 encara uns anys fins que no s'anuncii la data en la que \est{Xorg} haurà de
-ser utilitzat. I un cop passada aquesta data el més probable és que comandes
-com \verb|xrandr| segueixin funcionant, de la mateixa forma que segueixen
-funcionant eines com \verb|ifconfig|, deprecades des de fa ja molts anys
+ser utilitzat. I un cop passada aquesta data el més probable és que ordres
+com \ord|xrandr| segueixin funcionant, de la mateixa forma que segueixen
+funcionant eines com \ord|ifconfig|, deprecades des de fa ja molts anys
 \cite{Ifconfig}.
 
 Per aquest motiu s'ha decidit realitzar el projecte utilitzant \est{Xorg}.

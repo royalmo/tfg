@@ -38,9 +38,9 @@ uns segons més, però per a fer proves valdrà la pena aquesta espera.
 
 Programar el \est{Digispark} o una placa equivalent com la d'aquest projecte
 utilitzant el \est{bootloader} definit anteriorment és una tasca molt senzilla.
-Un cop es disposi del fitxer \verb|.hex| que es vol programar al
-microcontrolador, es pot utilitzar programes com \est{avrdude} o
-\est{micronucleus} per a que, mentre s'estigui executant el bootloader, es 
+Un cop es disposi del fitxer \fitx{.hex} que es vol programar al
+microcontrolador, es pot utilitzar programes com \ord|avrdude| o
+\est|micronucleus| per a que, mentre s'estigui executant el bootloader, es 
 reprogrami el xip \cite{DigisparkBootloader}.
 
 Per a progrmar la placa amb un sistema basat en Linux s'ha de realitzar una
@@ -54,7 +54,7 @@ Es pot consultar un tutorial detallat a \cite{CreateUdevRules}.
 
 Un cop es sap com programar la placa, el següent pas a seguir és crear un
 \est{Makefile} per a poder compilar i programar amb una única comanda.
-No és la primera ni la segona vegada que s'utilitza l'eina \est{make} en
+No és la primera ni la segona vegada que s'utilitza l'eina \ord|make| en
 aquesta titulació però sí que és la primera vegada que s'utilitza amb una placa
 que no sigui un Arduino. Tanmateix, no hi ha gaire diferència, tret de la
 part de programar mencionada en l'apartat anterior.
@@ -75,7 +75,8 @@ La tasca d'aquest apartat és aconseguir que l'ordinador identifqui la placa
 com un acceleròmetre tridimensional. Per a arribar a aquesta meta hi haurà un
 seguit de reptes i barreres a superar.
 
-El punt de partida és els codis d'exemples del repositori del projecte \cite{VusbProjects}.
+El punt de partida és els codis d'exemples del repositori del projecte
+\cite{VusbProjects}.
 També hi ha un repositori amb bastants exemples, però la majoria només son
 compatibles per a un \acro{AtMega}, i s'haurien d'adaptar de totes formes.
 
@@ -83,8 +84,10 @@ compatibles per a un \acro{AtMega}, i s'haurien d'adaptar de totes formes.
 
 Un dels problemes més grans del microcontrolador que s'està utilitzant és que
 l'osci\l.lador intern que disposa no és compatible amb el que demana el
-protocol \acro{usb}. Es disposa d'una freqüència de 16.5MHz i
-\acro{usb2} funciona a 1kHz.
+protocol \acro{usb}. Es disposa d'una freqüència de
+\SI[round-mode=places,round-precision=1]{16.5}{\mega\hertz} i
+\acro{usb2} funciona a
+\SI[round-mode=places,round-precision=0]{1}{\kilo\hertz}.
 
 Aquest problema és ben conegut pels desenvolupadors de \acro{v-usb} i en alguns
 dels exemples s'explica com ca\l.librar l'osci\l.lador intern per a poder-se
@@ -98,7 +101,7 @@ apartats anteriors, no es pretén certificar com a \acro{usb} el dispositiu
 (per altres motius no tècnics), pel que mentre funcioni correctament en la
 àmplia majoria de dispositius es considerarà un èxit.
 
-\subsection{Identificadors \acro{usb}}
+\subsection{Identificadors USB}
 
 Parlant de \acro{usb-if}, en aquest punt del projecte és quan s'ha de decidir
 quin \acro{vid-pid} es posa al dispositiu, si més no, durant el temps de
@@ -111,7 +114,8 @@ a obtenir identificadors a partir d'entitats mencionades anteriorment es sol
 tardar un temps, i acostumen a acceptar únicament projectes acabats o en fase
 de proves finals.
 
-Així doncs, s'ha optat per a agafar el \acro{vid-pid} 0x16c0-0x09e8, que és la
+Així doncs, s'ha optat per a agafar el \acro{vid-pid}
+\texttt{0x16c0}-\texttt{0x09e8}, que és la
 parella de codis que els autors de \acro{v-usb} ofereixen per a fer proves
 individuals \cite{Vusb}. En altres paraules, \est{ObDev}, el propietari dels
 codis, mai assignarà aquests identificadors a un producte que acabi sent
@@ -139,7 +143,7 @@ protecció adicional per a assegurar-se que el dispositiu sempre funciona
 correctament, o com a mínim sense errors greus que no permetin l'execució
 normal del programa.
 
-\subsection{Canvi de tipus \acro{hid}}
+\subsection{Canvi de tipus HID}
 
 Finalment, la tasca més complicada d'implantar aquesta llibreria en el marc
 del treball de final de grau és la configuració del nou tipus \acro{hid}:
@@ -158,14 +162,14 @@ d'acord amb aquest tutorial per a rebre paquets \acro{usb}
 generar un \est{Hid Report Descriptor} que és correctament llegit per l'ordinador.
 Una de les referències més importants sobre aquesta part és \cite{VusbProjects}.
 
-\section{\acro{I2c}}
+\section{I2C}
 
 Un cop solucionada la comunicació entre el microcontrolador i l'ordinador, toca
 centrar-se en la comunicació entre el microcontrolador i el sensor. Aquesta, tal
 i com s'ha dit en el capítol anterior, es farà mitjançant el protocol \acro{i2c}.
 Aquest protocol utilitza dues línies bidireccionals, una per les dades i una per
-el rellotge, que es connecten a 0V o es deixen a l'aire (i els \est{pull-ups} la
-porten a la tensió d'alimentació).
+el rellotge, que es connecten a \SI[round-mode=places,round-precision=0]{0}{\volt}
+o es deixen a l'aire (i els \est{pull-ups} la porten a la tensió d'alimentació).
 
 Si bé hi ha moltes llibreries per a la placa Arduino i altres microcontroladors
 de l'arquitectura \acro{avr}, totes utilitzen perifèrics específics que, en el
@@ -186,8 +190,9 @@ direcció del flux de dades pot canviar \cite{I2c}.
 El funcionament de \acro{i2c} es pot resumir en poques paraules: el mestre envia
 pel canal una adreça de 7 bits per a saber amb quin dispositiu vol comunicar-se.
 Aquests 7 bits són l'adreça del dispositiu, disponible als \est{datasheets}. Per
-al sensor d'aquest projecte, l'adreça és 0x68 \cite{MPU6050reg}. Després d'aquests 7 bits,
-s'envia un 8è bit que dependrà de si es vol enviar dades o rebre dades del
+al sensor d'aquest projecte, l'adreça és \texttt{0x68} \cite{MPU6050reg}.
+Després d'aquests 7 bits,
+s'envia un $8^{è}$ bit que dependrà de si es vol enviar dades o rebre dades del
 dispositiu.
 
 Un cop rebut el \est{acknowledgement} de l'esclau, comença la transmissió de
@@ -206,7 +211,7 @@ El sensor \est{MPU6050} defineix en el seu \est{datasheet} un seguit de
 registres, que funcionen de la mateixa forma que els perifèrics en \acro{avr}:
 no son registres comuns per a guardar dades, sinó que és com si hi hagués una
 extensió en els perifèrics del propi microcontrolador. Així doncs, si es llegeix
-els registres 0x42:0x41 es podrà consultar el valor mesurat de temperatura
+els registres \texttt{0x42:0x41} es podrà consultar el valor mesurat de temperatura
 (sense processar) \cite{MPU6050reg}. També es pot escriure en alguns registres,
 per exemple per a activar o ca\l.librar el sensor.
 

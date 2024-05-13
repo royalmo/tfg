@@ -16,28 +16,32 @@ costos de la tirada.
 \begin{table}[ht]
     \centering
     \begin{tabular}{lc}
-        \textbf{Concepte}           & \textbf{Cost} \\ \hline
-        Impressió de la PCB         & 1,87€         \\
-        Muntatge de la PCB          & 10,21€        \\
-        Impressió 3D                & 28€           \\
-        Cable USB2.0 A-C            & 5€            \\
-        Enviament 15 dies           & 1,90€         \\
-        Components (total)          & 62,47€        \\
-        - C1: 4.7u (5u.)            & 0,65€         \\
-        - C2,C4: 10u (10u.)         & 0,18€         \\
-        - C3,C5,C6: 0.1u (15u.)     & 0,08€         \\
-        - C7: 2200p (5u.)           & 0,17€         \\
-        - R1,R2: 5.1k (10u.)        & 0,19€         \\
-        - R3,R4: 68 (5u.)           & 0,20€         \\
-        - R5: 1.5k (5u.)            & 0,01€         \\
-        - R6,R7: 4.7k (10u.)        & 0,19€         \\
-        - D1,D2: 3.3V (14u.)        & 0,52€         \\
-        - J1: USBC (7u.)            & 0,60€         \\
-        - U1: MCP1703T (5u.)        & 3,43€         \\
-        - U2: AtTiny85 (5u.)        & 18,89€        \\
-        - U3: MPU6050 (5u.)         & 37,36€        \\ \hline
-        \textbf{TOTAL (IVA Inclòs)} & \textbf{109,45€}     
-        \end{tabular}
+        \toprule
+        \textbf{Concepte}           & \textbf{Cost} \\
+        \midrule
+        Impressió de la \acro{pcb}  & 1.87€         \\
+        Muntatge de la \acro{pcb}   & 10.21€        \\
+        Impressió 3D                & 28.€          \\
+        Cable \acro{usb2} A-C       & 5.€           \\
+        Enviament 15 dies           & 1.90€         \\
+        Components (total)          & 62.47€        \\
+        - C1: 4.7u (5u.)            & 0.65€         \\
+        - C2,C4: 10u (10u.)         & 0.18€         \\
+        - C3,C5,C6: 0.1u (15u.)     & 0.08€         \\
+        - C7: 2200p (5u.)           & 0.17€         \\
+        - R1,R2: 5.1k (10u.)        & 0.19€         \\
+        - R3,R4: 68 (5u.)           & 0.20€         \\
+        - R5: 1.5k (5u.)            & 0.01€         \\
+        - R6,R7: 4.7k (10u.)        & 0.19€         \\
+        - D1,D2: 3.3V (14u.)        & 0.52€         \\
+        - J1: USBC (7u.)            & 0.60€         \\
+        - U1: MCP1703T (5u.)        & 3.43€         \\
+        - U2: AtTiny85 (5u.)        & 18.89€        \\
+        - U3: MPU6050 (5u.)         & 37.36€        \\
+        \midrule
+        \textbf{TOTAL (IVA Inclòs)} & \textbf{109.45€} \\
+        \bottomrule
+    \end{tabular}
     \caption{Cost de produir una tirada de 5 dispositius.}
     \label{tab:jlcpcb}
 \end{table}
@@ -53,7 +57,7 @@ factor en ment i sabent que els preus solen disminuir quan s'augmenten les
 quantitats, s'ha decidit simular la compra de 10000 unitats.
 
 Per a fer aquesta simulació s'ha cercat als diferetns portals web (de les
-impressions 3D, dels components, ...) el preu aproximat per a aquestes
+impressions 3D, dels components, \dots) el preu aproximat per a aquestes
 quantitatas. Com és evident, els nombre obtinguts són molt aproximats i
 arrodonits, i en cas de voler-ho dur a terme s'haurien de revisar amb més
 cura. A la taula
@@ -63,22 +67,29 @@ grans quantitas.
 \begin{table}[ht]
     \centering
     \begin{tabular}{lc}
-        \textbf{Concepte}           & \textbf{Cost} \\ \hline
-        Impressió de la PCB         & 400€          \\
-        Muntatge de la PCB          & 14000€        \\
+        \toprule
+        \textbf{Concepte}           & \textbf{Cost} \\
+        \midrule
+        Impressió de la \acro{pcb}  & 400€          \\
+        Muntatge de la \acro{pcb}   & 14000€        \\
         Impressió 3D                & 8100€         \\
-        Cable USB2.0 A-C            & 7800€         \\
-        Enviament 15 dies           & 18,50€        \\
-        Components (total)          & 69200€        \\ \hline
-        \textbf{TOTAL (IVA Inclòs)} & \textbf{$\approx100000€$}  \\ \hline  
-        \textbf{Preu per unitat}    & \textbf{$\approx10€$} 
-        \end{tabular}
-    \caption{Cost de produir una tirada de 10000 dispositius.}
+        Cable \acro{usb2} A-C       & 7800€         \\
+        Enviament 15 dies           & \SI{18.5}{\EUR}        \\
+        Components (total)          & 69200€        \\
+        \midrule
+        \textbf{TOTAL (IVA Inclòs)} & \textbf{$\approx\SI[round-mode=places,round-precision=0]{100000}{\EUR}$}  \\
+        \midrule  
+        \textbf{Preu per unitat}    & \textbf{$\approx\SI[round-mode=places,round-precision=0]{10}{\EUR}$} \\
+        \bottomrule
+    \end{tabular}
+    \caption{Cost de produir una tirada de
+        \num[round-mode=places,round-precision=0]{10000} dispositius.}
     \label{tab:pricing10k}
 \end{table}
 
 Així doncs, si es produís aquest producte en massa, el preu de cost rondaria
-els 10€. Tanmateix, el preu de venda sempre hauria de ser més elevat que
+els \SI[round-mode=places,round-precision=0]{10}{\EUR}.
+Tanmateix, el preu de venda sempre hauria de ser més elevat que
 el preu de cost. El marge que es defineixi pot dependre de diversos factors.
 A continuació es detallen alguns aspectes que s'haurien de tenir presents
 a l'hora de fixar un preu:
@@ -100,12 +111,15 @@ a l'hora de fixar un preu:
     \item S'ha de determinar, si s'escau, un marge de benefici pels inversors
     del projecte.
     \item Finalment, es pot arrodonir el preu final en funció a altres aspectes,
-    d'entre els quals el psicològic: un producte a 19€ és més cridaner que un
-    altre a 20€ \cite{kumar2017impact}.
+    d'entre els quals el psicològic: un producte a
+    \SI[round-mode=places,round-precision=0]{19}{\EUR} és més cridaner que un
+    altre a \SI[round-mode=places,round-precision=0]{20}{\EUR}
+    \cite{kumar2017impact}.
 \end{itemize}
 
 Així doncs, tenint present les recomanacions anteriors, es podria valorar que
-un bon preu de venda podria ser 19.80€. Aquest preu agafa per referència al
+un bon preu de venda podria ser
+\SI{19.8}{\EUR}. Aquest preu agafa per referència al
 producte acabat completament, és a dir totes les imperfeccions i millores que
 es citaran al calítol \ref{cap:future_work} haurien d'estar acabades.
 
@@ -173,13 +187,14 @@ mercat és convenient reservar una parella de codis per a aquest dispositiu.
 
 Al mateix apartat s'explica que hi ha entitats que, sense cobrar res, assignen
 identificadors a projectes de codi i maquinari obert. Un d'aquests és
-\est{pid.codes}, que utilitza el sistema co\l.laboratiu de \est{GitHub} per a
+\texttt{pid.codes}, que utilitza el sistema co\l.laboratiu de \est{GitHub} per a
 acceptar noves peticions \cite{PidCodes}.
 
-Així doncs, s'ha so\l.licitat el \acro{vid/pid} 0x1209, 0xF4F4 per al projecte
+Així doncs, s'ha so\l.licitat el \acro{vid/pid} \texttt{0x1209}-\texttt{0xF4F4}
+per al projecte
 \est{Gyroscreen}. En el moment de l'entrega del treball encara no hi ha hagut
 resposta per part de la persona que manté el projecte. Cal tenir en compte que
-la persona que gestiona \est{pid.codes} no guanya res a canvi, només hi perd
+la persona que gestiona \texttt{pid.codes} no guanya res a canvi, només hi perd
 temps i diners \cite{PidCodesFaq}, i per això no està sempre pendent de
 les noves peticions.
 
