@@ -115,6 +115,11 @@ output-decimal-marker={,}]{siunitx}
 
 %% Portada ah-hoc
 \renewcommand*{\maketitle}{%
+  % This pageanchor fix (and further down the pageanchor=true) are for
+  % preventing a TeX warning at compile time that will not be able to link
+  % properly pages 1 to 6 (title pages) because they already exist.
+  % More info at https://tex.stackexchange.com/questions/18924/
+  \hypersetup{pageanchor=false}
   \begin{titlepage}
     \begin{center}
       \logoupc[1.5cm]
@@ -198,6 +203,9 @@ output-decimal-marker={,}]{siunitx}
     \ackmsg
   \end{titlepage}
   \fi
+  %% Part 2 of https://tex.stackexchange.com/questions/18924/ fix.
+  \hypersetup{pageanchor=true}
+  \pagenumbering{arabic}
 }%
 
 \newcommand{\advisor}[1]{\def\@advisor{#1}}
