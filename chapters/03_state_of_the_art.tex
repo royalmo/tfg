@@ -438,7 +438,14 @@ arquitectura. També hi ha gran varietat d'exemples i llibreries disponibles per
 a \acro{avr}, cosa que facilitarà la tasca de desenvolupament.
 
 A \cite{Vusb} hi ha el codi font de la llibreria, que s'ha d'incloure al
-projecte que s'estigui desenvolupant, i també s'hi troben exemples de dispositius
+projecte que s'estigui desenvolupant com a submòdul de \est{git}
+\footnote{
+    Els submòduls de \est{git}, o \est{Git Submodules}, serveixen per a
+    situar un repositori de \est{git} en un directori que forma part d'un altre
+    repositori de \est{git}. Això permet mantenir els dos projectes separats
+    mentre que eines com \est{gcc} poden disposar de l'estructura de
+    fitxers necessària \cite{GitSubmodule}.
+}, i també s'hi troben exemples de dispositius
 senzills (ratolins i teclats) implementats amb aquesta llibreria. Tanmateix,
 s'ha trobat el repositori de \cite{VusbProjects} més interessant, ja que conté
 exemples de sensors \acro{hid}.
@@ -674,6 +681,28 @@ fitxer d'autorització, però mitjançant l'ordre \ord|xhost +| es pot permetre
 que tothom pugui efectuar modificacions a la sessió d'aquell usuari \cite{Xhost}.
 Tanmateix, es considera aquesta pràctica poc segura, i per aquest motiu no es
 tindrà en compte durant l'elaboració d'aquest treball.
+
+\subsection{Linux i els controladors gràfics}
+
+Qualsevol persona que hagi provat d'insta\l.lar els controladors oficials
+d'una targeta gràfica en un entorn Linux sabrà que no és pas cap tasca trivial.
+Tot i haver millorat recentment, hi segueixen havent moltes incompatibilitats
+entre diferents versions i targetes gràfiques. En el cas concret d'aquest
+projecte s'ha utilitzat un ordinador equipat amb una \acro{nvidia gtx1050},
+un model utilitzat en molts dispositius.
+
+Tanmateix, en el moment de provar l'ordre \ord|xrandr| es va descobrir que,
+en funció dels controladors de la targeta gràfica que hi hagi activats a
+l'ordinador i de les seves versions, l'execució de l'ordre causa un congelament
+de mig segon aproximadament de totes les pantalles del sistema. Aquest error ja
+ha estat reportat a \cite{xrandrBug}, però no s'ha trobat cap solució
+específica.
+
+S'ha solucionat aquest problema desinsta\l.lant els controladors gràfics de
+\acro{nvidia}. Tanmateix, això deixava inutilitzable la connexió \acro{hdmi} de
+l'ordinador. Finalment, es va optar per a actualitzar la distribució d'Ubuntu
+(de 18.04 a 24.04) on aquest error ja no ha tornat a aparèixer (n'han aparegut
+d'altres, però no han afectat pel desenvolupament d'aquest projecte).
 
 \subsection{\est{Wayland}}
 \label{subsec:wayland}

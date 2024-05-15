@@ -1,4 +1,4 @@
-\chapter{\est{Software} a Linux}
+\chapter{Software a Linux}
 
 La darrera peça del puzzle per a que el sistema pugui funcionar és el
 programari del cantó de l'ordinador. Tal i com s'ha comentat al capítol
@@ -73,9 +73,13 @@ d'utilitzar el primer grup de dispositius possible. En canvi, el programa d'exem
 s'aturava sense mostrar cap error.
 
 Així doncs, amb la intenció de contribuir a millorar el projecte, es va
-notificar de l'error i es va crear una \est{Pull Request}, és a dir, es va
-proposar una solució \cite{LibiioPR}. Aquesta encara està pendent d'aprovació
-(ja que sembla que
+notificar de l'error i es va crear una \est{Pull Request}
+\footnote{
+    Una \est{Pull Request} és una forma de \est{GitHub} de notificar i debatre
+    els canvis proposats en una branca d'un repositori. Si es creu convenient,
+    es poden aplicar aquests canvis a la branca principal (acció de \est{merge})
+    \cite{PullRequest}.
+}, \cite{LibiioPR}. Aquesta encara està pendent d'aprovació (ja que sembla que
 les persones encarregades de mantenir la llibreria no tenen molt de temps
 disponible).
 
@@ -139,14 +143,6 @@ afegir el codi (d'unes 300 línies) al propi repositori del projecte. inicialmen
 es va implementar com a un submòdul de \est{git}, però al fer tantes
 modificacions i al voler fusionar tot el programa en un fitxer es va acabar
 copiant i enganxant el contingut necessari.
-
-En el moment de provar la llibreria es va descobrir que, en funció dels
-controladors de la targeta gràfica que hi hagi insta\l.lats a l'ordinador i de
-les seves versions, l'ordre \ord|xrandr| causa un congelament de mig segon
-aproximadament de totes les pantalles del sistema. Aquest error ja ha estat
-reportat \cite{xrandrBug}, però no s'ha trobat cap solució específica. En el
-cas personal, tant actualitzar la distribució d'Ubuntu (de 18.04 a 24.04) com
-desinsta\l.lar els controladors gràfics de \acro{nvidia} ha arreglat el problema.
 
 \section{Desenvolupament del programa}
 

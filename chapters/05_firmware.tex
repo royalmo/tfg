@@ -281,3 +281,29 @@ Per a programar per \acro{isp} s'ha utilitzat una placa Arduino amb el codi
 \cite{ArduinoIsp}. Un cop
 l'Arduino tenia aquest codi, una simple comanda d'\est{avrdude} s'ha afegit
 al \est{Makefile}, permetent la programació senzilla del dispositiu.
+
+\section{Actualitzacions de firmware}
+
+Quan incrustar el programa no és una tasca trivial, cal preguntar-se què
+passaria si  es vol actualitzar la versió del \est{firmware} per a afegir
+funcionalitats o corregir errors. Queda clar que els consumidors no disposaran
+de l'enginy de la figura \ref{fig:programmer}, ni dels coneixements necessaris
+per a poder-lo utilitzar, pel que s'ha de tenir present alguna forma per a
+poder canviar el codi del microcontrolador.
+
+Una de les solucions més senzilles és tornar a posar el \est{Bootloader} a la
+placa. D'aquesta forma, es podrà programar mitjançant la mateixa connexió
+\acro{usb}, com s'ha fet durant l'etapa de desenvolupament. L'únic inconvenient
+d'aquest sistema és que el dispositiu tardarà més a funcionar «amb normalitat»,
+degut al temps que tarda en executar-se aquest codi inicial.
+
+Una altra solució, però no aplicable per al \est{hardware} creat en aquest
+projecte, és afegir un botó a la \acro{pcb} que, si es prem més de 3 segons,
+atura el programa principal del dispositiu i inicia un programa que
+fa la mateixa tasca que el \est{Bootloader}. Aquest botó també podria aportar
+altres beneficis com, per exemple, configurar més fàcilment el dispositiu.
+
+Finalment s'ha decidit no incorporar cap \est{Bootloader} en aquesta primera
+tirada de dispositius, degut a la no imminent comercialització. Tot i això, s'ha
+pres nota de la importància d'aquest aspecte per a tenir-lo present per a
+futures versions de la placa de circuit imprès.
