@@ -140,6 +140,14 @@ es va implementar com a un submòdul de \est{git}, però al fer tantes
 modificacions i al voler fusionar tot el programa en un fitxer es va acabar
 copiant i enganxant el contingut necessari.
 
+En el moment de provar la llibreria es va descobrir que, en funció dels
+controladors de la targeta gràfica que hi hagi insta\l.lats a l'ordinador i de
+les seves versions, l'ordre \ord|xrandr| causa un congelament de mig segon
+aproximadament de totes les pantalles del sistema. Aquest error ja ha estat
+reportat \cite{xrandrBug}, però no s'ha trobat cap solució específica. En el
+cas personal, tant actualitzar la distribució d'Ubuntu (de 18.04 a 24.04) com
+desinsta\l.lar els controladors gràfics de \acro{nvidia} ha arreglat el problema.
+
 \section{Desenvolupament del programa}
 
 Un cop conegudes totes les peces del programa només falta unir-les entre sí. En
@@ -314,7 +322,9 @@ molt senzilla.
 
 Només s'ha canviat el lloc on estarà l'executable, a \fitx{~/.local/bin} i el
 fitxer de configuracions, a \fitx{~/.config/gyroscreen}. La resta es mantindrà
-tot igual.
+tot igual. Els fitxers de servei utilitzen una notació específica per a
+definir variables per al temps d'execució. Aquesta documencació es pot consultar
+a \cite{mansystemd}.
 
 També s'ha fet que el programa només informi a \est{systemd} que s'ha carregat
 correctament el servei si aquest s'executa amb l'argument \ord|--daemon| a la
@@ -417,7 +427,8 @@ manual d'ús del programa, en anglès.
 Insta\l.lar el paquet generat es pot fer utilitzant l'eina \ord|dpkg| sense cap
 problema. L'únic inconvenient d'aquesta eina és que no insta\l.la automàticament
 les dependències, però en el \acro{readme} del repositori es detallen tots els
-passos per a seguir en aquests casos.
+passos per a seguir en aquests casos, que ve a ser la solució proposada a
+\cite{dpkgHelp}.
 
 Si es vulgués distribuir més fàcilment el programa el pas a seguir seria
 penjar el paquet en algun repositori \acro{apt}. Això implicaria tenir un servidor

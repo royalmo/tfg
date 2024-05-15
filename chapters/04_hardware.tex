@@ -119,8 +119,8 @@ a un circuit amb aquestes característiques. Tot i això, s'ha decidit posar
     el connector \acro{usb} és de \SI[round-mode=places,round-precision=0]{5}{\volt}.
     \item Al utilitzar un connector de tipus C, tot i communicar-se amb
     \acro{usb2}, hi ha un parell de cables extres que determinen a quina tensió
-    s'ha d'alimentar el dispositiu. Tal i com es comenta en \cite{Axelson2015USB},
-    si es desitja utilitzar una alimentació tradicional de 
+    s'ha d'alimentar el dispositiu. Tal i com es comenta a \cite{Axelson2015USB}
+    o a \cite{TypeCIntro}, si es desitja utilitzar una alimentació tradicional de 
     \SI[round-mode=places,round-precision=0]{5}{\volt} és suficient
     utilitzar dos \est{pull-downs} de
     \SI[round-mode=places,round-precision=1]{5.1}{\kilo\ohm}.
@@ -238,8 +238,11 @@ del microcontrolador com afegint contro\l.ladors al \est{kernel} de Linux),
 el dispositiu s'identifica com un mestre \acro{i2c} de cara a l'ordinador, i
 apareix a \fitx{/dev/i2c-X} on X és el nombre de dispositiu.
 
+A \cite{i2cOnLittleWireBuilding} s'ha trobat una adaptació de
+\est{i2c\_tiny\_usb} per a la placa \est{Digispark}, amb un tutorial molt
+detallat sobre com programar la placa.
 Aquest projecte ha anat molt bé per a fer proves de precisió del sensor a més
-alt nivell (per exemple, utilitzant la lliberria \acro{i2c} de Python). Tanmateix,
+alt nivell (per exemple, utilitzant la llibreria \acro{i2c} de Python). Tanmateix,
 es va descartar utilitzar-lo per a aquest treball per a dos motius:
 
 \begin{itemize}
@@ -360,7 +363,14 @@ enviament i \acro{iva} inclosos.
 
 El resultat final ha quedat molt professional i es pot veure a la figura
 \ref{fig:printedpcb}. Es pot veure també com s'ha aprofitat la cara inferior
-per a afegir els crèdits del projecte.
+per a afegir els crèdits del projecte. Tanmateix, el camí per a arribar fins
+a aquests resultats no ha sigut senzill.
+
+En primer lloc, \acro{jlcpcb} demana la \acro{bom} (\est{Bill Of Materials})
+del circuit, i les posicions i orientacions de cada component. Resulta que el
+seu sistema no és completament compatible amb els fitxers que exporta
+KiCad. Ha sigut gràcies a un tutorial de la seva pròpia pàgina web que s'ha
+acabat aconseguint el format demanat dels fitxers \cite{KiCADJLC}.
 
 \section{Encapsulat}
 

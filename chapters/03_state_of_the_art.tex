@@ -132,6 +132,8 @@ la mes rellevant pel projecte sent la dels sensors.
 Quan es defineix un tipus concret de \acro{hid}, s'ha de complir amb
 l'estandard de comunicació associat. D'aquesta forma l'ordinador no necessita
 insta\l.lar programari addicional per a poder comunicar-se amb el dispositiu.
+Es poden veure el llistat de classes i subclasses \acro{hid} a la documentació
+oficial d'\acro{usb-if} \cite{HidDefinition}.
 
 Finalment hi ha altres metadades que poden ser interessants conèixer, com
 poden ser les freqüències en que el dispositiu envia dades o versions de
@@ -441,6 +443,11 @@ senzills (ratolins i teclats) implementats amb aquesta llibreria. Tanmateix,
 s'ha trobat el repositori de \cite{VusbProjects} més interessant, ja que conté
 exemples de sensors \acro{hid}.
 
+A part de \acro{v-usb} també hi ha altres llibreries, com \acro{lufa}, que també
+implementen el protocol \acro{usb}. El problema d'aquestes és que utilitzen
+perifèrics específics que no disposen tots els dispositius de l'arquitectura 
+\acro{avr8} \cite{Lufa}.
+
 \section{\est{Drivers} a Linux}
 
 Un altre dels aspectes importants del projecte és la creació d'un programari
@@ -483,10 +490,10 @@ llenguatges que permet realitzar una comunicació amb dispositius \acro{usb} en
 la capa més baixa possible. En aquest nivell es poden enviar trames de control,
 entrada o sortida a nivell de bits i bytes \cite{Libusb}.
 
-Tot i que la llibreria es va pensar
-incialment per Linux, s'ha portat a Windows i MacOS, convertint-la en la millor
-alternativa per a generar programes multiplataforma que necessitin controladors
-personalitzats.
+Tot i que la llibreria es va pensar incialment per Linux, sota el nom de
+\est{Linux-\acro{Usb}} \cite{LinuxUsb}, s'ha portat a Windows i MacOS,
+convertint-la en la millor alternativa per a generar programes multiplataforma
+que necessitin controladors personalitzats.
 
 Tanmatix, aquest projecte es beneficiarà de les capes de més alt nivell, pel que
 serà més fàcil utilitzar les altres llibreries, tot i que això pugui suposar
@@ -497,6 +504,12 @@ a fitxer sota el format \fitx{/dev/usbrawX}, on X és el número de dispositiu.
 No gens menys, si un contro\l.lador d'una capa superior està utilitzant
 exclusivament el dispositiu, el \est{kernel} no crearà aquest fitxer, per a
 evitar confusió i so\l.lapaments.
+
+Es pot evitar que un dispositiu utilitzi un \est{driver} d'una capa superior
+gràcies a l'ordre \ord|udevadm|. Aquesta requereix permisos d'administrador, i
+possibilita el canvi de controlador d'un dispositiu. Així doncs, sí que seria
+possible de mostrar un fitxer \fitx{/dev/usbrawX} d'un dispositiu \acro{hid}
+\cite{unbindingHid}.
 
 \subsection{Capa 2: \acro{libhid} i \acro{hidapi}}
 
@@ -635,7 +648,7 @@ quan s'inicialitza \est{Xlib}. Això vol dir que, sempre que s'executi
 la línia de comandes) no hi haurà problema.
 Tanmateix, si es vol executar \est{xrandr} des d'un servei de sistema o d'un
 terminal remot, el programa no trobarà la sessió actual i serà impossible
-resoldre la comanda.
+resoldre la comanda \cite{ArchWiki}.
 
 Hi ha entre dos i tres variables d'entorn importants per al correcte funcionament
 de \est{xrandr} \cite{XrandrVars}:
