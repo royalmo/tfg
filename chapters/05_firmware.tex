@@ -236,6 +236,25 @@ codi de la llibreria d'Arduino per a comunicar-se amb el sensor
 quins missatges \acro{i2c} s'enviaven i en quin ordre, i només ha fet falta
 replicar la comunicació amb l'entorn propi.
 
+\section{Desenvolupament del firmware}
+
+Per a facilitar la lectura i depuració del codi s'ha decidit dividir en
+diferents mòduls el codi del microcontrolador. El més evident de separar és
+la part de \acro{v-usb} i la part de \est{i2c} i del sensor. Tot i això s'ha
+decidit anar més enllà, atrevint-se a separar fins i tot les funcions del mòdul
+\acro{i2c} de les específiques per a comunicar-se amb el sensor, o el codi per
+a calibrar l'osci\l.lador intern del que configura el dispositiu \acro{hid}. 
+
+A la Figura \ref{fig:firmware-dependency-graph} es pot com ha quedat el gràfic
+de dependències. Cal destacar que, tot i semblar-ho a jutjar pel gràfic, el
+llenguatge de C treabllat a baix nivell (com és el cas amb l'arquitectura
+\acro{avr8}) no és gairebé mai possible separar completament els mòduls entre
+si, i més quan es configuren com requereix la llibreria \acro{v-usb}. Així
+doncs, aquest diagrama de dependències és orientatiu, però no reflecteix la
+realitat amb precisió.
+
+\input{misc/firmware_dependency_graph.tex}
+
 \section{Programació dels dispositius de producció}
 
 Després de resoldre alguns detalls que no tenen suficient importància per a

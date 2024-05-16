@@ -1,0 +1,23 @@
+\begin{figure}[ht]
+    \centering
+    \begin{forest}
+        forked edges,
+        for tree={draw,align=center,edge={-latex}}
+        [Gyroscreen\\ (\fitx{main})
+            [\fitx{sensor/mpu6050}
+                [\fitx{sensor/i2c}]
+            ]
+            [\fitx{usbext/usb}
+                [\fitx{usbext/osccal}]
+                [\fitx{usbext/hid}
+                    [\fitx{usbext/hid_sensor_spec}]
+                ]
+                [V-USB\\ (\fitx{usbdrv})]
+            ]
+        ]
+    \end{forest}
+
+
+    \caption{Diagrama de dependències del \est{firmware}.}
+    \label{fig:firmware-dependency-graph}
+\end{figure}
