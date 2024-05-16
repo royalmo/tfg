@@ -490,6 +490,16 @@ aquestes regles. Tanmateix, com que aquestes normes només seran d'utilitat dura
 el procés de desenvolupament del dispositiu, s'ha decidit no entrar gaire en
 detalls de la implementació.
 
+A la figura \ref{fig:linux-stack} es pot veure una esquematització de la pila
+de capes de \est{drivers} que el dispositiu haurà de travessar. Com es pot
+veure, la capa més elevada engloba més tipus de dispositius, pel que aquesta
+darrera abstracció aporta molts avantatges alhora de fer el programa més
+versàtil. Evidentment l'esquema és una simplificació, ja que darrere de cada
+\est{driver} hi ha molta lògica que no donaria temps a explicar en aquest
+document.
+
+\input{misc/linux_iio_stack.tex}
+
 \subsection{Capa 1: \acro{libusb}}
 
 \est{libusb} és una llibreria multiplataforma i disponible per diversos
@@ -710,7 +720,7 @@ d'altres, però no han afectat pel desenvolupament d'aquest projecte).
 El servidor gràfic de l'apartat anterior, \est{Xorg}, és un projecte molt vell
 i porta acumulades bastantes funcionalitats i canvis que s'ha fet durant els
 anys. Si bé és molt funcional i popular, es podria crear un entorn gràfic que
-funcionés d'una forma més eficient amb el maquinari actual (el \est{harrdware}
+funcionés d'una forma més eficient amb el maquinari actual (el \est{hardware}
 ha canviat molt des dels seus inicis). Aquesta és la idea que va tenir les
 persones que van impulsar \est{Wayland}.
 
