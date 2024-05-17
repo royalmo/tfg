@@ -10,6 +10,28 @@
 % Per a que l'arbre de dependències no surti dels marges
 \usepackage{adjustbox}
 
+%%% AFEGITS PER ALGORITME TIKZ %%%
+\usetikzlibrary{shapes.geometric, arrows}
+\tikzstyle{startstop} = [rectangle, rounded corners, 
+minimum width=2cm, 
+minimum height=0.8cm,
+text centered, 
+draw=black]
+\tikzstyle{process} = [rectangle, 
+minimum width=2cm, 
+minimum height=0.8cm, 
+text centered, 
+text width=3cm, 
+draw=black]
+\tikzstyle{decision} = [diamond, 
+aspect=2,
+minimum width=3cm, 
+minimum height=1cm, 
+text centered, 
+draw=black]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \addbibresource{misc/tfg.bib}
 
 \title{Implementació d'una pantalla inte\l.ligent}

@@ -1,0 +1,44 @@
+\begin{figure}[ht]
+    \centering
+    \begin{adjustbox}{height=0.6\textheight}
+    \begin{tikzpicture}[node distance=1.5cm]
+
+        \node (start) [startstop] {Inici};
+        \node (xr1) [process, below of=start] {Executar \texttt{xrandr}};
+        \node (dec1) [decision, below of=xr1] {Funciona?};
+        \node (ok1) [startstop, below of=dec1, xshift=-2cm] {Fi};
+        \node (xauth) [process, below of=dec1, xshift=2cm] {Buscar \texttt{.Xauthority}};
+        \node (found) [decision, below of=xauth] {Trobat?};
+        \node (wait) [process, right of=found, xshift=2.5cm, yshift=0.8cm] {Esperar 30 segons};
+        \node (xr2) [process, below of=found, yshift=-0.8cm] {
+            Executar \texttt{xrandr} amb \texttt{.Xauthority} i \texttt{DEVICE=:0}
+        };
+        \node (dec2) [decision, below of=xr2, yshift=-0.8cm] {Funciona?};
+        \node (ok2) [startstop, below of=dec2, yshift=-0.4cm, xshift=2cm] {Fi};
+        \node (xr3) [process, below of=dec2, yshift=-0.6cm, xshift=-2cm] {
+            Executar \texttt{xrandr} amb \texttt{.Xauthority}i \texttt{DEVICE=:1}
+        };
+        \node (dec3) [decision, below of=xr3, yshift=-0.8cm] {Funciona?};
+        \node (ok3) [startstop, below of=dec3, yshift=-0.3cm] {Fi};
+        
+        \draw [arrow] (start) -- (xr1);
+        \draw [arrow] (xr1) -- (dec1);
+        \draw [arrow] (dec1.west) -| node[anchor=east] {Sí} (ok1.north);
+        \draw [arrow] (dec1) -| node[anchor=west] {No} (xauth);
+        \draw [arrow] (xauth) -- (found);
+        \draw [arrow] (found) -| node[anchor=west] {No} (wait);
+        \draw [arrow] (found) -- node[anchor=east] {Sí} (xr2);
+        \draw [arrow] (wait) |- (xauth);
+        \draw [arrow] (xr2) -- (dec2);
+        \draw [arrow] (dec2) -| node[anchor=west] {Sí} (ok2);
+        \draw [arrow] (dec2) -| node[anchor=east] {No} (xr3);
+        \draw [arrow] (xr3) -- (dec3);
+        \draw [arrow] (dec3) -- node[anchor=east] {Sí} (ok3);
+        \draw [arrow] (dec3) -| node[anchor=west] {No} (wait);
+        
+    \end{tikzpicture}
+    \end{adjustbox}
+
+    \caption{Diagrama simplificat de decisió del context de \texttt{xrandr}.}
+    \label{fig:xrandr-program-schema}
+\end{figure}

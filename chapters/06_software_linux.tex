@@ -350,8 +350,28 @@ opcions de \verb|$DISPLAY| (concretament \verb|:0| i \verb|:1|) i es cercarà
 en diferents directoris predefinits el fitxer \fitx{.Xauthority}, com pot ser
 en els directoris de cada usuari o a \fitx{/run}.
 
-Si no s'aconsegueix recuperar el context de \est{xrandr} després de tots aquests
-intents s'aturarà el programa amb un codi d'error. Tanmateix, s'ha provat el
+\input{misc/xrandr_program_schema.tex}
+
+A la Figura \ref{fig:xrandr-program-schema} es pot veure l'arbre de decisions
+per a obtenir el context necessasri per a \ord|xrandr|. El primer cop que es
+vulgui executar l'ordre s'executarà el codi equivalent a aquest diagrama.
+Un cop trobat el context necessari per a obtenir l'entorn de l'usuari es guardarà
+en una variable per a no haver de repetir cada cop el procés. Si mai en algun
+moment donat salta un error durant l'execució de \ord|xrandr| amb el context
+guardat es tornarà a executar el codi anterior per a determinar de nou el
+context necessari.
+
+Com es pot intuir a la figura, és possible que aquest esquema de decisió no
+s'acabi mai, és a dir, que es quedi en un bucle infinit. Això està fet a
+propòsit: quan no es troba el context de cap manera sol ser perquè l'usuari ha
+engegat l'ordinador però encara no ha iniciat la sessió. En aquests casos s'ha
+decidit esperar mig minut i tornar a fer les comprovacions per veure si ja
+s'ha inicialitzat un entorn gràfic. En el cas d'aquest programa no serviria de
+res aturar-se amb un codi d'error, ja que al ser un servei el \est{kernel}
+tornaria a executar el programa just quan s'aturés.
+
+Així doncs, és possible que no es pugui recuperar el context de \est{xrandr}
+després de tots aquests intents. Tanmateix, s'ha provat el
 sistema amb diferents versions de Debian i Ubuntu i en totes ha acabat funcionant.
 En un cas extrem, cal recordar que sempre es pot insta\l.lar l'aplicació per a
 que funcioni en el context de la sessió, mitjançant un servei d'usuari.
