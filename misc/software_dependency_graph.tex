@@ -1,0 +1,53 @@
+\begin{figure}[ht]
+    \centering
+    \begin{adjustbox}{width=\linewidth}
+    \begin{forest}
+        forked edges,
+        for tree={
+            draw,
+            align=center,
+            edge={-latex}
+        },
+        boxd/.style={
+            draw,
+            dashed,
+        },
+        dotdep/.style={
+            draw,
+            dotted,
+        },
+        [\texttt{gyroscreen} v1.1, name=gyroscreen
+            [\texttt{x11-xserver-utils}
+                [\texttt{libx11}
+                    [\dots, color=black!35, dotdep]
+                ]
+                [\texttt{libxrandr2}
+                    [\dots, color=black!35, dotdep]
+                ]
+                [\dots, color=black!35, dotdep]
+            ]
+            [\texttt{python3}
+                [\texttt{libpython3-stdlib}
+                    [\dots, color=black!35, dotdep]
+                ]
+                [\dots, color=black!35, dotdep]
+            ]
+            [\texttt{python3-libiio}
+                [\texttt{libiio0}
+                    [\dots, color=black!35, dotdep]
+                ]
+                [\texttt{python3}, color=black!35, boxd]
+            ]
+            [\texttt{python3-pyudev}
+                [\texttt{libudev1}
+                    [\dots, color=black!35, dotdep]
+                ]
+                [\texttt{python3}, color=black!35, boxd]
+            ]
+        ]
+    \end{forest}
+    \end{adjustbox}
+
+    \caption{Diagrama simplificat de dependències del paquet de Debian.}
+    \label{fig:software-dependency-graph}
+\end{figure}

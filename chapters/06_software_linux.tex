@@ -373,6 +373,24 @@ operatiu es considerarà com el més antic que suporta aquesta aplicació. En al
 paraules, les versions de les dependències insta\l.lades en aquest sistema seran
 les que es posaran en el llistat de dependències del paquet.
 
+A la Figura \ref{fig:software-dependency-graph} es pot veure el diagrama de
+dependències de l'aplicació creada. Com es pot veure, hi ha dependències que
+son directes o de primer nivell, però aquests programes amb els que depèn també
+tenen al seu torn altres dependències. Tot plegat acaba amb un arbre de
+dependències que, per a evitar fer molt gran l'esquema, s'ha retallat a només
+les dependències més properes. Al paquet de Debian només s'hi haurà d'incloure
+les de primer nivell (ja que aquestes ja inclouran al seu torn la resta).
+
+\input{misc/software_dependency_graph.tex}
+
+Segurament que, després de consultar l'arbre de dependències de la Figura
+\ref{fig:software-dependency-graph}, un es preguntarà perquè la dependència
+de \texttt{python3} està de color gris en els dos paquets de Python. El motiu
+d'aquest color rau en que aquesta dependència ja ha estat satisfeta durant el
+primer nivell, pel que no s'ha de tornar a insta\l.lar. Tanmateix, convé seguir
+tenint-la present, ja que si mai es desinsta\l.la el programa principal però es
+vol mantenir \texttt{python3-libiio} no es podrà desinsta\l.lar \texttt{python3}.
+
 També és essencial saber determinar per a quines arquitectures és compatible el
 programa creat. Per exemple, si s'hagués implementat el projecte en C, s'hauria
 de compilar per a cada arquitectura separadament, i crear un paquet per a cada
