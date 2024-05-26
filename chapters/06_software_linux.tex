@@ -24,7 +24,7 @@ Després de donar-hi algunes voltes s'ha decidit utilitzar Python per a
 desenvolupar l'aplicació, degut a la gran disponibilitat de llibreries, el fet
 que ja es troba insta\l.lat per defecte en moltes distribucions de Linux, i
 la simplicitat de programació (en comparació als llenguatges de baix nivell).
-S'ha decidit també aque s'utilitzarà un servei de Linux per al programa principal.
+S'ha decidit també que s'utilitzarà un servei de Linux per al programa principal.
 Això implicarà alguna configuració addicional, però de ben segur que facilitarà
 la vida als usuaris.
 
@@ -33,7 +33,7 @@ idealment, el millor per als usuaris finals seria una interfície interactiva,
 Linux sol funcionar amb fitxers per tot. Així doncs, s'ha decidit crear un fitxer
 \fitx{.conf} per a guardar les configuracions de l'aplicació. Aquest fitxer té
 un format pactat i descrit a la documentació del programa, i es podrà guardar en
-diferents llocs específics del sistema, on el progrma els buscarà. Crear una
+diferents llocs específics del sistema, on el programa els buscarà. Crear una
 interfície interactiva que modifiqui aquest fitxer no hauria de ser una tasca
 gens complicada, i podria ser una perfecta ampliació al sistema.
 
@@ -94,7 +94,7 @@ estalviar aquesta comanda i utilitzar una llibreria de Python en el seu lloc.
 És important evitar utilitzar comandes ja que aquestes són més propenses a
 variar i deixar de funcionar que la pròpia interfície de desenvolupament que
 proporcionen les llibreries, com és el cas de \est{libudev}. Per aquest motiu,
-quan es va conéixer l'existència de \est{PyUdev} es va fer el canvi en la
+quan es va coneixer l'existència de \est{PyUdev} es va fer el canvi en la
 implementació \cite{Pyudev}.
 
 Aquesta llibreria també disposava d'exemples, i no s'hi ha trobat cap
@@ -106,7 +106,7 @@ Quan encara no es sabia del tot segur si es faria servir \acro{iio} o, una capa
 més per sota, el protocol \acro{hid}, també es va cercar si hi havia una
 implementació per Python de la llibreria \est{libhid}. Es va trobar el mòdul
 \est{CPython-HidApi}, un projecte molt complet amb, fins i tot, eines per a
-debugar interactivament dispositius \acro{hid} \cite{CpythonHid}.
+depurar de forma interactiva dispositius \acro{hid} \cite{CpythonHid}.
 Finalment es va descartar utilitzar
 aquest afegit, ja que es va passar a utilitzar \acro{iio}.
 
@@ -205,7 +205,7 @@ dispositius mòbils no responen bé als canvis d'orientació, però un cop
 s'assoleix la velocitat de creuer (i per tant no hi ha acceleració) ja torna
 a funcionar amb normalitat.
 
-Si mai es vulgués mesurar l'orientació d'una forma més robusta es pot combinar
+Si mai es volgués mesurar l'orientació d'una forma més robusta es pot combinar
 l'acceleròmetre amb un sensor de velocitat angular. L'acceleròmetre ajuda a
 calibrar el sensor, determinant sempre la direcció de la gravetat. Però un
 cop ca\l.librat, qui dona més precisió és el sensor giroscopic o de velocitat
@@ -276,7 +276,7 @@ documentat. Aquí només s'ha posat els mínims comentaris per a entendre'l.
 \subsection{Agrupació en un fitxer}
 
 A diferència dels programes en C, que almenys els programes de característiques
-similars a les d'aqeust projecte es compilen en un únic fitxer executable, els
+similars a les d'aquest projecte es compilen en un únic fitxer executable, els
 \est{scripts} de Python no s'interpreten en el mateix moment d'execució. Això
 significa que, per a portar un programa d'un lloc a un altre s'ha de moure tot
 el projecte, i no només l'executable.
@@ -299,7 +299,7 @@ Un cop el programa funcionava correctament amb la línia de comandes és el mome
 de fer-lo funcionar en un segon pla. Tal i com s'ha detallat a l'apartat
 \ref{subsec:systemd}, hi ha dos tipus de serveis que es poden crear, els dos
 amb propòsits diferents. Per a oferir més possibilitats a l'usuari i, sobretot,
-conéixer millor les diferències entre aquests dos tipus, s'ha decidit crear
+coneixer millor les diferències entre aquests dos tipus, s'ha decidit crear
 un servei per usuari i un servei per al sistema.
 
 \subsection{Servei d'usuari}
@@ -319,7 +319,7 @@ molt senzilla.
 Només s'ha canviat el lloc on estarà l'executable, a \fitx{~/.local/bin} i el
 fitxer de configuracions, a \fitx{~/.config/gyroscreen}. La resta es mantindrà
 tot igual. Els fitxers de servei utilitzen una notació específica per a
-definir variables per al temps d'execució. Aquesta documencació es pot consultar
+definir variables per al temps d'execució. Aquesta documentació es pot consultar
 a \cite{mansystemd}.
 
 També s'ha fet que el programa només informi a \est{systemd} que s'ha carregat
@@ -353,7 +353,7 @@ en els directoris de cada usuari o a \fitx{/run}.
 \input{misc/xrandr_program_schema.tex}
 
 A la Figura \ref{fig:xrandr-program-schema} es pot veure l'arbre de decisions
-per a obtenir el context necessasri per a \ord|xrandr|. El primer cop que es
+per a obtenir el context necessari per a \ord|xrandr|. El primer cop que es
 vulgui executar l'ordre s'executarà el codi equivalent a aquest diagrama.
 Un cop trobat el context necessari per a obtenir l'entorn de l'usuari es guardarà
 en una variable per a no haver de repetir cada cop el procés. Si mai en algun
@@ -386,7 +386,7 @@ paquet de Debian per a facilitar el procés d'insta\l.lació.
 
 El més important durant la creació d'un paquet és saber quines dependències
 necessita el programa i quina és la versió més baixa amb la que poden funcionar.
-Per sort, s'ha desenvolupat el programa en un enotrn de Ubuntu 18.04, que fa
+Per sort, s'ha desenvolupat el programa en un entorn de Ubuntu 18.04, que fa
 pocs mesos que ha deixat de rebre suport gratuït \cite{UbuntuSupport}. Per tant,
 aquest sistema
 operatiu es considerarà com el més antic que suporta aquesta aplicació. En altres
@@ -452,7 +452,7 @@ editable a mà, però la corba d'aprenentatge és prou alta i, segons moltes fon
 no val la pena per a pàgines petites o projectes poc ambiciosos \cite{Manpage}.
 
 Un cop creada la pàgina de manual, s'ha d'afegir en les comandes d'insta\l.lació
-que es copïi al directori pertinent aquesta pàgina, i un cop insta\l.lat el
+que es copiï al directori pertinent aquesta pàgina, i un cop insta\l.lat el
 paquet de nou, només cal executar \ord|man gyroscreen| per a consultar el
 manual d'ús del programa, en anglès.
 
@@ -464,7 +464,7 @@ les dependències, però en el \acro{readme} del repositori es detallen tots els
 passos per a seguir en aquests casos, que ve a ser la solució proposada a
 \cite{dpkgHelp}.
 
-Si es vulgués distribuir més fàcilment el programa el pas a seguir seria
+Si es volgués distribuir més fàcilment el programa el pas a seguir seria
 penjar el paquet en algun repositori \acro{apt}. Això implicaria tenir un servidor
 web estàtic on poder descarregar els programes. Els usuaris haurien de, en primer
 lloc, afegir la clau pública amb la que es signa el paquet al seu ordinador, i

@@ -33,14 +33,14 @@ s'ha trobat dues alternatives viables.
     senzilla possible \cite{adxl335}.
     \item El sensor \est{MPU6050}, en canvi, es comunica amb el microcontrolador
     mitjançant el protocol \acro{i2c}. Aquest protocol només necessita dues
-    línies de comunicació, però implica implemenar una mica de lògica per a
+    línies de comunicació, però implica implementar una mica de lògica per a
     recuperar les dades. Tanmateix, aquest sensor també ofereix lectures de
     velocitat angular i temperatura, que podrien ser útils per a futures
     millores del projecte \cite{mpu6050specs}.
 \end{itemize}
 
 Així doncs, degut que el segon sensor és només pocs cèntims més car i ofereix
-la possiblitat d'ampliar el projecte en un futur, s'utilitzarà el sensor
+la possibilitat d'ampliar el projecte en un futur, s'utilitzarà el sensor
 \est{MPU6050} per al sistema.
 
 Aquest sensor es sol vendre amb una placa que estalvia connectar
@@ -112,12 +112,12 @@ a un circuit amb aquestes característiques. Tot i això, s'ha decidit posar
     (en funció del que recomanava
     cada fabricant al seu \est{datasheet}), per a assegurar-se que la tensió
     d'entrada és prou estable.
-    \item S'ha hagut de posar un regulador lineal en el ciruit, ja que el
+    \item S'ha hagut de posar un regulador lineal en el circuit, ja que el
     sensor necessita estar alimentat a
     \SI[round-mode=places,round-precision=1]{3.3}{\volt},
     però l'alimentació que proporciona
     el connector \acro{usb} és de \SI[round-mode=places,round-precision=0]{5}{\volt}.
-    \item Al utilitzar un connector de tipus C, tot i communicar-se amb
+    \item Al utilitzar un connector de tipus C, tot i comunicar-se amb
     \acro{usb2}, hi ha un parell de cables extres que determinen a quina tensió
     s'ha d'alimentar el dispositiu. Tal i com es comenta a \cite{Axelson2015USB}
     o a \cite{TypeCIntro}, si es desitja utilitzar una alimentació tradicional de 
@@ -167,8 +167,8 @@ microcontrolador disposa de molta més memòria de la que mai es necessitarà
 \cite{AtMega32u4}.
 
 El principal motiu per a fer el canvi és doncs el preu. Un \acro{AtMega32u4}
-no és molt car \cite{AvrComparison}, però és més barat un dispotitiu \acro{avr} de la sèrie
-\acro{AtTinyXX}, com es veurà en el segïuent apartat.
+no és molt car \cite{AvrComparison}, però és més barat un dispositiu \acro{avr}
+de la sèrie \acro{AtTinyXX}, com es veurà en el següent apartat.
 
 \section{Segona versió de la placa}
 
@@ -195,7 +195,7 @@ la placa \est{Digispark}.
 La placa \est{Digispark} es pot comprar a preus molt reduïts i a molts llocs.
 És una placa de circuit imprès equipada d'un \acro{AtTiny85}, un connector
 \acro{usb}, algun component per a regular les tensions, i tot de pins per a
-poder connetar fàcilment qualsevol cable i component al microcontrolador
+poder connectar fàcilment qualsevol cable i component al microcontrolador
 \cite{Digispark}. A la figura \ref{fig:digispark} es pot veure l'aspecte físic
 de la placa.
 
@@ -209,7 +209,7 @@ de la placa.
 Aquesta placa és de maquinari obert, i per tant, també es pot trobar fàcilment
 el seu esquema elèctric. Es pot consultar a la Figura \ref{fig:digisparksch}
 com el circuit és prou senzill, i només hi ha un parell de detalls que mereixen
-la seva explicació, com podria ser l'ús de Díodes Zener. Es comentará en el
+la seva explicació, com podria ser l'ús de Díodes Zener. Es comentarà en el
 moment del disseny del propi circuit.
 
 \begin{figure}[ht]
@@ -259,7 +259,7 @@ es va descartar utilitzar-lo per a aquest treball per a dos motius:
 
 Així doncs, s'ha acabat utilitzant la placa \est{Digispark} per a validar
 que el projecte es podria desenvolupar en aquest maquinari, i un cop es va
-conéixer la bona notícia es va començar a desenvolupar la pròpia placa de circuit
+coneixer la bona notícia es va començar a desenvolupar la pròpia placa de circuit
 imprès.
 
 \subsection{Esquemàtic}
@@ -270,7 +270,7 @@ microcontrolador per al nou. S'ha utilitzat com a referència el circuit de la
 placa \est{Digispark}, tenint en compte que algunes coses, com el regulador de
 tensió extern, no son necessaries per a aquest projecte \cite{Digispark}.
 
-En aquest nou circuit s'utilitza el rellogte intern del microcontrolador, que
+En aquest nou circuit s'utilitza el rellotge intern del microcontrolador, que
 ja s'ha vist que és suficient per a comunicar-se per \acro{usb}. Només hi ha
 una novetat a comentar en aquesta segona versió, i és la presència de dos
 díodes Zener en les línies d'\acro{usb}. El motiu rau en el protocol \acro{usb}:
@@ -299,7 +299,7 @@ Un cop creat l'esquema elèctric, s'ha pogut començar a dissenyar la placa de
 circuit imprès, de la mateixa manera que amb la versió anterior. Una de les
 tasques més difícils d'aquest procés és escollir \est{footprints} de components
 que estiguin actualment en estoc, i assegurar-se que les línies de tensió
-són una mica més groixudes que la resta. A la figura \ref{fig:pcb_v2}
+són una mica més gruixudes que la resta. A la figura \ref{fig:pcb_v2}
 es pot veure el resultat
 final d'aquest segon disseny.
 
@@ -312,7 +312,7 @@ final d'aquest segon disseny.
 
 S'ha utilitzat,
 sempre que ha sigut possible, components amb \est{footprints} de dimensions 0805,
-ja que amb aqeusta mida es poden soldar a mà. Tot i que no s'ha previst afegir
+ja que amb aquesta mida es poden soldar a mà. Tot i que no s'ha previst afegir
 manualment els components, el fet d'escollir aquestes mides és una assegurança
 que si s'espatlla o es crema algun component, aquest es podrà canviar.
 Evidentment, en un disseny per a produir-se en massa es pot reduir la mida dels
@@ -332,9 +332,9 @@ modificacions d'alguns components.
 
 Amb la placa de circuit imprès ja preparada, només faltava produir-ne algunes
 unitats. Per recomanacions de la universitat s'ha optat per utilitzar el
-proveïdor \acro{jlcpcb}. Aquest ofereix bons preus, plaços curts i també té el
-servei de muntatge de la placa (és a dir, soldar-hi tots els components)
-\cite{JlcPcb}.
+proveïdor \acro{jlcpcb}. Aquest ofereix bons preus, entrega del producte en pocs
+dies i també té el servei de muntatge de la placa (és a dir, soldar-hi tots els
+components) \cite{JlcPcb}.
 
 Degut al poc talent i ganes que hi havia en soldar un per un els components, i
 sabent que alguns són molt petits i seria senzill cometre errors, s'ha optat
@@ -434,7 +434,7 @@ perfecció i la placa cabia a dintre de la carcassa.
 
 \section{OSHWA}
 
-Un cop es va saber que el disseny físic del projecte era defintiu, es va decidir
+Un cop es va saber que el disseny físic del projecte era definitiu, es va decidir
 publicar-lo a \acro{oshwa}. L'\est{Open-Source HardWare Association} és, com el
 nom indica, una associació que vetlla pel maquinari de codi obert. Una de les
 diverses tasques que fa és mantenir un registre de dissenys de maquinari obert,
@@ -455,7 +455,7 @@ com a resultat d'aquesta certificació.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\textwidth]{images/oshwa.png}
-    \caption{Certificació \acro{oshwa} obtinguta per al projecte.}
+    \caption{Certificació \acro{oshwa} obtinguda per al projecte.}
     \label{fig:oshwa}
 \end{figure}
 

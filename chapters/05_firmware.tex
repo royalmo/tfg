@@ -9,7 +9,7 @@ per les dues plaques.
 Tal i com s'ha dit en l'apartat \ref{subsec:hw_digispark}, es va descobrir
 el projecte \est{i2c\_on\_littlewire}, que permet comunicar-se directament amb
 dispositius \acro{i2c} des de l'ordinador. En aquest apartat també es destaquen
-els motius pel que s'ha descartat aquesta possiblitat, però tot i això cal
+els motius pel que s'ha descartat aquesta possibilitat, però tot i això cal
 mencionar que es va crear un petit codi de C per a demostrar que la comunicació
 era possible. Aquest codi es va basar en els exemples disponibles a
 \cite{I2cTinyUsb}.
@@ -40,10 +40,10 @@ Programar el \est{Digispark} o una placa equivalent com la d'aquest projecte
 utilitzant el \est{bootloader} definit anteriorment és una tasca molt senzilla.
 Un cop es disposi del fitxer \fitx{.hex} que es vol programar al
 microcontrolador, es pot utilitzar programes com \ord|avrdude| o
-\est|micronucleus| per a que, mentre s'estigui executant el bootloader, es 
+\est|micronucleus| per a que, mentre s'estigui executant el \est{bootloader}, es 
 reprogrami el xip \cite{DigisparkBootloader}.
 
-Per a progrmar la placa amb un sistema basat en Linux s'ha de realitzar una
+Per a programar la placa amb un sistema basat en Linux s'ha de realitzar una
 tasca extra: els permisos. Un usuari administrador podrà programar la placa
 sense cap problema, però executar com a \est{root} un programa sempre implica
 assumir riscos. Per això el més recomanat és crear una regla \acro{udev}
@@ -62,7 +62,7 @@ part de programar mencionada en l'apartat anterior.
 S'ha preparat i documentat el \est{Makefile} com es mereix: s'ha posat un menú
 d'ajuda, s'ha posat l'opció per a programar els fusibles del microcontrolador
 (aquesta part només s'ha de fer una sola vegada), s'ha posat opcions per a
-eliminar tots els fitxers generats i també per a poder debugar el programa.
+eliminar tots els fitxers generats i també per a poder depurar el programa.
 
 \section{\acro{V-usb}}
 
@@ -71,7 +71,7 @@ Amb l'entorn de programació preparat, ja es pot començar a crear el
 llibreria \acro{v-usb}. Tanmateix, aquesta té molt bona documentació i
 tutorials disponibles per internet.
 
-La tasca d'aquest apartat és aconseguir que l'ordinador identifqui la placa
+La tasca d'aquest apartat és aconseguir que l'ordinador identifiqui la placa
 com un acceleròmetre tridimensional. Per a arribar a aquesta meta hi haurà un
 seguit de reptes i barreres a superar.
 
@@ -91,7 +91,7 @@ protocol \acro{usb}. Es disposa d'una freqüència de
 
 Aquest problema és ben conegut pels desenvolupadors de \acro{v-usb} i en alguns
 dels exemples s'explica com ca\l.librar l'osci\l.lador intern per a poder-se
-comunicar amb \acro{usb2} basant-se en els intèrvals de temps entre els que es
+comunicar amb \acro{usb2} basant-se en els intervals de temps entre els que es
 reb senyal des de l'ordinador. Es recomana consultar aquests codis
 \cite{Vusb} si es vol entendre millor aquest apartat.
 
@@ -139,7 +139,7 @@ no ha sigut un reinici voluntari, sinó degut a un error previ \cite{Watchdog}.
 
 La llibreria \acro{v-usb} disposa d'exemples on s'utilitza un \est{watchdog}, i
 per tant no ha sigut gaire complicació afegir-lo en aquest projecte. És una
-protecció adicional per a assegurar-se que el dispositiu sempre funciona
+protecció addicional per a assegurar-se que el dispositiu sempre funciona
 correctament, o com a mínim sense errors greus que no permetin l'execució
 normal del programa.
 
@@ -153,9 +153,9 @@ Resulta que els tutorials documenten molt bé com configurar tota la llibreria,
 però no és cosa seva explicar com es creen o modifiquen \est{Hid Report Descriptors}.
 Tot i que hi ha exemples amb la llibreria que utilitzen la classe \acro{hid},
 aquests són per a simular teclats o ratolins. S'ha hagut de buscar molt per a
-trobar una mica d'inforamció al respecte.
+trobar una mica d'informació al respecte.
 
-Tanmateix, després de molt prova i error i anar debugant amb l'ajuda de
+Tanmateix, després de molt prova i error i anar depurant amb l'ajuda de
 \est{wireshark} totes les comunicacions (es recomana configurar \est{wireshark}
 d'acord amb aquest tutorial per a rebre paquets \acro{usb}
 \cite{InstallWireshark}), s'ha aconseguit
@@ -268,7 +268,7 @@ La placa \acro{AtTiny85} ve, per defecte, amb la memòria \est{flash} completame
 buida, és a dir, no té ni \est{bootloader}. La forma més senzilla de poder
 programar-hi alguna cosa és mitjançant \acro{isp}. El protocol
 \est{In-System Programming}, també conegut sota les sigles \acro{icsp} o
-\est{In-Circuit Serial Programming}, és una forma prou estandaritzada per a
+\est{In-Circuit Serial Programming}, és una forma prou comuna per a
 programar o comunicar-se amb microcontroladors programables, sensors, o altres
 dispositius del món dels sistemes encastats \cite{Isp}.
 

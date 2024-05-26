@@ -33,7 +33,7 @@ d'instal·lació i generació del PDF provades amb Ubuntu 20.04 LTS.
 
 ### Instal·lació dels paquets necessaris
 
-En primer lloc, cal instal·lar tots els paquets de LaTeX necesasris:
+En primer lloc, cal instal·lar tots els paquets de LaTeX necessaris:
 
 ```sh
 sudo apt install texlive-full biber libpgf6

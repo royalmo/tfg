@@ -84,12 +84,12 @@ Existeixen tres tipus de transaccions:
     \item Les transaccions \emph{in} serveixen per a enviar paquets del
     dispositiu a l'ordinador. A diferència del tipus anterior, aquesta
     transacció no la inicia qui vol enviar el paquet. Per a poder
-    solventar aquesta complicació existeix el següent tipus.
+    superar aquest obstacle s'utilitza el següent tipus.
     \item Les transaccions de control serveixen per a poder esbrinar quan el
     dispositiu necessita enviar dades, pactar velocitats de transmissió, entre
     d'altres. La transacció de control més important és la \emph{setup},
     que serveix per a intercanviar informació inicial entre els dispositius. Més
-    endavant es veuran els tiups de dades que s'intercanvien inicialment.
+    endavant es veuran els tipus de dades que s'intercanvien inicialment.
 \end{itemize}
 
 L'important d'aquest apartat és tenir present que les transaccions \emph{in} i
@@ -174,14 +174,14 @@ Aquest projecte cau en aquest co\l.lectiu. Per a decidir com prosseguir, s'ha
 observat el que fa la comunitat d'aficionats quan es topa amb aquest problema.
 Es recomana llegir la publicació de \cite{Johnson2023usb} si es desitja entendre
 els motius d'\acro{usb-if} per a posar aquests preus o no cedir \acro{vid}
-a projectes de programari i/o maquiari lliure.
+a projectes de programari i/o maquinari lliure.
 
 Resumidament, en aquests casos es disposa de dues alternatives:
 
 \begin{enumerate}
     \item Inventar-se un \acro{vid} i \acro{pid}: Ja que en cap moment s'ha
     signat cap contracte amb l'\acro{usb-if}, i cap llei vigent ho impedeix, es
-    podria escollir un \acro{vid} i \acro{pid} arbritraris i l'\acro{usb-if} no
+    podria escollir un \acro{vid} i \acro{pid} arbitraris i l'\acro{usb-if} no
     podria dir o fer res al respecte. Si s'escull amb cura, la
     probabilitat que els codis escollits co\l.lisionin amb el d'un altre
     producte és molt baixa. Tot i que aquesta metodologia és bona i ràpida per a
@@ -217,8 +217,8 @@ l'estàndard. Aquestes es poden dividir en grans grups:
     \item \acro{Usb1}: Aquesta primera versió, projectada l'any 1996, oferia
     una velocitat màxima de transmissió de
     \SI[round-mode=places,round-precision=0]{12}{\mega\bit\per\second}.
-    Aquesta versió està deprecada i no s'hauria de crear nous dispositius amb
-    aquesta.
+    Aquesta versió es considera obsoleta i no s'hauria de crear nous dispositius
+    amb aquesta.
     \item \acro{Usb2}: La segona versió utilitzava el mateix connector que el
     seu predecessor, però aprofitava els avenços de la tecnologia per a
     augmentar la velocitat de transmissió a
@@ -233,13 +233,13 @@ l'estàndard. Aquestes es poden dividir en grans grups:
     la velocitat de transmissió en relació al \acro{usb3.2}.
 \end{itemize}
 
-Les versions de l'estàndard estan dissenades de forma que sempre tenen
+Les versions de l'estàndard estan dissenyades de forma que sempre tenen
 compatibilitat envers les anteriors. Per tant, la recomanació general per als
 desenvolupadors de dispositius és utilitzar la mínima versió possible, sense
 perjudicar el rendiment del dispositiu  \cite{Axelson2015USB}. D'aquesta forma,
 el dispositiu podrà funcionar en un màxim nombre d'ordinadors possible.
 
-Sabent que la primera versió està deprecada, s'ha escollit utilitzar la versió
+Sabent que la primera versió està obsoleta, s'ha escollit utilitzar la versió
 \acro{usb2} per a aquest projecte, donat que no es necessita transmetre gran
 volum de dades.
 
@@ -263,11 +263,11 @@ L'estàndard \acro{usb} disposa de diferents connectors. Es poden distingir en
 \end{figure}
 
 \begin{itemize}
-    \item Els connectors de tiups A son els que es connecten al dispositiu
+    \item Els connectors de tipus A son els que es connecten al dispositiu
     que actuarà com a mestre. Existeixen les variants \est{micro} i \est{mini},
     com es pot observar a la Figura \ref{fig:usb_connectors}, tot i que aquestes
     so son gaire populars. Amb l'aparició de l'estàndard \acro{usb3}, es van
-    dissenyar nous connectors que fóssin compatibles amb els dels estàndards
+    dissenyar nous connectors que fossin compatibles amb els dels estàndards
     anteriors.
     \item Els connectors de tipus B son els que es connecten a l'esclau. Aquests
     també tenen les variants \est{micro} i \est{mini}, molt utilitzades
@@ -307,9 +307,9 @@ es començarà a aplicar a finals de l'any 2024, i afectarà dispositius mòbils
 alguns portàtils, tauletes, teclats i ratolins ina\l.làmbrics, entre
 d'altres.
 
-Sent el dispositu que es vol crear en aquest projecte un perifèric de
+Sent el dispositiu que es vol crear en aquest projecte un perifèric de
 l'ordinador, la llei citada no l'afectaria. Tanmateix, la mateixa nota de premsa
-informa sobre la intenció d'extendre aquest connector a altres dispositius.
+informa sobre la intenció d'estendre l'obligació a altres dispositius.
 Tenint present que el dispositiu que es vol crear podria entrar fàcilment en
 aquest grup de perifèrics d'ordinador, s'ha decidit utilitzar un connector de
 tipus \acro{usb-c} per a assegurar-nos la seva possible comercialització dintre
@@ -331,8 +331,8 @@ quin dispositiu és i com envia les dades.
 
 Per exemple, un ratolí definirà que cada poc temps l'ordinador podrà fer-li
 una petició de noves dades, i que aquestes tindran el format de 3 valors
-de 1 bit (pels 3 botons), i 2 valors de 8 bits (per a saber la disància
-desplaçada en cadascún dels eixos de coordenades). Aquesta capçalera també
+de 1 bit (pels 3 botons), i 2 valors de 8 bits (per a saber la distància
+desplaçada en cadascun dels eixos de coordenades). Aquesta capçalera també
 especificarà que el dispositiu és un ratolí. Un cop enviat aquest paquet,
 l'ordinador ja sabrà com comunicar-se amb el
 dispositiu i com interpretar les dades que anirà enviant.
@@ -403,7 +403,7 @@ de dades: \est{feature} i \est{input}.
 
 \begin{itemize}
     \item El tipus \est{feature} enviarà l'estat del sensor: connexió, dades,
-    intèrval entre comunicacions, sensitivitat i esdeveniments.
+    interval entre comunicacions, sensitivitat i esdeveniments.
     \item El tipus \est{input} enviarà l'estat del sensor i, si s'escau, els
     valors llegits. Aquests valors s'hauran de dividir pel factor especificat
     a la capçalera per a poder representar decimals. En el cas de l'acceleròmetre,
@@ -423,7 +423,7 @@ llibreria \acro{v-usb}, implementada per \est{Objective Development}
 \cite{Vusb}. Aquesta llibreria
 es distribueix amb la llicència \acro{gpl-2+}, una llicència que obliga a
 distribuir sota la mateixa llicència (o versions posteriors d'aquesta) tots els
-projectes que facin servir la llibreria. La empresa ofreix el concecpte de
+projectes que facin servir la llibreria. L'empresa ofereix el concepte de
 llicència dual: a part de \acro{gpl-2+}, es pot comprar una llicència comercial
 per a poder generar codi sota altres llicències \cite{VusbLicensing}.
 
@@ -464,7 +464,7 @@ diu el títol de l'apartat, es comentarà només el cas específic dels sistemes
 
 El \est{kernel} de Linux acostuma a dividir tot en diferents capes, i no és una
 excepció per al que té referència amb aquest projecte. Sempre és recomanable
-treballar amb la capa més alta possible, ja que sovint aixó significa
+treballar amb la capa més alta possible, ja que sovint això significa
 estalviar-se feina. Tanmateix, és important comprendre d'on es vé per a
 poder entendre millor els errors i dificultats que es trobaran en aquest treball.
 
@@ -507,16 +507,16 @@ llenguatges que permet realitzar una comunicació amb dispositius \acro{usb} en
 la capa més baixa possible. En aquest nivell es poden enviar trames de control,
 entrada o sortida a nivell de bits i bytes \cite{Libusb}.
 
-Tot i que la llibreria es va pensar incialment per Linux, sota el nom de
+Tot i que la llibreria es va pensar inicialment per Linux, sota el nom de
 \est{Linux-\acro{Usb}} \cite{LinuxUsb}, s'ha portat a Windows i MacOS,
 convertint-la en la millor alternativa per a generar programes multiplataforma
 que necessitin controladors personalitzats.
 
-Tanmatix, aquest projecte es beneficiarà de les capes de més alt nivell, pel que
+Tanmateix, aquest projecte es beneficiarà de les capes de més alt nivell, pel que
 serà més fàcil utilitzar les altres llibreries, tot i que això pugui suposar
 efectuar petits canvis entre els diferents sistemes operatius.
 
-A Linux, un dispositiu que es pot controlar per \est{libusb} sol aparéixer com
+A Linux, un dispositiu que es pot controlar per \est{libusb} sol apareixer com
 a fitxer sota el format \fitx{/dev/usbrawX}, on X és el número de dispositiu.
 No gens menys, si un contro\l.lador d'una capa superior està utilitzant
 exclusivament el dispositiu, el \est{kernel} no crearà aquest fitxer, per a
@@ -533,15 +533,15 @@ possible de mostrar un fitxer \fitx{/dev/usbrawX} d'un dispositiu \acro{hid}
 La següent llibreria és la capa immediatament superior a la de l'apartat
 anterior. \est{libhid} permet gestionar dispositius \acro{hid}. D'questa
 llibreria ha nascut \est{hidapi}, que la engloba i la converteix en
-una abstracció compatibla amb altres sistemes operatius, com
+una abstracció compatible amb altres sistemes operatius, com
 FreeBSD, Windows i MacOS \cite{Libhid}. Tal i com s'ha dit a 
 l'apartat \ref{sec:hut}, també permetrà utilitzar dispositius Bluetooth.
 
 Al ser aquesta llibreria una abstracció més elevada, existeixen més aplicacions
-per a provar-la i debugar-la. Sobretot es destaca \cite{LibhidUI}, que disposa
+per a provar-la i depurar-la. Sobretot es destaca \cite{LibhidUI}, que disposa
 d'una interfície molt senzilla d'utilitzar i multiplataforma.
 
-A Linux, un dispositiu que es pot controlar per \est{libhid} sol aparéixer com
+A Linux, un dispositiu que es pot controlar per \est{libhid} sol apareixer com
 a fitxer sota el format \fitx{/dev/hidrawX}, on X és el número de dispositiu.
 De la mateixa forma que amb l'apartat anterior, el dispositiu no apareixerà
 sota aquest format si una capa més alta l'està utilitzant exclusivament.
@@ -563,7 +563,7 @@ propis \cite{Iio}.
 Hi ha moltes formes de veure quines categories de dispositius \acro{hid} es
 converteixen en \acro{iio}, però la més senzilla és consultant el codi
 font de Linux \cite{KernelIioAccel}. Pel que fa a aquest projecte, es pot veure
-que esisteix un \est{driver} per a \est{hid\_accelerometer\_3d}, pel que
+que existeix un \est{driver} per a \est{hid\_accelerometer\_3d}, pel que
 el dispositiu d'aquest treball anirà en aquesta capa superior.
 
 Mitjançant normes \acro{udev} es podria aconseguir que un dispositiu que, per 
@@ -575,13 +575,13 @@ defecte s'assigna a \acro{iio} es quedi una capa més per sota, com seria
     sensors. Per tant, no s'ha d'afegir a l'usuari en un grup nou ni crear
     cap regla \acro{udev}.
     \item Més d'un usuari o procés pot estar llegint simultàniament el sensor.
-    El dispositu creat a \fitx{/dev/iio:deviceX} (on X és el número de
+    El dispositiu creat a \fitx{/dev/iio:deviceX} (on X és el número de
     dispositiu) pot ser llegit simultàniament, de la mateixa forma que ho fan
     altres fitxers, per exemple \fitx{/dev/rand} o \fitx{/dev/zero}.
     \item Al ser una capa superior, no s'ha de gestionar tot el referent al
     protocol \acro{hid}. Les lectures del sensor venen gairebé completament
     processades.
-    \item Finalment, al ser una capa superior, també hi tene cabuda altres
+    \item Finalment, al ser una capa superior, també hi tenen cabuda altres
     sensors que podrien servir per al projecte, però que no són \acro{hid}.
 \end{itemize}
 
@@ -601,8 +601,8 @@ correctament sempre, fins i tot després de reiniciar l'ordinador.
 
 En els sistemes basats en Linux, els programes que estan en execució tota
 l'estona s'anomenen serveis i els gestiona el propi \est{kernel}, també anomenat
-en aquest context \est{systemd} \cite{Systemd}. Hi ha dos tipus de serveis diferents, en
-funció dels privilegis que tenen:
+en aquest context \est{systemd} \cite{Systemd}. Hi ha dos tipus de serveis
+diferents, en funció dels privilegis que tenen:
 
 \begin{itemize}
     \item Els \emph{serveis del sistema} afecten a tots els usuaris i
@@ -621,7 +621,7 @@ funció dels privilegis que tenen:
 \end{itemize}
 
 És important conéixer la diferència entre els dos tipus mencionats, ja que en
-aquest treball es generarà un servei d'usuari i un de sistema, i cadascún té
+aquest treball es generarà un servei d'usuari i un de sistema, i cadascun té
 les seves complicacions, tant en el moment d'insta\l.lació com en el moment
 d'execució.
 
@@ -638,7 +638,7 @@ els entorns gràfics i els navegadors: els navegadors, a Linux, implementen les
 crides i interfície de \est{www-browser}, tot i estar implementats internament
 de formes diferents. Si es vol implementar una aplicació que necessiti, per
 exemple, un navegador incrustat, però qualsevol navegador serveix, es pot
-indicar com a dependència \est{www-browser} enlloc de, per exmple, \est{firefox}.
+indicar com a dependència \est{www-browser} enlloc de, per exemple, \est{firefox}.
 
 \est{Xlib} és una llibreria molt complexa, i té interfícies per a la majoria
 de llenguatges. Tanmateix, sovint és més senzill utilitzar una aplicació de
@@ -731,13 +731,13 @@ funcionar amb aquest nou servidor, especialment els que comparteixen pantalla
 o interactuen amb ella. Des d'Ubuntu 17.10 que el sistema operatiu deixa
 escollir entre els dos entorns \cite{Wayland}.
 
-Tanmateix, un canvi d'aquesta embargadura no es fa d'una versió per una altra.
+Tanmateix, un canvi d'aquesta magnitud no es fa d'una versió per una altra.
 \est{Wayland} encara necessita bastantes millores per a fer-lo completament
 compatible, pel que la seva \acro{api} no és del tot definitiva. Es preveuen
 encara uns anys fins que no s'anuncii la data en la que \est{Xorg} haurà de
 ser utilitzat. I un cop passada aquesta data el més probable és que ordres
 com \ord|xrandr| segueixin funcionant, de la mateixa forma que segueixen
-funcionant eines com \ord|ifconfig|, deprecades des de fa ja molts anys
+funcionant eines com \ord|ifconfig|, obsoletes des de fa ja molts anys
 \cite{Ifconfig}.
 
 Per aquest motiu s'ha decidit realitzar el projecte utilitzant \est{Xorg}.
