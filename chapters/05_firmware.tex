@@ -1,4 +1,4 @@
-\chapter{Firmware}
+\chapter{Disseny del firmware}
 
 En aquest capítol es detallarà tot el referent al codi que anirà dintre de la
 placa de circuit imprès realitzada en el capítol anterior. Degut que les
@@ -14,13 +14,13 @@ mencionar que es va crear un petit codi de C per a demostrar que la comunicació
 era possible. Aquest codi es va basar en els exemples disponibles a
 \cite{I2cTinyUsb}.
 
-\section{Entorn de treball de desenvolupament}
+\section{Creació d'un entorn de desenvolupament}
 
 Per a poder desenvolupar amb comoditat el \est{firmware} del projecte és crucial
 facilitar la tasca de provar les modificacions fetes. Per aquest motiu, s'ha
 planejat tot un entorn de treball que es detalla en aquest apartat.
 
-\subsection{\est{Bootloader}}
+\subsection{Programació del microcontrolador}
 \label{subsec:bootloader}
 
 Hi ha diverses formes de programar el microcontrolador, però la més adequada
@@ -50,7 +50,7 @@ assumir riscos. Per això el més recomanat és crear una regla \acro{udev}
 per al dispositiu en qüestió, fent que sigui accessible per a tots els usuaris.
 Es pot consultar un tutorial detallat a \cite{CreateUdevRules}.
 
-\subsection{\est{Makefile}}
+\subsection{Automatització del procés de compilació i programació}
 
 Un cop es sap com programar la placa, el següent pas a seguir és crear un
 \est{Makefile} per a poder compilar i programar amb una única comanda.
@@ -64,7 +64,7 @@ d'ajuda, s'ha posat l'opció per a programar els fusibles del microcontrolador
 (aquesta part només s'ha de fer una sola vegada), s'ha posat opcions per a
 eliminar tots els fitxers generats i també per a poder depurar el programa.
 
-\section{\acro{V-usb}}
+\section{Comunicació amb l'ordinador mitjançant USB}
 
 Amb l'entorn de programació preparat, ja es pot començar a crear el
 \est{firmware} del projecte. Es començarà per la part més complicada: la
@@ -80,7 +80,7 @@ El punt de partida és els codis d'exemples del repositori del projecte
 També hi ha un repositori amb bastants exemples, però la majoria només son
 compatibles per a un \acro{AtMega}, i s'haurien d'adaptar de totes formes.
 
-\subsection{Ca\l.libració de l'osci\l.loscopi}
+\subsection{Ca\l.libració de l'osci\l.lador del microcontrolador}
 
 Un dels problemes més grans del microcontrolador que s'està utilitzant és que
 l'osci\l.lador intern que disposa no és compatible amb el que demana el
@@ -101,9 +101,9 @@ apartats anteriors, no es pretén certificar com a \acro{usb} el dispositiu
 (per altres motius no tècnics), pel que mentre funcioni correctament en la
 àmplia majoria de dispositius es considerarà un èxit.
 
-\subsection{Identificadors USB}
+\subsection{Identificadors USB durant el desenvolupament}
 
-Parlant de \acro{usb-if}, en aquest punt del projecte és quan s'ha de decidir
+En aquest punt del projecte és quan s'ha de decidir
 quin \acro{vid-pid} es posa al dispositiu, si més no, durant el temps de
 desenvolupament. Tal i com s'ha vist en l'apartat \ref{subsec:usb-if}, hi ha dues
 opcions possibles.
@@ -122,7 +122,7 @@ codis, mai assignarà aquests identificadors a un producte que acabi sent
 comercialitzat. Va perfecte doncs per a fer proves durant el desenvolupament del
 projecte.
 
-\subsection{\est{Watchdog}}
+\subsection{Robustesa del \est{firmware}: \est{Watchdog}}
 
 Una altra de les funcionalitats afegides en aquest projecte és el \est{watchdog}.
 Es tracta d'un perifèric disponible en la majoria de xips de l'arquitectura
@@ -143,13 +143,13 @@ protecció addicional per a assegurar-se que el dispositiu sempre funciona
 correctament, o com a mínim sense errors greus que no permetin l'execució
 normal del programa.
 
-\subsection{Canvi de tipus HID}
+\subsection{Implementació del sensor HID}
 
 Finalment, la tasca més complicada d'implantar aquesta llibreria en el marc
 del treball de final de grau és la configuració del nou tipus \acro{hid}:
 acceleròmetre tridimensional.
 
-Resulta que els tutorials documenten molt bé com configurar tota la llibreria,
+Els tutorials trobats documenten molt bé com configurar tota la llibreria,
 però no és cosa seva explicar com es creen o modifiquen \est{Hid Report Descriptors}.
 Tot i que hi ha exemples amb la llibreria que utilitzen la classe \acro{hid},
 aquests són per a simular teclats o ratolins. S'ha hagut de buscar molt per a
@@ -162,12 +162,18 @@ d'acord amb aquest tutorial per a rebre paquets \acro{usb}
 generar un \est{Hid Report Descriptor} que és correctament llegit per l'ordinador.
 Una de les referències més importants sobre aquesta part és \cite{VusbProjects}.
 
-\section{I2C}
+\section{Comunicació amb el sensor}
 
 Un cop solucionada la comunicació entre el microcontrolador i l'ordinador, toca
 centrar-se en la comunicació entre el microcontrolador i el sensor. Aquesta, tal
 i com s'ha dit en el capítol anterior, es farà mitjançant el protocol \acro{i2c}.
-Aquest protocol utilitza dues línies bidireccionals, una per les dades i una per
+En aquest apartat es defineix aquest protocol en el context de l'arquitectura
+\acro{avr} i es detallen les peculiaritats i afegits que requereix el sensor que
+s'utilitza per al projecte.
+
+\subsection{Protocol I2C en l'arquitectura AVR}
+
+El protocol \acro{i2c} utilitza dues línies bidireccionals, una per les dades i una per
 el rellotge, que es connecten a \SI[round-mode=places,round-precision=0]{0}{\volt}
 o es deixen a l'aire (i els \est{pull-ups} la porten a la tensió d'alimentació).
 
@@ -201,7 +207,7 @@ si el mestre envia un senyal de stop. Es recomana llegir el \est{dataheet} del
 sensor a \cite{mpu6050specs} per a entendre el funcionament de \acro{i2c},
 ja que està molt ben explicat.
 
-\subsection{Funcionament del sensor \est{MPU6050}}
+\subsection{Peculiaritats del sensor \est{MPU6050}}
 
 Pel cas concret del sensor d'aquest projecte, hi ha un parell de normes extres
 a part de les que estableix el protocol \acro{i2c} que serveixen per a comunicar-se
@@ -245,7 +251,7 @@ decidit anar més enllà, atrevint-se a separar fins i tot les funcions del mòd
 \acro{i2c} de les específiques per a comunicar-se amb el sensor, o el codi per
 a calibrar l'osci\l.lador intern del que configura el dispositiu \acro{hid}. 
 
-A la Figura \ref{fig:firmware-dependency-graph} es pot com ha quedat el gràfic
+A la Figura \ref{fig:firmware-dependency-graph} es pot veure com ha quedat el gràfic
 de dependències. Cal destacar que, tot i semblar-ho a jutjar pel gràfic, el
 llenguatge de C treballat a baix nivell (com és el cas amb l'arquitectura
 \acro{avr8}) no és gairebé mai possible separar completament els mòduls entre
@@ -301,7 +307,7 @@ Per a programar per \acro{isp} s'ha utilitzat una placa Arduino amb el codi
 l'Arduino tenia aquest codi, una simple comanda d'\est{avrdude} s'ha afegit
 al \est{Makefile}, permetent la programació senzilla del dispositiu.
 
-\section{Actualitzacions de firmware}
+\section{Distribució d'actualitzacions de firmware}
 
 Quan incrustar el programa no és una tasca trivial, cal preguntar-se què
 passaria si  es vol actualitzar la versió del \est{firmware} per a afegir

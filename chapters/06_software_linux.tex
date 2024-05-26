@@ -1,4 +1,4 @@
-\chapter{Software a Linux}
+\chapter{Disseny del software a Linux}
 
 La darrera peça del puzzle per a que el sistema pugui funcionar és el
 programari del cantó de l'ordinador. Tal i com s'ha comentat al capítol
@@ -13,7 +13,7 @@ centraran les proves en la distribució de Linux Ubuntu, concretament en
 les versions 18.04 i 24.04 \acro{lts} (\est{Long-Term Support}), però tot hauria
 de funcionar de la mateixa forma amb la resta de distribucions.
 
-\section{Punt de partida}
+\section{Requisits mínims del programari}
 
 Un bon inici per a aquesta part del projecte és identificar què és el que
 s'espera del programa: com s'ha d'insta\l.lar, com ha de funcionar i com
@@ -151,7 +151,7 @@ aquest capítol es detallen només alguns aspectes rellevants en referència al 
 creat específicament per a aquest programa. Es recomana tenir a proximitat el
 codi font del projecte per a poder entendre millor aquest apartat.
 
-\subsection{Funcionalitats}
+\subsection{Funcionalitats addicionals implementades}
 
 Tot i que la funcionalitat principal del programa ja és coneguda, s'ha decidit
 dur aquest programa una mica més enllà, afegint una mica de robustesa i
@@ -179,7 +179,7 @@ destacar-ne només tres de més rellevants:
 Aquestes millores, juntament amb els detalls mencionats en aquest capítol, han
 convertit un programa que feia la seva tasca en un de robust, escalable i segur.
 
-\subsection{Conversió de l'acceleració en orientació}
+\subsection{Conversió de les mesures d'acceleració a orientació}
 
 Durant tot el document s'ha parlat d'utilitzar un sensor d'acceleració quan el
 que es vol obtenir és l'orientació del dispositiu. No és pas un error, més bé
@@ -214,7 +214,7 @@ angular. Es pot consultar un exemple de sensor amb més precisió a
 s'implementarà en aquest projecte degut a la complexitat afegida i els propòsits
 del projecte (no es cerca precisió).
 
-\subsection{Fitxer de configuració}
+\subsection{Configuració del programa}
 
 La forma principal (i gairebé única, tret d'alguns detalls) de configurar
 l'aplicació és mitjançant un fitxer de configuració. Quan s'executi el programa
@@ -273,7 +273,7 @@ connector_facing = Left
 Al repositori del projecte hi ha el mateix fitxer d'exemple però molt més ben
 documentat. Aquí només s'ha posat els mínims comentaris per a entendre'l.
 
-\subsection{Agrupació en un fitxer}
+\subsection{Preparació del codi per a la distribució}
 
 A diferència dels programes en C, que almenys els programes de característiques
 similars a les d'aquest projecte es compilen en un únic fitxer executable, els
@@ -293,7 +293,7 @@ però es considera que
 s'afegeix molta dificultat en quant a insta\l.lar el programa (sobretot en un
 context d'usuari) i s'hi guanya poc.
 
-\section{Creació del servei \est{systemd}}
+\section{Execució del programa en segon pla: \est{systemd}}
 
 Un cop el programa funcionava correctament amb la línia de comandes és el moment
 de fer-lo funcionar en un segon pla. Tal i com s'ha detallat a l'apartat
@@ -376,13 +376,15 @@ sistema amb diferents versions de Debian i Ubuntu i en totes ha acabat funcionan
 En un cas extrem, cal recordar que sempre es pot insta\l.lar l'aplicació per a
 que funcioni en el context de la sessió, mitjançant un servei d'usuari.
 
-\section{Creació del paquet de Debian}
+\section{Insta\l.lació del programa}
 
 Tal i com s'ha vist en l'apartat anterior, el servei de sistema necessita guardar
 els fitxer de configuració i els fitxers executables en llocs molt específics.
 Insta\l.lar el programa a mà, quan es tracta de fer-ho per a tot el sistema,
 pot ser fins i tot una tasca perillosa. Per aquest motiu s'ha decidit crear un
 paquet de Debian per a facilitar el procés d'insta\l.lació.
+
+\subsection{Creació del paquet de Debian}
 
 El més important durant la creació d'un paquet és saber quines dependències
 necessita el programa i quina és la versió més baixa amb la que poden funcionar.
@@ -436,7 +438,7 @@ paquet. Tot i que el nombre de comandes a recordar son poques, és una tasca que
 no es fa sovint, i es prefereix deixar-ho apuntat i ben preparat en algun lloc.
 Es pot consultar en el repositori del treball aquest \est{script}.
 
-\subsection{Pàgina de manual}
+\subsection{Creació d'una pàgina de manual}
 
 Quan el paquet de Debian ja va funcionar correctament s'hagués pogut considerar
 la part de programari per Linux completa. Tanmateix, mentre es creava el paquet,
@@ -456,7 +458,7 @@ que es copiï al directori pertinent aquesta pàgina, i un cop insta\l.lat el
 paquet de nou, només cal executar \ord|man gyroscreen| per a consultar el
 manual d'ús del programa, en anglès.
 
-\subsection{Repositori d'APT}
+\subsection{Possible ampliació: creació d'un repositori APT}
 
 Insta\l.lar el paquet generat es pot fer utilitzant l'eina \ord|dpkg| sense cap
 problema. L'únic inconvenient d'aquesta eina és que no insta\l.la automàticament

@@ -1,4 +1,4 @@
-\chapter{Hardware}
+\chapter{Disseny del hardware}
 
 En aquest capítol es detallarà tot el procés de realització del maquinari per
 al projecte. La base teòrica del capítol anterior pot resultar de gran utilitat
@@ -74,7 +74,7 @@ només centrar-se en la part de més alt nivell: l'aplicació del projecte.
     \label{fig:gy521sch}
 \end{figure}
 
-\section{Primer disseny}
+\section{Primera versió de la placa}
 
 En un primer moment es va decidir per utilitzar un microcontrolador que disposés
 del perifèric \acro{usb} directament al maquinari, per a evitar programar-lo tot.
@@ -154,7 +154,7 @@ invertint temps amb un disseny que no veuria mai la llum.
     \label{fig:pcb_v1}
 \end{figure}
 
-\subsection{Problema del primer disseny}
+\subsection{Problemes del primer disseny}
 
 Tal i com s'ha dit a l'apartat anterior, no es va acabar de dissenyar la placa
 de circuit imprès degut al redisseny del \est{hardware}. El motiu es ben senzill,
@@ -189,7 +189,7 @@ realitzar el sistema amb aquest darrer. A través de recerca i recomanacions del
 personal del laboratori de l'escola es va prendre coneixement de l'existència de
 la placa \est{Digispark}.
 
-\subsection{Proves amb \est{Digispark}}
+\subsection{Proves prèvies amb la placa \est{Digispark}}
 \label{subsec:hw_digispark}
 
 La placa \est{Digispark} es pot comprar a preus molt reduïts i a molts llocs.
@@ -328,7 +328,7 @@ l'empresa amb qui s'ha encarregat la producció de la placa no tenia disponibles
 alguns d'aquests. Així doncs, s'ha hagut de fer una nova revisió amb petites
 modificacions d'alguns components.
 
-\subsection{Producció de la pcb}
+\subsection{Producció i muntatge de la placa final}
 
 Amb la placa de circuit imprès ja preparada, només faltava produir-ne algunes
 unitats. Per recomanacions de la universitat s'ha optat per utilitzar el
@@ -372,7 +372,7 @@ seu sistema no és completament compatible amb els fitxers que exporta
 KiCad. Ha sigut gràcies a un tutorial de la seva pròpia pàgina web que s'ha
 acabat aconseguint el format demanat dels fitxers \cite{KiCADJLC}.
 
-\section{Encapsulat}
+\section{Disseny d'un encapsulat per la placa}
 
 Quan es va saber que la placa impresa ja no rebria més modificacions físiques,
 es va decidir crear una petita carcassa per a evitar que hi entri pols o les
@@ -432,7 +432,7 @@ perfecció i la placa cabia a dintre de la carcassa.
     \label{fig:3d_real}
 \end{figure}
 
-\section{OSHWA}
+\section{Certificació del disseny final}
 
 Un cop es va saber que el disseny físic del projecte era definitiu, es va decidir
 publicar-lo a \acro{oshwa}. L'\est{Open-Source HardWare Association} és, com el
