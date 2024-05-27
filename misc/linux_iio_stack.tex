@@ -22,17 +22,20 @@
         \node at (9,1.25) {Sensor};
     
         \filldraw[fill=orange!20!white, draw=black] (1,3.25) rectangle (4,4.75);
-        \node at (2.5,4) {USB};
+        \node at (2.5,4.25) {USB};
+        \node at (2.5,3.75) {(\fitx{libusb})};
         \filldraw[fill=orange!20!white, draw=black] (4.25,3.25) rectangle (7.25,4.75);
         \node at (5.75,4) {Bluetooth};
         \filldraw[fill=orange!20!white, draw=black] (1,5.25) rectangle (7.25,6.75);
-        \node at (4.125,6) {Human Interface Devices (HID)};
+        \node at (4.125,6.25) {Human Interface Devices (HID)};
+        \node at (4.125,5.75) {(\fitx{libhid}/\fitx{hidapi})};
     
         \filldraw[fill=orange!20!white, draw=black] (7.5,3.25) rectangle (10.5,6.75);
         \node at (9,5.25) {Altres};
         \node at (9,4.75) {Drivers};
         \filldraw[fill=orange!20!white, draw=black] (1,7.25) rectangle (10.5,8.75);
-        \node at (6.125,8) {Linux Industrial I/O};
+        \node at (5.75,8.25) {Linux Industrial I/O};
+        \node at (5.75,7.75) {(\fitx{libiio})};
     
         \filldraw[fill=yellow!20!white, draw=black] (1,9.75) rectangle (3.5,11.75);
         \node at (2.25,10.75) {Aplicació};

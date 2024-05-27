@@ -6,13 +6,49 @@ connexions entre la placa creada i l'entorn de proves amb la placa \est{Digispar
 i el mòdul \est{GY521} són idèntiques, el \est{firmware} que es crei servirà
 per les dues plaques.
 
+\section{Proves prèvies del projecte i2c\_tiny\_usb}
+\label{sec:testinc-i2c-tiny}
+
 Tal i com s'ha dit en l'apartat \ref{subsec:hw_digispark}, es va descobrir
-el projecte \est{i2c\_on\_littlewire}, que permet comunicar-se directament amb
-dispositius \acro{i2c} des de l'ordinador. En aquest apartat també es destaquen
-els motius pel que s'ha descartat aquesta possibilitat, però tot i això cal
-mencionar que es va crear un petit codi de C per a demostrar que la comunicació
-era possible. Aquest codi es va basar en els exemples disponibles a
-\cite{I2cTinyUsb}.
+el projecte \est{i2c\_on\_usb} \cite{I2cTinyUsb}.
+Aquest projecte ha aconseguit dissenyar
+una placa molt semblant a la de \est{Digispark}, i mitjançant programari (tant
+del cantó del microcontrolador com afegint contro\l.ladors al \est{kernel} de
+Linux), el dispositiu s'identifica com un mestre \acro{i2c} de cara a
+l'ordinador, i apareix a \fitx{/dev/i2c-X} on X és el nombre de dispositiu.
+
+A \cite{i2cOnLittleWireBuilding} s'ha trobat el projecte
+\est{i2c\_on\_littlewire}, una adaptació de
+\est{i2c\_tiny\_usb} per a la placa \est{Digispark}, amb un tutorial molt
+detallat sobre com programar la placa.
+Aquest projecte ha anat molt bé per a fer proves de precisió del sensor a més
+alt nivell (per exemple, utilitzant la llibreria \acro{i2c} de Python). Tanmateix,
+es va descartar utilitzar-lo per a aquest treball per a dos motius:
+
+\begin{itemize}
+    \item Aquest \acro{tfg} pretén ser el màxim de versàtil possible i utilitzar
+    els estàndards de més alt nivell. En el capítol anterior s'ha comentat que
+    es volia utilitzar les classes \acro{hid} i el mòdul \acro{iio}. El projecte
+    \est{i2c\_tiny\_usb} utilitza programari propi, i tot i que estigui inclòs
+    en el \est{kernel} de Linux \cite{I2cTinyKernel}, s'hauria de fer de zero per altres sistemes
+    operatius.
+    \item L'objectiu del \acro{tfg} és aprendre durant el procés de
+    desenvolupament. Si s'agafa un projecte que ja ho té tot fet no s'adquirirà
+    experiència en aquests camps.
+\end{itemize}
+
+Tot i haver descartat el projecte \est{i2c\_on\_littlewire}, es va considerar
+oportú demostrar que una lectura del sensor amb aquest dispositiu era viable.
+Es va partir dels exemples disponibles a \cite{I2cTinyUsb}, que consisteixen en
+un codi en C que utilitza \est{libusb} per a llegir dades del sensor. Només va
+fer falta adaptar la implementació del sensor (basant-se en els requeriments
+d'aquest, explicats en detall a l'apartat \ref{subsec:i2c_sensor}).
+
+Es va poder llegir les mesures del sensor sense gaire complicacions, però també
+es va modificar el programa per a deixar d'utilitzar \est{libusb} i utilitzar
+\est{libi2c}, la llibreria de Linux per a comunicar-se amb dispositius
+\acro{i2c}. Aquesta també es pot utilitzar des de llenguatges de més alt nivell,
+com Python.
 
 \section{Creació d'un entorn de desenvolupament}
 
@@ -208,6 +244,7 @@ sensor a \cite{mpu6050specs} per a entendre el funcionament de \acro{i2c},
 ja que està molt ben explicat.
 
 \subsection{Peculiaritats del sensor \est{MPU6050}}
+\label{subsec:i2c_sensor}
 
 Pel cas concret del sensor d'aquest projecte, hi ha un parell de normes extres
 a part de les que estableix el protocol \acro{i2c} que serveixen per a comunicar-se

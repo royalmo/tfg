@@ -6,6 +6,20 @@ recerca inicial que s'ha fet per a aquest projecte. Només es posarà èmfasi en
 les parts rellevants per el projecte, però sempre s'inclourà alguna referència
 per a complementar o ampliar algun concepte.
 
+\section{Estructura general del projecte}
+
+S'ha considerat que, per a comprendre millor el projecte i les decisions preses,
+és convenient tenir una idea general del projecte. D'aquesta forma, es pot veure
+quines parts són les mès crítiques o complicades. Evidentment, al no haver fet
+cap recerca encara l'arquitectura tindrà moltes ambigüitats.
+
+A la figura \ref{fig:project-structure} es pot contemplar l'arquitectura inicial
+del projecte. S'ha determinat les peces que formen aquest puzzle a partir d'una
+recerca molt superficial, i es preten afirmar la certesa d'aquest esquema amb
+els apartats que venen a continuació.
+
+\input{misc/project_structure.tex}
+
 \section{USB}
 
 Sent la connexió \acro{usb} un dels objectius més cèntrics d'aquest treball de
@@ -277,7 +291,7 @@ L'estàndard \acro{usb} disposa de diferents connectors. Es poden distingir en
     serveixen per a dispositius que poden ser mestres o esclaus en diferents
     moments donats. La decisió de qui actua de mestre es pacta just a l'inici
     de la connexió, mitjançant un protocol específic \cite{Axelson2015USB}.
-    Aquest connector, a diferència de la reta, és reversible: es pot connectar
+    Aquest connector, a diferència de la resta, és reversible: es pot connectar
     en les dues orientacions possibles. Es pot veure l'aspecte del connector
     a la Figura \ref{fig:usb_connectors_c}.
 \end{itemize}
@@ -735,8 +749,8 @@ Tanmateix, un canvi d'aquesta magnitud no es fa d'una versió per una altra.
 \est{Wayland} encara necessita bastantes millores per a fer-lo completament
 compatible, pel que la seva \acro{api} no és del tot definitiva. Es preveuen
 encara uns anys fins que no s'anuncii la data en la que \est{Xorg} haurà de
-ser utilitzat. I un cop passada aquesta data el més probable és que ordres
-com \ord|xrandr| segueixin funcionant, de la mateixa forma que segueixen
+deixar de ser utilitzat. I un cop passada aquesta data el més probable és que
+ordres com \ord|xrandr| segueixin funcionant, de la mateixa forma que segueixen
 funcionant eines com \ord|ifconfig|, obsoletes des de fa ja molts anys
 \cite{Ifconfig}.
 

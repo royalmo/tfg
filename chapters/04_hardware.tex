@@ -166,9 +166,11 @@ deixaran al voltant de 20 entrades sense utilitzar. I no només això: aquest
 microcontrolador disposa de molta més memòria de la que mai es necessitarà
 \cite{AtMega32u4}.
 
-El principal motiu per a fer el canvi és doncs el preu. Un \acro{AtMega32u4}
-no és molt car \cite{AvrComparison}, però és més barat un dispositiu \acro{avr}
-de la sèrie \acro{AtTinyXX}, com es veurà en el següent apartat.
+El principal motiu per a fer el canvi és doncs el preu \cite{AvrComparison}.
+Un \acro{AtMega32u4} no és molt car (val \SI{4.92}{\EUR} a Mouser, si es compra
+únicament una unitat), però és més barat un dispositiu \acro{avr} de la sèrie
+\acro{AtTinyXX} (el model \acro{AtTiny85} val \SI{1.54}{\EUR} a la mateixa
+botiga que abans), com es veurà en el següent apartat.
 
 \section{Segona versió de la placa}
 
@@ -192,7 +194,8 @@ la placa \est{Digispark}.
 \subsection{Proves prèvies amb la placa \est{Digispark}}
 \label{subsec:hw_digispark}
 
-La placa \est{Digispark} es pot comprar a preus molt reduïts i a molts llocs.
+La placa \est{Digispark} es pot comprar a preus molt reduïts (sovint a menys de 
+\SI[round-mode=places,round-precision=0]{8}{\EUR}) i a molts llocs.
 És una placa de circuit imprès equipada d'un \acro{AtTiny85}, un connector
 \acro{usb}, algun component per a regular les tensions, i tot de pins per a
 poder connectar fàcilment qualsevol cable i component al microcontrolador
@@ -221,41 +224,19 @@ moment del disseny del propi circuit.
 
 El microcontrolador ve programat amb un \est{bootloader} que utilitza la
 llibreria \acro{v-usb} per a identificar-se com un port sèrie a l'ordinador
-(és una de les sub-classes \est{hid}) i així poder programar-lo fàcilment.
+(és una de les sub-classes \acro{hid}) i així poder programar-lo fàcilment.
 És una placa bastant popular, de maquinari obert, i amb molta documentació i
 tutorials disponibles per internet \cite{DigisparkBootloader}.
 
 Es va adquirir un parell d'unitats d'aquesta placa, i es va connectar amb el
-mòdul del sensor giroscopi. Mitjançant tutorials era senzill utilitzar la
+mòdul del sensor d'acceleració. Mitjançant tutorials era senzill utilitzar la
 placa \est{Digispark} com si d'un Arduino es tractés. Es podia, per exemple,
 utilitzar la llibreria \est{LittleWire} per a comunicar-se amb el sensor amb el
 protocol \acro{i2c} i llegir les dades necessaries.
 
 Durant el transcurs d'aquestes proves també es va descobrir el projecte
-\est{i2c\_tiny\_usb} \cite{I2cTinyUsb}. Aquest projecte ha aconseguit dissenyar una placa
-molt semblant a la de \est{Digispark}, i mitjançant programari (tant del cantó
-del microcontrolador com afegint contro\l.ladors al \est{kernel} de Linux),
-el dispositiu s'identifica com un mestre \acro{i2c} de cara a l'ordinador, i
-apareix a \fitx{/dev/i2c-X} on X és el nombre de dispositiu.
-
-A \cite{i2cOnLittleWireBuilding} s'ha trobat una adaptació de
-\est{i2c\_tiny\_usb} per a la placa \est{Digispark}, amb un tutorial molt
-detallat sobre com programar la placa.
-Aquest projecte ha anat molt bé per a fer proves de precisió del sensor a més
-alt nivell (per exemple, utilitzant la llibreria \acro{i2c} de Python). Tanmateix,
-es va descartar utilitzar-lo per a aquest treball per a dos motius:
-
-\begin{itemize}
-    \item Aquest projecte pretén ser el màxim de versàtil possible i utilitzar
-    els estàndards de més alt nivell. En el capítol anterior s'ha comentat que
-    es volia utilitzar les classes \acro{hid} i el mòdul \acro{iio}. El projecte
-    \est{i2c\_tiny\_usb} utilitza programari propi, i tot i que estigui inclòs
-    en el \est{kernel} de Linux \cite{I2cTinyKernel}, s'hauria de fer de zero per altres sistemes
-    operatius.
-    \item L'objectiu del projecte és aprendre durant el procés de desenvolupament.
-    Si s'agafa un projecte que ja ho té tot fet no s'adquirirà experiència en
-    aquests camps.
-\end{itemize}
+\est{i2c\_tiny\_usb}, que va donar unes conclusions molt interessants. Es
+comentaran els resultats amb més detall a l'apartat \ref{sec:testinc-i2c-tiny}.
 
 Així doncs, s'ha acabat utilitzant la placa \est{Digispark} per a validar
 que el projecte es podria desenvolupar en aquest maquinari, i un cop es va
@@ -305,7 +286,7 @@ final d'aquest segon disseny.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.75\textwidth]{images/kicad/gyro2_pcb.png}
+    \includegraphics[width=0.6\textwidth]{images/kicad/gyro2_pcb.png}
     \caption{Placa de circuit imprès de la segona versió.}
     \label{fig:pcb_v2}
 \end{figure}
