@@ -51,3 +51,38 @@ Objectius addicionals:
     \item Preparar el sistema per poder acceptar més d'un dispositiu
     simultàniament.
 \end{itemize}
+
+\section{Estructura general del projecte}
+
+S'ha considerat que, per a comprendre millor el projecte i les decisions preses,
+és convenient tenir una idea general del projecte. D'aquesta forma, es pot veure
+quines parts són les mès crítiques o complicades. Evidentment, al no haver fet
+cap recerca encara l'arquitectura tindrà moltes ambigüitats.
+
+A la figura \ref{fig:project-structure} es pot contemplar l'arquitectura inicial
+del projecte. S'ha determinat les peces que formen aquest puzzle a partir d'una
+recerca molt superficial, i es preten afirmar la certesa durant el transcurs
+d'aquest document.
+
+\input{misc/project_structure.tex}
+
+Tal i com s'ha comentat en l'apartat anterior, es desenvoluparà el maquinari per
+a funcionar correctament en sistemes Linux, i la portabilitat a la resta de
+sistemes operatius es considera una possible ampliació. Tot i això, l'esquema
+anterior serveix per a tots els sistemes operatius, donat que tots disposen de
+\est{Drivers}, entorn gràfic o gestor de serveis. Només varia la implementació i
+la forma amb la que l'aplicació hi haurà de interactuar.
+
+No es defineix quin protocol de comunicació hi haurà entre el microcontrolador
+i el sensor, donat que això pot canviar en funció del sensor que s'acabi
+escollint. De la mateixa manera, tampoc es defineix com es comunicaran les
+diverses parts de programari que hi haurà a l'ordinador (en blau a l'esquema).
+
+El que sí que es pot definir és la forma d'interacció de l'usuari amb el
+programa. Tret de l'etapa d'insta\l.lació, l'usuari modificarà un fitxer per a
+poder configurar el programa. Quan es vulguin aplicar els canvis, aturar,
+executar o reiniciar el programà es farà mitjançant un gestor de serveis. En el
+cas dels sistemes basats en Linux, aquest serà \est{systemd}.
+
+Tenint doncs l'estructura del sistema en ment resulta més senzill veure per on
+es pot començar el treball.
