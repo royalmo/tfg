@@ -6,7 +6,7 @@ recerca inicial que s'ha fet per a aquest projecte. Només es posarà èmfasi en
 les parts rellevants per el projecte, però sempre s'inclourà alguna referència
 per a complementar o ampliar algun concepte.
 
-\section{USB}
+\section{Protocol USB}
 
 Sent la connexió \acro{usb} un dels objectius més cèntrics d'aquest treball de
 fi de grau, s'ha iniciat la recerca per aquest cantó. No només s'ha escollit
@@ -51,16 +51,17 @@ a enviar dades.
 Contràriament al que un podria pensar, el flux de dades (i electricitat) no
 està predefinit: en un moment pot ser l'ordinador que utilitzi els dos cables
 per a transmetre dades al dispositiu, i en un altre pot ser a l'inrevés. De fet,
-els dos cables envien sempre el mateix, però invertit. D'aquesta forma es pot
-detectar i corregir interferències molt més fàcilment, ja que aquestes solen
-afectar per igual als dos cables (degut a la seva proximitat dins del
-connector).
+els dos cables envien sempre el mateix, però invertit, el que es coneix com a
+tensió en mode diferencial, Així les interferències en mode comú (respecte
+\acro{gnd}) es poden eliminar (restant els dos senyals). La tensió en mode
+diferencial funciona de forma òptima si els dos cables estan trenats (d'aquesta
+forma reben gairebé la mateixa interferència, que s'anu\l.la quan es fa la
+resta) \cite{DiffTension}.
 
 És important tenir en compte que la tensió d'operació de l'estàndard \acro{usb2}
 és de
 \SI[round-mode=places,round-precision=1]{3.3}{\volt}, encara que la tensió que
-proporciona el cable
-d'alimentació sigui de
+proporciona el cable d'alimentació sigui de
 \SI[round-mode=places,round-precision=0]{5}{\volt}.
 Aquest detall serà molt important de cara
 al disseny del dispositiu, ja que implicarà, molt probablement, l'ús de dos
@@ -625,7 +626,9 @@ aquest treball es generarà un servei d'usuari i un de sistema, i cadascun té
 les seves complicacions, tant en el moment d'insta\l.lació com en el moment
 d'execució.
 
-\subsection{Entorn gràfic: \acro{Xlib}}
+\section{Entorn gràfic a Linux}
+
+\subsection{Xorg}
 
 Finalment, un cop es sap com es farà la lectura de les dades del sensor, cal
 esbrinar com s'aplicarà els canvis de rotació de la pantalla. Els sistemes
