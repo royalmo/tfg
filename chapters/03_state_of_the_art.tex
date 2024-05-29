@@ -377,28 +377,38 @@ aquest grup de perifèrics d'ordinador, s'ha decidit utilitzar un connector de
 tipus \acro{usb-c} per a assegurar-nos la seva possible comercialització dintre
 de la \acro{ue}.
 
-\section{Taules d'ús HID}
+\section{Dispositius d'interfície humana}
 \label{sec:hut}
 
+Els dispositius d'interfície humana, o \acro{hid} (de l'anglès
+\est{Human Interface Devices}) són una categoria de dispositius que recullen
+accions fetes per persones o bé els hi lliuren una sortida. Dintre d'aquesta
+definició hi tenen cabuda teclats, ratolins, pantalles, sensors, entre d'altres.
+Aquest terme s'utilitza per a definir el concepte \acro{usb-hid}, una de les
+classes \acro{usb} amb que un dispositiu pot identificar-se.
 
-%%%%%
-Es tracta de dispositius amb els
-que l'usuari pot interactuar. Dintre d'aquests hi ha encara més categories,
-la mes rellevant pel projecte sent la dels sensors.
+El protocol \acro{usb-hid} (d'ara endavant \acro{hid}) defineix una jerarquia
+de subclasses per a classificar els dispositius. En funció de la subclasse
+l'ordinador podrà decidir si utilitzar un \est{driver} o un altre. El protocol
+també defineix la forma amb la que s'envien les dades en funció del tipus de
+dispositiu. Es poden veure el llistat de classes i subclasses \acro{hid} a la
+documentació oficial d'\acro{usb-if} \cite{HidDefinition}.
 
-Quan es defineix un tipus concret de \acro{hid}, s'ha de complir amb
-l'estandard de comunicació associat. D'aquesta forma l'ordinador no necessita
-insta\l.lar programari addicional per a poder comunicar-se amb el dispositiu.
-Es poden veure el llistat de classes i subclasses \acro{hid} a la documentació
-oficial d'\acro{usb-if} \cite{HidDefinition}.
-%%%%%
-
-Tal i com s'ha comentat en l'apartat \ref{subsubsec:metadades}, els dispositius
-\acro{hid} utilitzen uns protocols ja establerts per a poder ser utilitzats
+El principal avantatge és que els dispositius
+\acro{hid} utilitzen protocols ja establerts per a poder ser utilitzats
 sense haver d'insta\l.lar programari nou a l'ordinador (el que es coneix com
-a \est{plug\&play}).
+a \est{plug\&play}). Així doncs, quan es defineix un tipus concret \acro{hid},
+s'ha de complir amb l'estandard de comunicació associat.
 
-Un cop es presenta un dispositiu com a \acro{hid}
+Un dels altres avantatges d'utilitzar la classe \acro{hid} és que, al ser una capa per
+sobre del protocol \acro{usb}, és independent d'aquest. En altres paraules,
+altres protocols de comunicació poden beneficiar-se també de \acro{hid}, no
+només \acro{usb}. Per aquest motiu, quan es va implementar \est{Bluetooth},
+es va decidir utilitzar també \acro{hid} \cite{BluetoothHid}.
+
+\subsection{HID Report Descriptor}
+
+Un cop es presenta un dispositiu (o un \est{endpoint}) com a \acro{hid}
 (mitjançant les metadades), s'ha d'enviar a l'ordinador una nova capçalera de
 metadades, donant més informació sobre el dispositiu. Aquest paquet s'anomena
 \est{\acro{Hid} Report Descriptor} i envia informacions molt detallades de
@@ -423,13 +433,7 @@ de la documentació de Linux \cite{LinuxHid} on es presenten diferents eines
 per a interpretar millor aquests paquets. Tot i que n'hi ha moltes que
 funcionen des del terminal, la més visual i popular és \est{wireshark}.
 
-Un dels altres avantatges d'utilitzar \acro{hid} és que, al ser una capa per
-sobre del protocol \acro{usb}, és independent d'aquest. En altres paraules,
-altres protocols de comunicació poden beneficiar-se també de \acro{hid}, no
-només \acro{usb}. Per aquest motiu, quan es va implementar \est{Bluetooth},
-es va decidir utilitzar també \acro{hid} \cite{BluetoothHid}.
-
-\subsection{Acceleròmetre tridimensional}
+\subsection{Cas concret: acceleròmetre tridimensional}
 
 Tal i com es veurà més endavant, s'acabarà utilitzant la categoria de
 \est{3D Accelerometer} per a designar el tipus de dispositiu. Aquesta
@@ -471,11 +475,34 @@ amb la freqüència amb que l'ordinador les pot so\l.licitar.
     d'aquesta informació.
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%TODO
+A la taula \ref{tab:hid-rd} es mostra REVISE!!!
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{l p{0.6\linewidth}}
+        \toprule
+        \textbf{Element} & \textbf{Descripció} \\ \midrule
+        Tipus de dispositiu & Categoria de sensors: acceleròmetre tridimensional \\
+        Tipus de connexió & Adjunt (a proximitat de l'ordinador, reportant dades del mateix) \\
+        Esdeveniments del sensor & No Events \\
+        Estat d'alimentació & Constant (no mode \textit{sleep} o de baix consum) \\
+        Estat del sensor & Variable: pot reportar noves dades, inicialització, error en lectura, etc. \\
+        Interval entre \textit{reports} & Temps entre cada trama de tipus \textit{in} \\
+        Dades a enviar & Configuracions inicials de les dades: valor màxim, mínim, factor d'escala, estat de les dades \\
+        \bottomrule
+    \end{tabular}
+    \caption{Dades a enviar en l'\est{\acro{HID} Report Descriptor}}
+    \label{tab:hid-rd}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%TODO
+
 Un cop enviada aquesta capçalera,
 l'ordinador podrà demanar tantes vegades com vulgui els valors de les dades.
 Concretament, en el cas d'aquest sensor, l'ordinador podrà demanar dos tipus
 de dades: \est{feature} i \est{input}.
 
+%TODO apartat 3.2.1: feature, input -> d'on surten?
 \begin{itemize}
     \item El tipus \est{feature} enviarà l'estat del sensor: connexió, dades,
     interval entre comunicacions, sensitivitat i esdeveniments.
@@ -491,26 +518,63 @@ informació anterior en el format desitjat per al protocol \acro{hid}. Per sort,
 existeixen programes i eines que ajuden a generar aquests codis, tal i com
 es veurà més endavant.
 
-\section{V-USB}
+% Antic subapartat V-USB
+\section{Implementacions del protocol \acro{usb} en \acro{avr}}
 
-Una de les eines que facilita la implementació del protocol \acro{usb} és la
-llibreria \acro{v-usb}, implementada per \est{Objective Development}
-\cite{Vusb}. Aquesta llibreria
+Un cop es coneix el funcionament del protocol \acro{usb} i es sap quines trames
+cal enviar, cal esbrinar com poder comunicar un microcontrolador amb
+una arquitectura \acro{avr8} amb l'ordinador. En aquest apartat es detallen
+les diferents possibilitats que s'ha descobert al llarg d'aquest projecte.
+
+\subsection{Perifèrics incorporats}
+
+El primer que s'ha cercat és microcontroladors amb arquitectura \acro{avr8} que
+tinguessin un perifèric \acro{usb} integrat. S'ha trobat la família
+\acro{AtMegaXXuX} (on les X poden ser diferents nombres) de l'empresa
+\acro{atmel} \cite{AtMega32u4}. Aquests dispositius, que tenen una \emph{u} en
+el seu nom (per a remarcar que disposen del perifèric \acro{usb}), permetrien
+una comunicació molt senzilla amb l'ordinador.
+
+El dispositiu que més es comentarà durant aquest document és l'\acro{AtMega32u4},
+que, al formar part de la placa Arduino Leonardo, és molt fàcil poder fer-hi
+proves. També es veurà com s'acaba descartant l'ús de microcontroladors amb
+perifèrics incorporats degut a la diferència de preu en comparació amb les
+alternatives següents.
+
+\subsection{Llibreria LUFA}
+
+La llibreria \acro{lufa} és una implementació del protocol \acro{usb} en
+programari \cite{Lufa}. Disposa d'una llicència molt permissiva (\acro{mit}) i
+funciona amb un gran nombre de dispositius \acro{avr}. De ben segur que és una
+alternativa a tenir present quan s'ha de prendre una decisió com la actual.
+
+Tanmateix, aquesta llibreria necessita uns perifèrics i maquinari específics
+(temporitzadors, freqüència de rellotge, \dots) per a funcionar correctament.
+Això limita considerablement el nombre de dispositius que es poden triar, ja que
+no tots els microcontroladors \acro{avr8} compleixen els requisits que
+demana \acro{lufa}. Aquest és el principal motiu pel que s'acabarà escollint la
+darrera opció per al projecte.
+
+\subsection{Llibreria V-USB}
+
+La llibreria \acro{v-usb}, implementada per \est{Objective Development} \cite{Vusb},
+implementa la capa més baixa de \acro{usb} a l'arquitectura
+\acro{avr}, sense utilitzar perifèrics específics. Així doncs, gràcies a aquesta
+llibreria no serà necessari utilitzar un microcontrolador \acro{avr} dotat amb
+perifèrics \acro{usb}, com podria ser, per exemple l'\acro{AtMega32u4}.
+
+Aquesta llibreria 
 es distribueix amb la llicència \acro{gpl-2+}, una llicència que obliga a
 distribuir sota la mateixa llicència (o versions posteriors d'aquesta) tots els
 projectes que facin servir la llibreria. L'empresa ofereix el concepte de
 llicència dual: a part de \acro{gpl-2+}, es pot comprar una llicència comercial
 per a poder generar codi sota altres llicències \cite{VusbLicensing}.
 
-Aquesta llibreria implementa la capa més baixa de \acro{usb} a l'arquitectura
-\acro{avr}, sense utilitzar perifèrics específics. Així doncs, gràcies a aquesta
-llibreria no serà necessari utilitzar un microcontrolador \acro{avr} dotat amb
-perifèrics \acro{usb}, com podria ser, per exemple l'\acro{AtMega32u4}.
-
-La probabilitat d'acabar utilitzant un microcontrolador \acro{avr} per a aquest
-projecte és molt elevada, degut a la prèvia experiència personal amb aquesta
-arquitectura. També hi ha gran varietat d'exemples i llibreries disponibles per
-a \acro{avr}, cosa que facilitarà la tasca de desenvolupament.
+Al no utilitzar perifèrics específics, \acro{v-usb} no pot ca\l.librar amb
+precisió el rellotge i nivells de voltatge per a complir el protocol \acro{usb}
+amb perfecció. Així doncs, s'ha de tenir present que, per a llicenciar un
+dispositiu davant d'\acro{usb-if} potser hi haurà alguna complicació més que
+habitualment.
 
 A \cite{Vusb} hi ha el codi font de la llibreria, que s'ha d'incloure al
 projecte que s'estigui desenvolupant com a submòdul de \est{git}
@@ -525,45 +589,21 @@ senzills (ratolins i teclats) implementats amb aquesta llibreria. Tanmateix,
 s'ha trobat el repositori de \cite{VusbProjects} més interessant, ja que conté
 exemples de sensors \acro{hid}.
 
-A part de \acro{v-usb} també hi ha altres llibreries, com \acro{lufa}, que també
-implementen el protocol \acro{usb}. El problema d'aquestes és que utilitzen
-perifèrics específics que no disposen tots els dispositius de l'arquitectura 
-\acro{avr8} \cite{Lufa}.
-
 \section{\est{Drivers} a Linux}
 
 Un altre dels aspectes importants del projecte és la creació d'un programari
 que pugui fer d'intermediari entre el dispositiu i l'entorn gràfic. Tal i com
 diu el títol de l'apartat, es comentarà només el cas específic dels sistemes
-\acro{unix}, concretament amb Linux.
+\acro{unix}, concretament amb Linux, degut que aquest sistema és l'objectiu
+principal del projecte.
+
+\subsection{Capes d'abstracció}
 
 El \est{kernel} de Linux acostuma a dividir tot en diferents capes, i no és una
 excepció per al que té referència amb aquest projecte. Sempre és recomanable
 treballar amb la capa més alta possible, ja que sovint això significa
 estalviar-se feina. Tanmateix, és important comprendre d'on es vé per a
 poder entendre millor els errors i dificultats que es trobaran en aquest treball.
-
-\subsection{Permisos: \acro{udev}}
-
-\acro{Udev} és un gestor de dispositius per a sistemes basats en Linux.
-Té com a objectiu gestionar dinàmicament els dispositius de maquinari del
-sistema, és a dir, és el responsable que si es connecta o desconnecta
-un dispositiu mentre l'ordinador està encès tot funcioni amb normalitat \cite{Udev}.
-
-El funcionament d'\acro{udev} es basa en un conjunt de regles,
-que es configuren per
-determinar com han de gestionar-se els dispositius detectats.
-Aquestes regles es poden configurar i modificar, i en el cas d'aquest projecte
-s'utilitzaran exclusivament per a permetre a tots els usuaris utilitzar alguns
-dispositius concrets, siguin quins siguin els permisos. Tanmateix, \acro{udev}
-ofereix molta flexibilitat: es poden executar \est{scripts}, canviar el nom,
-crear un volum, entre moltes altres possibilitats.
-
-Com és d'esperar, només un usuari amb permisos d'administrador podrà configurar
-les regles \acro{udev}, i hi ha molts paràmetres per a configurar al màxim
-aquestes regles. Tanmateix, com que aquestes normes només seran d'utilitat durant
-el procés de desenvolupament del dispositiu, s'ha decidit no entrar gaire en
-detalls de la implementació.
 
 A la figura \ref{fig:linux-stack} es pot veure una esquematització de la pila
 de capes de \est{drivers} que el dispositiu haurà de travessar. Com es pot
@@ -575,7 +615,7 @@ document.
 
 \input{misc/linux_iio_stack.tex}
 
-\subsection{Capa 1: \acro{libusb}}
+\subsubsection*{Capa 1: \acro{libusb}}
 
 \est{libusb} és una llibreria multiplataforma i disponible per diversos
 llenguatges que permet realitzar una comunicació amb dispositius \acro{usb} en
@@ -597,13 +637,7 @@ No gens menys, si un contro\l.lador d'una capa superior està utilitzant
 exclusivament el dispositiu, el \est{kernel} no crearà aquest fitxer, per a
 evitar confusió i so\l.lapaments.
 
-Es pot evitar que un dispositiu utilitzi un \est{driver} d'una capa superior
-gràcies a l'ordre \ord|udevadm|. Aquesta requereix permisos d'administrador, i
-possibilita el canvi de controlador d'un dispositiu. Així doncs, sí que seria
-possible de mostrar un fitxer \fitx{/dev/usbrawX} d'un dispositiu \acro{hid}
-\cite{unbindingHid}.
-
-\subsection{Capa 2: \acro{libhid} i \acro{hidapi}}
+\subsubsection*{Capa 2: \acro{libhid} i \acro{hidapi}}
 
 La següent llibreria és la capa immediatament superior a la de l'apartat
 anterior. \est{libhid} permet gestionar dispositius \acro{hid}. D'questa
@@ -621,7 +655,7 @@ a fitxer sota el format \fitx{/dev/hidrawX}, on X és el número de dispositiu.
 De la mateixa forma que amb l'apartat anterior, el dispositiu no apareixerà
 sota aquest format si una capa més alta l'està utilitzant exclusivament.
 
-\subsection{Capa 3: \acro{libiio}}
+\subsubsection*{Capa 3: \acro{libiio}}
 
 Finalment, la darrera capa d'abstracció de la pila d'aquest projecte és la
 llibreria \acro{libiio}.
@@ -665,7 +699,87 @@ dispositius a canvi de generar programari robust i a la capa més alta possible
 per Linux. Pot semblar una mala decisió, però es veurà en el següent apartat
 que tampoc seria possible generar un controlador 100\% multiplataforma.
 
-\subsection{Serveis: \est{systemd}}
+\subsection{Gestió i assignació de dispositius}
+
+Un sistema operatiu amb tantes capes d'abstracció necessita forçosament una
+aplicació que gestioni quina preval i quins usuaris hi poden accedir.
+\acro{Udev} és el gestor de dispositius per a sistemes basats en Linux.
+Té com a objectiu gestionar dinàmicament els dispositius de maquinari del
+sistema, és a dir, és el responsable que si es connecta o desconnecta
+un dispositiu mentre l'ordinador està encès tot funcioni amb normalitat \cite{Udev}.
+
+El funcionament d'\acro{udev} es basa en un conjunt de regles,
+que es configuren per
+determinar com han de gestionar-se els dispositius detectats.
+Aquestes regles es poden configurar i modificar, i en el cas d'aquest projecte
+s'utilitzaran exclusivament per a permetre a tots els usuaris utilitzar alguns
+dispositius concrets, siguin quins siguin els permisos. Tanmateix, \acro{udev}
+ofereix molta flexibilitat: es poden executar \est{scripts}, canviar el nom,
+crear un volum, entre moltes altres possibilitats.
+
+Com és d'esperar, només un usuari amb permisos d'administrador podrà configurar
+les regles \acro{udev}, i hi ha molts paràmetres per a configurar al màxim
+aquestes regles. Tanmateix, com que aquestes normes només seran d'utilitat durant
+el procés de desenvolupament del dispositiu, s'ha decidit no entrar gaire en
+detalls de la implementació.
+
+\subsubsection*{Exemples d'ús d'UDEV}
+
+Un clàssic cas d'ús d'\acro{udev} és quan es vol que un dispositiu \acro{usb}
+concret (identificat a través de la parella de codis \acro{vid}-\acro{pid})
+sigui accessible per a un usuari concret. Això és necessari, per exemple, per a
+poder programar una placa Arduino o similar sense haver d'utilitzar permisos
+d'administrador cada vegada.
+Tot i que en aquest exemple la solució més encertada seria afegir l'usuari
+corresponent al grup \fitx{dialout}, també es pot assolir l'objectiu proposat
+afegint una regla \acro{udev}.
+
+El següent fitxer anomenat \fitx{49-micronucleus.rules} permet programar una
+placa \est{Digispark} mitjançant l'ordre \ord|micronucleus|. El nom del fitxer
+comença amb un nombre per un motiu concret: el \est{kernel} carregarà totes les
+regles que hi hagi a \fitx{/etc/udev/rules.d/} en ordre alfabètic dels fitxers.
+A partir d'aquest requisit s'ha creat una convenció per a utilitzar dos nombres
+per a ordenar aquests fitxers \cite{Udev}.
+
+A continuació es mostra el contingut del fitxer
+\footnote{
+    Les regles \acro{udev} no poden tenir salts de línia. Per a facilitar la
+    lectura s'ha utilitzat la contrabarra per a representar les regles en
+    diferents línies, però copiades literalment donarien en un error.
+}:
+
+\begin{verbatim}
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="16d0", ATTRS{idProduct}=="0753", \
+                   MODE:="0666"
+KERNEL=="ttyACM*", ATTRS{idVendor}=="16d0", ATTRS{idProduct}=="0753", \
+                   MODE:="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
+\end{verbatim}
+
+Com es pot veure, hi ha dues regles:
+\begin{itemize}
+    \item La primera donarà accés a tots els usuaris (posant el mode
+    \texttt{0666}) a tots els dispositius que utilitzin el \est{driver}
+    \texttt{usb} i que tinguin el \acro{vid} i \acro{pid} assenyalats.
+    \item La segona realitza el mateix, però amb aquells qua utilitzin el
+    \est{driver} \texttt{ttyACM} (dispositius de comunicació). També evita que
+    el \est{driver} del mòdem (\est{ModemManager}) prengui control del
+    dispositiu, fent que l'ignori.
+\end{itemize}
+
+\subsubsection*{Assignar drivers específics}
+
+Com s'ha vist a l'exemple anterior, és possible crear regles \acro{udev} per a
+canviar el \est{driver} o controlador d'un dispositiu. També es pot desvincular
+controladors mitjançant l'ordre \ord|udevadm|, que, al no modificar cap fitxer
+a \fitx{/etc}, no és persistent.
+
+Així doncs, gràcies a aquesta ordre o la configuració de regles \acro{udev}
+es pot evitar que un dispositiu utilitzi un \est{driver} d'una capa superior.
+És possible, doncs, mostrar un fitxer \fitx{/dev/usbrawX} d'un dispositiu
+\acro{hid} \cite{unbindingHid}, tot i que per defecte aquests utilitzin
+\fitx{libhid} i no \fitx{libusb}.
+
+\section{Execució en segon pla a Linux}
 \label{subsec:systemd}
 
 El programari que es pretén realitzar per a aquest projecte involucra la
@@ -695,12 +809,14 @@ diferents, en funció dels privilegis que tenen:
     \ord|systemctl|, però afegint l'opció \ord|--user|.
 \end{itemize}
 
-És important conéixer la diferència entre els dos tipus mencionats, ja que en
+És important coneixer la diferència entre els dos tipus mencionats, ja que en
 aquest treball es generarà un servei d'usuari i un de sistema, i cadascun té
 les seves complicacions, tant en el moment d'insta\l.lació com en el moment
 d'execució.
 
 \section{Entorn gràfic a Linux}
+
+
 
 \subsection{Xorg}
 
@@ -770,6 +886,7 @@ Tanmateix, es considera aquesta pràctica poc segura, i per aquest motiu no es
 tindrà en compte durant l'elaboració d'aquest treball.
 
 \subsection{Linux i els controladors gràfics}
+%TODO Restructurar o col·locar en un altre lloc "Experiències personals"
 
 Qualsevol persona que hagi provat d'insta\l.lar els controladors oficials
 d'una targeta gràfica en un entorn Linux sabrà que no és pas cap tasca trivial.
