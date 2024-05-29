@@ -816,15 +816,12 @@ d'execució.
 
 \section{Entorn gràfic a Linux}
 
-
-
-\subsection{Xorg}
-
-Finalment, un cop es sap com es farà la lectura de les dades del sensor, cal
-esbrinar com s'aplicarà els canvis de rotació de la pantalla. Els sistemes
-basats en Linux, independentment de l'entorn gràfic que utilitzin (normalment
-\acro{gnome}, però també \acro{kde}), responen a les peticions gràfiques sota
-l'interfície de programació de \est{Xlib} \cite{Xlib}.
+El darrer punt a tractar en aquest capítol és la comunicació entre una
+aplicació i l'entorn gràfic en un sistema basat en Linux, concretament cal
+esbrinar com aplicar canvis de rotació de la pantalla. Per sort, 
+independentment de l'entorn gràfic que utilitzi un ordinador (normalment
+\acro{gnome}, però també \acro{kde}), tots responen a les peticions gràfiques
+sota l'interfície de programació de \est{Xlib} \cite{Xlib}.
 
 Es podria fer una bona analogia entre
 els entorns gràfics i els navegadors: els navegadors, a Linux, implementen les
@@ -833,14 +830,28 @@ de formes diferents. Si es vol implementar una aplicació que necessiti, per
 exemple, un navegador incrustat, però qualsevol navegador serveix, es pot
 indicar com a dependència \est{www-browser} enlloc de, per exemple, \est{firefox}.
 
+\subsection{Servidor gràfic Xorg}
+
+\est{Xorg} és un servidor gràfic per a gestionar des de configuracions de
+pantalla fins a detalls de rendiment per a certes finestres. Els programes
+utilitzen la llibreria \est{Xlib} per a interactuar amb ell.
 \est{Xlib} és una llibreria molt complexa, i té interfícies per a la majoria
-de llenguatges. Tanmateix, sovint és més senzill utilitzar una aplicació de
+de llenguatges.
+
+Tanmateix, sovint és més senzill utilitzar una aplicació de
 la línia de comandes que simplifica la tasca del programador. Aquesta
 aplicació és diu \est{xrandr}, i d'una forma molt senzilla permet llistar
 totes les pantalles connectades a l'ordinador i canviar l'orientació
-d'una d'elles \cite{Xrandr}. Ara bé, els beneficis venen amb un cost: les sessions.
+d'una d'elles \cite{Xrandr}.
 
-\subsection{\est{Xrandr} i les sessions}
+A la figura \ref{fig:xorg-hyerarchy} es pot contemplar la jerarquia de la que
+es parla: \est{xrandr} segueix sent un intermediari més entre l'aplicació que
+es vol crear i l'objectiu final: rotar la pantalla.
+
+%TODO is it ok?
+\input{misc/xorg_hyerarchy.tex}
+
+\subsection{Execució de \est{Xrandr} en un servei de sistema}
 \label{subsec:xrandr}
 
 Els sistemes Linux estan construits per a ser el més versàtils possible. Una
@@ -885,30 +896,30 @@ que tothom pugui efectuar modificacions a la sessió d'aquell usuari \cite{Xhost
 Tanmateix, es considera aquesta pràctica poc segura, i per aquest motiu no es
 tindrà en compte durant l'elaboració d'aquest treball.
 
-\subsection{Linux i els controladors gràfics}
+%\subsection{Linux i els controladors gràfics}
 %TODO Restructurar o col·locar en un altre lloc "Experiències personals"
 
-Qualsevol persona que hagi provat d'insta\l.lar els controladors oficials
-d'una targeta gràfica en un entorn Linux sabrà que no és pas cap tasca trivial.
-Tot i haver millorat recentment, hi segueixen havent moltes incompatibilitats
-entre diferents versions i targetes gràfiques. En el cas concret d'aquest
-projecte s'ha utilitzat un ordinador equipat amb una \acro{nvidia gtx1050},
-un model utilitzat en molts dispositius.
+% Qualsevol persona que hagi provat d'insta\l.lar els controladors oficials
+% d'una targeta gràfica en un entorn Linux sabrà que no és pas cap tasca trivial.
+% Tot i haver millorat recentment, hi segueixen havent moltes incompatibilitats
+% entre diferents versions i targetes gràfiques. En el cas concret d'aquest
+% projecte s'ha utilitzat un ordinador equipat amb una \acro{nvidia gtx1050},
+% un model utilitzat en molts dispositius.
 
-Tanmateix, en el moment de provar l'ordre \ord|xrandr| es va descobrir que,
-en funció dels controladors de la targeta gràfica que hi hagi activats a
-l'ordinador i de les seves versions, l'execució de l'ordre causa un congelament
-de mig segon aproximadament de totes les pantalles del sistema. Aquest error ja
-ha estat reportat a \cite{xrandrBug}, però no s'ha trobat cap solució
-específica.
+% Tanmateix, en el moment de provar l'ordre \ord|xrandr| es va descobrir que,
+% en funció dels controladors de la targeta gràfica que hi hagi activats a
+% l'ordinador i de les seves versions, l'execució de l'ordre causa un congelament
+% de mig segon aproximadament de totes les pantalles del sistema. Aquest error ja
+% ha estat reportat a \cite{xrandrBug}, però no s'ha trobat cap solució
+% específica.
 
-S'ha solucionat aquest problema desinsta\l.lant els controladors gràfics de
-\acro{nvidia}. Tanmateix, això deixava inutilitzable la connexió \acro{hdmi} de
-l'ordinador. Finalment, es va optar per a actualitzar la distribució d'Ubuntu
-(de 18.04 a 24.04) on aquest error ja no ha tornat a aparèixer (n'han aparegut
-d'altres, però no han afectat pel desenvolupament d'aquest projecte).
+% S'ha solucionat aquest problema desinsta\l.lant els controladors gràfics de
+% \acro{nvidia}. Tanmateix, això deixava inutilitzable la connexió \acro{hdmi} de
+% l'ordinador. Finalment, es va optar per a actualitzar la distribució d'Ubuntu
+% (de 18.04 a 24.04) on aquest error ja no ha tornat a aparèixer (n'han aparegut
+% d'altres, però no han afectat pel desenvolupament d'aquest projecte).
 
-\subsection{\est{Wayland}}
+\subsection{Transició al servidor gràfic \est{Wayland}}
 \label{subsec:wayland}
 
 El servidor gràfic de l'apartat anterior, \est{Xorg}, és un projecte molt vell
