@@ -1,0 +1,31 @@
+\begin{figure}[ht]
+    \centering
+    \begin{adjustbox}{width=\linewidth}
+    \begin{forest}
+        forked edges,
+        for tree={draw,align=center,edge={-latex}}
+        [Device Descriptor
+            [Configuration Descriptor 1
+                [Interface 0
+                    [Endpoint 1]
+                    [Endpoint 2]
+                    [\dots]
+                ]
+                [Interface 1
+                    [Endpoint 1]
+                    [\dots]
+                ]
+                [\dots]
+            ]
+            [Configuration Descriptor 2
+                [Interface 0]
+                [\dots]
+            ]
+            [\dots]
+        ]
+    \end{forest}
+    \end{adjustbox}
+
+    \caption{Diagrama de jerarquia del descriptor de dispositiu \acro{usb} \cite{Axelson2015USB}.}
+    \label{fig:usb-endpoints}
+\end{figure}

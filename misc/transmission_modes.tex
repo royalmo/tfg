@@ -1,0 +1,15 @@
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{l p{0.6\linewidth}}
+        \toprule
+        \textbf{Mode}           & \textbf{Descripció} \\
+        \midrule
+        Control & Mode utilitzat durant la configuració del dispositiu per a enviar comandes específiques que requereix el protocol. \\
+        Isòcron & Mode utilitzat per a transmetre dades a temps real (audio, vídeo, \dots). Aquest mode reserva una porció de l'ample de banda \acro{usb} per a garantir la mateixa latència. No es tornen a enviar paquets amb errors. \\
+        Per interrupció & Aquest mode demana als dispositius cada cert temps si han de transmetre dades. Utilitzat per a dispositius que requereixen transmetre poques dades, com teclats o ratolins. \\
+        Massiu (\est{Bulk}) & Mode utilitzat per a dispositius que necessiten transmetre moltes dades i garantir l'absència d'errors, però que no tenen requeriments de latència. Ho són, per exemple, les impressores i els discs durs. \\
+        \bottomrule
+    \end{tabular}
+    \caption{Modes de transmissió \acro{usb} \cite{Axelson2015USB}.}
+    \label{tab:transmision-modes}
+\end{figure}

@@ -8,7 +8,7 @@ per a complementar o ampliar algun concepte.
 
 \section{Protocol USB}
 
-Sent la connexió \acro{usb} un dels objectius més cèntrics d'aquest treball de
+Sent la connexió \acro{usb} un dels punts més cèntrics d'aquest treball de
 fi de grau, s'ha iniciat la recerca per aquest cantó. No només s'ha escollit
 usar aquest estàndard per la seva compatibilitat
 i facilitats que proporciona a l'usuari, sinó que també hi havia un interès
@@ -67,7 +67,19 @@ Aquest detall serà molt important de cara
 al disseny del dispositiu, ja que implicarà, molt probablement, l'ús de dos
 díodes Zener a l'entrada de les línies de transmissió de dades.
 
-\subsubsection*{Aspectes de baix nivell}
+A la figura \ref{fig:usb-wave} es pot veure un exemple de transacció \acro{usb}.
+Hi ha un preàmbul per a sincronitzar el rellotge dels dos dispositius i una
+transmissió de dades fins que \acro{d+} i \acro{d-} deixen de tenir valors
+invertits.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/usb_signal_example.png}
+    \caption{Exemple de transmissió \acro{usb}. \cite{Contributors2024USB}}
+    \label{fig:usb-wave}
+\end{figure}
+
+\subsubsection*{Transaccions}
 
 Tal i com s'ha comentat en l'apartat anterior, el canal de transmissió que
 proporciona l'estàndard és unidireccional o \est{half-duplex}. En aquest
@@ -100,6 +112,20 @@ més pensades per a petits intercanvis de dades, i més irregulars. Més endavan
 resultarà aquesta informació important per a entendre la implementació del
 dispositiu.
 
+\subsubsection*{Modes de transmissió}
+
+Un mode de transmissió és una descripció de quines transaccions i quan s'han
+d'enviar per a aconseguir un objectiu específic. Existeixen quatre modes
+de transacció, descrits en la taula \ref{tab:transmision-modes}.
+
+\input{misc/transmission_modes.tex}
+
+Com es pot veure, amb aquests modes ja es cobreixen gairebé la totalitat dels
+usos típics del protocol \acro{usb}: un micròfon o altaveu, un sensor, un
+disc dur, entre d'altres. En el cas del dispositiu que es vol crear, el mode més
+adequat és el d'interrupcions, ja que el sensor farà lectures a una freqüència
+constant.
+
 \subsubsection*{Metadades}
 \label{subsubsec:metadades}
 
@@ -107,7 +133,8 @@ Durant els intercanvis inicials, durant l'etapa \emph{setup}, el dispositiu
 comparteix certes metadades a l'ordinador, cosa que el permet identificar-se,
 i descriure les especificacions necessàries. Un dels avantatges més visibles
 d'aquest procés invisible és la funcionalitat \est{plug\&play}, que evita
-insta\l.lar programari per a cada nou dispositiu que es connecta.
+insta\l.lar programari per a cada nou dispositiu que es connecta. El paquet
+que s'intercanvia inicialment s'anomena \emph{Descriptor de dispositiu}.
 
 Dos codis molt importants en aquest procés són el \acro{vid} i el \acro{pid},
 acrònims de \est{Vendor ID} i \est{Product ID}. El \acro{vid} identifica
@@ -124,21 +151,55 @@ dispositiu que s'ha connectat. Un dels usos principals d'aquesta funcionalitat
 \est{drivers} en funció dels codis anteriorment esmentats.
 
 Una altra metadada que s'intercanvia a l'inici de la connexió és la classe
-de dispositiu. Aquesta pot diferenciar entre altaveus, micròfons, teclats,
-ratolins, dispositius especials, etcètera. Un dels grups més grans és el
-\acro{hid}, o \est{Human Interface Devices}. Es tracta de dispositius amb els
-que l'usuari pot interactuar. Dintre d'aquests hi ha encara més categories,
-la mes rellevant pel projecte sent la dels sensors.
-
-Quan es defineix un tipus concret de \acro{hid}, s'ha de complir amb
-l'estandard de comunicació associat. D'aquesta forma l'ordinador no necessita
-insta\l.lar programari addicional per a poder comunicar-se amb el dispositiu.
-Es poden veure el llistat de classes i subclasses \acro{hid} a la documentació
-oficial d'\acro{usb-if} \cite{HidDefinition}.
+de dispositiu. Aquesta pot diferenciar entre dispositius multimedia, Hubs
+\acro{usb}, teclats i ratolins, etcètera. Un dels grups més grans és el
+\acro{hid}, o \est{Human Interface Devices} una classe de dispositiu tan
+versàtil que també s'utilitza en el protocol \est{Bluetooth}. S'explicarà amb
+detall la classe \acro{hid} a l'apartat \ref{sec:hut}.
 
 Finalment hi ha altres metadades que poden ser interessants conèixer, com
 poden ser les freqüències en que el dispositiu envia dades o versions de
 l'estàndard.
+
+\subsubsection*{Interfícies i \est{Endpoints}}
+
+Dintre de les metadades que s'envien en el descriptor de dispositiu hi ha els
+descriptors de configuració. Aquests poden tenir una o diverses interfícies, que
+al seu torn poden tenir un o més \est{endpoints}. Tot plegat queda amb una
+jerarquia com es pot veure a la figura \ref{fig:usb-endpoints}.
+
+\input{misc/usb_endpoint_hyerarchy.tex}
+
+Es començarà a explicar aquesta estructura des del nivell més baix. Un
+\est{endpoint} és un canal de comunicació entre el dispositiu i l'ordinador.
+Aquest es configura amb un dels modes mencionats anteriorment. Normalment es
+comença a contar a partir del número 1 donat que es reserva l'\est{endpoint}
+0 per a trames de control de l'interfície.
+
+És molt comú que un \est{driver} necessiti més d'un \est{endpoint} per
+a comunicar-se amb el dispositiu. Per exemple, un teclat pot enviar dades de les
+tecles premudes a través de l'\est{endpoint} 1 i rebre informació de l'ordinador
+(com, per exemple, una ordre per a encendre el llum del Bloq Mayus) a través de
+l'\est{endpoint} 2. En aquest cas hi ha un \est{endpoint} en mode d'interrupció
+i un altre en mode de control (només rebrà trames \est{out} de tant en tant).
+
+Els \est{endpoints} s'agrupen en interfícies. L'ordinador pot tractar cada
+interfície independentment i assignar diferents \est{drivers} per a cada una
+d'elles. Així doncs, un teclat pot utilitzar el \est{driver} per defecte del
+sistema operatiu i a la vegada tenir una interfície amb \est{drivers} específics
+per a aquell model concret per a, per exemple, fer animacions amb la
+retroi\l.luminació. És important utilitzar sempre que es pugui \est{drivers}
+estàndards ja que, en el cas concret de teclat, permet que aquest segueixi
+funcionant en un sistema operatiu que no disposi dels \est{drivers}
+específics (com podria ser un entorn de \acro{bios}).
+
+Finalment, les interfícies es poden agrupar en descriptors de configuració.
+Aquests descriptors estan pensats per a dispositius que tenen dos modes
+diferenciats, com per exemple un convertidor d'\acro{usb} a Jack d'audio. Aquest
+dispositiu pot funcionar tant d'entrada (connectant un micròfon) o de sortida
+(connectant un altaveu), però no d'entrada i de sortida a la vegada. En aquest
+cas hi haurà dos descriptors de configuració, i el dispositiu o el sistema
+operatiu decidiran quin utilitzar en cada cas.
 
 \subsection{\est{USB Implementers Forum}}
 \label{subsec:usb-if}
@@ -244,7 +305,7 @@ Sabent que la primera versió està obsoleta, s'ha escollit utilitzar la versió
 \acro{usb2} per a aquest projecte, donat que no es necessita transmetre gran
 volum de dades.
 
-\subsection{Aspectes físics}
+\subsection{Connectors i cables}
 
 Entre totes les especificacions de l'estàndard \acro{usb} també s'hi troben les
 dels cables. Tot i la ignorància general, els allargadors de \acro{usb}, tinguin
@@ -318,6 +379,19 @@ de la \acro{ue}.
 
 \section{Taules d'ús HID}
 \label{sec:hut}
+
+
+%%%%%
+Es tracta de dispositius amb els
+que l'usuari pot interactuar. Dintre d'aquests hi ha encara més categories,
+la mes rellevant pel projecte sent la dels sensors.
+
+Quan es defineix un tipus concret de \acro{hid}, s'ha de complir amb
+l'estandard de comunicació associat. D'aquesta forma l'ordinador no necessita
+insta\l.lar programari addicional per a poder comunicar-se amb el dispositiu.
+Es poden veure el llistat de classes i subclasses \acro{hid} a la documentació
+oficial d'\acro{usb-if} \cite{HidDefinition}.
+%%%%%
 
 Tal i com s'ha comentat en l'apartat \ref{subsubsec:metadades}, els dispositius
 \acro{hid} utilitzen uns protocols ja establerts per a poder ser utilitzats
