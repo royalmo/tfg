@@ -433,6 +433,24 @@ de la documentació de Linux \cite{LinuxHid} on es presenten diferents eines
 per a interpretar millor aquests paquets. Tot i que n'hi ha moltes que
 funcionen des del terminal, la més visual i popular és \est{wireshark}.
 
+Quan s'ha enviat el \est{\acro{Hid} Report Descriptor} es considera que
+s'ha acabat la fase d'inicialització, i l'ordinador podrà demanar al
+dispositiu els \est{Reports} que ha definit a la capçalera anterior.
+Hi ha diferents tipus de \est{Reports}, que varien en funció del tipus de
+dispositiu. Els més comuns son els tipus \est{feature}, \est{input} i \est{output},
+que es definiran més endavant. Els reports es poden demanar també mitjançant
+interrupcions de transmissió \est{in}.
+
+A la figura \ref{fig:hid-packets} es pot veure un exemple simplificat d'un
+intercanvi de paquets entre l'ordinador i el dispositiu. Es diu simplificat
+perquè hi ha moltes més transmissions, i només s'ha decidit incloure les
+rellevants per a aquest apartat. Per exemple, l'inicialització de la capa
+\acro{usb} comporta molts més intercanvis que els que hi ha escrits, i la fase
+de lectura de dades es pot fer en qualsevol ordre. En tot cas, és important
+veure com totes les comunicacions són iniciades per l'ordinador.
+
+\input{misc/hid_packets.tex}
+
 \subsection{Cas concret: acceleròmetre tridimensional}
 
 Tal i com es veurà més endavant, s'acabarà utilitzant la categoria de
@@ -475,34 +493,12 @@ amb la freqüència amb que l'ordinador les pot so\l.licitar.
     d'aquesta informació.
 \end{itemize}
 
-%%%%%%%%%%%%%%%%%%%%%%%TODO
-A la taula \ref{tab:hid-rd} es mostra REVISE!!!
-
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{l p{0.6\linewidth}}
-        \toprule
-        \textbf{Element} & \textbf{Descripció} \\ \midrule
-        Tipus de dispositiu & Categoria de sensors: acceleròmetre tridimensional \\
-        Tipus de connexió & Adjunt (a proximitat de l'ordinador, reportant dades del mateix) \\
-        Esdeveniments del sensor & No Events \\
-        Estat d'alimentació & Constant (no mode \textit{sleep} o de baix consum) \\
-        Estat del sensor & Variable: pot reportar noves dades, inicialització, error en lectura, etc. \\
-        Interval entre \textit{reports} & Temps entre cada trama de tipus \textit{in} \\
-        Dades a enviar & Configuracions inicials de les dades: valor màxim, mínim, factor d'escala, estat de les dades \\
-        \bottomrule
-    \end{tabular}
-    \caption{Dades a enviar en l'\est{\acro{HID} Report Descriptor}}
-    \label{tab:hid-rd}
-\end{table}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%TODO
-
 Un cop enviada aquesta capçalera,
-l'ordinador podrà demanar tantes vegades com vulgui els valors de les dades.
+l'ordinador podrà demanar tantes vegades com vulgui els valors de les dades, és
+a dir, els \est{Reports} definits anteriorment.
 Concretament, en el cas d'aquest sensor, l'ordinador podrà demanar dos tipus
-de dades: \est{feature} i \est{input}.
+de \est{Reports}: \est{feature} i \est{input}.
 
-%TODO apartat 3.2.1: feature, input -> d'on surten?
 \begin{itemize}
     \item El tipus \est{feature} enviarà l'estat del sensor: connexió, dades,
     interval entre comunicacions, sensitivitat i esdeveniments.
@@ -519,7 +515,7 @@ existeixen programes i eines que ajuden a generar aquests codis, tal i com
 es veurà més endavant.
 
 % Antic subapartat V-USB
-\section{Implementacions del protocol \acro{usb} en \acro{avr}}
+\section{Implementacions del protocol USB en AVR}
 
 Un cop es coneix el funcionament del protocol \acro{usb} i es sap quines trames
 cal enviar, cal esbrinar com poder comunicar un microcontrolador amb
@@ -589,7 +585,7 @@ senzills (ratolins i teclats) implementats amb aquesta llibreria. Tanmateix,
 s'ha trobat el repositori de \cite{VusbProjects} més interessant, ja que conté
 exemples de sensors \acro{hid}.
 
-\section{\est{Drivers} a Linux}
+\section{Drivers a Linux}
 
 Un altre dels aspectes importants del projecte és la creació d'un programari
 que pugui fer d'intermediari entre el dispositiu i l'entorn gràfic. Tal i com
