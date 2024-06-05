@@ -54,6 +54,16 @@ fet, s'ha observat fins i tot errades en les llibreries d'aquest nivell, i s'ha
 publicat correccions a aquestes. A data de la publicació d'aquest treball encara
 no s'ha acceptat la contribució que s'ha fet a la llibreria \est{libiio}.
 
+També es considera una conclusió rellevant el que s'ha mencionat a l'apartat
+\ref{sec:winmac-conclusions}: al treballar en capes d'abstracció molt altes i
+només disponibles en alguns sistemes operatius, portar l'aplicació a altres
+sistemes operatius esdevé més complicat. Per això gran part dels productes
+comercials es queden a una capa més baixa (sovint \est{libusb}) i no utilitzen
+protocols \acro{hid} estàndards. Tot i això, no es considera una pèrdua de temps
+haver aprofundit en els detalls específics de Linux, ja que gràcies a aquesta
+investigació s'ha pogut percebre totes les diferències amb la resta de sistemes
+operatius.
+
 Si aquest projecte ha arribat a bon port és, en gran part, perquè s'ha sabut
 detectar les errades a temps per a corregir-les. Tanmateix, el fet d'iterar
 diverses vegades en el mateix sistema i proposar millores que
