@@ -4,77 +4,76 @@
 Tal com s'ha dit al principi d'aquest treball de final de grau, l'objectiu
 del projecte és realitzar un programari que pugui funcionar amb la gran majoria
 de sistemes operatius disponibles al mercat. Tanmateix, s'ha vist que les
-llibreries per a modificar aspectes gràfics dels dispositius varien molt entre
-cada \est{kernel}, pel que la possibilitat de realitzar un únic programa que
+llibreries per modificar aspectes gràfics dels dispositius varien molt entre
+cada \est{kernel} i, per tant, la possibilitat de realitzar un únic programa que
 funcioni per a tots els sistemes operatius queda descartada.
 
-Degut a les limitacions de temps i dedicació d'aquest treball, no es podrà
-repetir totes les tasques realitzades en el capítol anterior amb la resta
-de sistemes operatius. Tanmateix, es pretén aprendre el funcionament d'aquests
-per a deixar un camí més senzill si mai es volgués acabar implementant un
+A causa de les limitacions de temps i dedicació d'aquest treball, no es podran
+repetir totes les tasques executades en el capítol anterior amb la resta
+de sistemes operatius. Tanmateix, es pretén aprendre el seu funcionament
+per deixar un camí més senzill si mai es volgués acabar implementant un
 programari per a aquests equipaments.
 
 En aquest capítol s'explorarà la possibilitat de llegir dades d'un sensor
 \acro{usb} i modificar l'orientació d'una pantalla en els dos sistemes operatius
 que, juntament amb Linux, s'utilitzen en gairebé tots els ordinadors personals.
 No es fixa com a objectiu crear un programa insta\l.lable per a cada un d'ells
-degut a les limitacions del projecte.
+per culpa de les limitacions del projecte.
 
 \section{\est{Software} a Windows}
 
 El sistema operatiu Windows acostuma a proposar un gran nombre de llibreries
-a disposició del programador per a poder carregar-les durant l'execució del
+a disposició del programador per poder carregar-les durant l'execució del
 programa i així interactuar amb el \est{kernel}. Aquests fitxers amb
 extensió \fitx{.dll} (de l'anglès \est{Dynamic Linked Library}) es poden trobar
 a diversos directoris del sistema i poden ser insta\l.lats posteriorment.
 
-Un dels grans avantatges de Windows és que un programa sol distribuir-se
+Un dels grans avantatges de Windows és que els programes solen distribuir-se
 juntament amb les seves dependències i llibreries, eliminant problemes de
 versions mínimes suportades i compatibilitat entre diferents programes. El
 gran inconvenient d'aquesta funcionalitat és que els programes ocupen més espai
 de disc, i sovint s'acaba tenint algunes llibreries per duplicat.
 
-En aquest apartat es veurà els detalls a tenir presents per a portar parts
+En aquest apartat es veuran els detalls a tenir present per portar parts
 de l'aplicació que interactuen directament amb el sistema operatiu a Windows.
 
 \subsection{Comunicació amb el dispositiu}
 
-De la mateixa forma que a Linux hi havia diversos \est{drivers} per a poder
+De la mateixa manera que a Linux hi havia diversos \est{drivers} per poder
 interactuar amb un perifèric des de diferents capes d'abstracció, Windows també
-ofereix certa flexibilitat per a treballar amb sensors. Aquesta llibreria es diu
+ofereix certa flexibilitat per treballar amb sensors. Aquesta llibreria es diu
 \emph{Sensor API} i està disponible des de Windows 7 \cite{SensorMsft}.
-Cal mencionar que també existeix una llibreria per a interactuar amb dispositius
-\acro{hid} genèrics, o també existeix el projecte \est{libusb-win32}, que
-vindrien a ser l'analogia d'\ord|hidapi| i \ord|libusb| \cite{SensorHidMsft}.
+Cal mencionar que també existeix una llibreria per interactuar amb dispositius
+\acro{hid} genèrics i, a més, hi ha el projecte \est{libusb-win32}, que
+vindria a ser l'analogia d'\ord|hidapi| i \ord|libusb| \cite{SensorHidMsft}.
 
-El problem d'aquesta llibreria és que no està molt ben documentada i té pocs,
-tutorials, pel que ha sigut molt difícil aconseguir rebre dades del dispositiu
-del projecte, i no s'ha aconseguit distingir entre dos sensors, com sí que
-s'ha pogut fer a Linux. Es deixa aquesta tasca com una futura ampliació del
-projecte.
+El problema d'aquesta llibreria és que no està gaire ben documentada i té pocs
+tutorials; és per això que ha sigut molt difícil aconseguir rebre dades del
+dispositiu del projecte i, a diferència de Linux, no s'ha aconseguit distingir
+entre dos sensors. Es deixa aquesta tasca com a una futura ampliació del projecte.
 
-En comparació amb \ord|libiio| s'ha trobat aquesta llibreria bastant més
-complexa, ja que al no disposar d'exemples es sospita que no s'hagi realitzat
-la cerca dels sensors de la forma més senzilla possible. De la mateixa forma,
-aquesta llibreria està dissenyada per a treballar amb llenguatges de més baix
+En comparació amb \ord|libiio|, aquesta llibreria ha resultat ser bastant més
+complexa ja que, com que no disposa d'exemples, es creu que no s'ha realitzat
+la cerca dels sensors de la forma més senzilla possible. A més a més,
+aquesta llibreria està dissenyada per treballar amb llenguatges de més baix
 nivell que Python, i la tasca de programació no ha sigut tan ràpida com a Linux.
 
 \subsection{Comunicació amb l'entorn gràfic}
 
-Poder canviar la rotació d'una pantalla i poder esbrinar l'orientació actual
-d'aquesta no és una tasca trivial a Windows, però tampoc és complica de més.
+Canviar la rotació d'una pantalla i esbrinar la seva orientació actual no és una
+tasca trivial a Windows, però tampoc és gaire complicat.
 Tot i no disposar d'una llibreria específica per a les pantalles, Windows
 disposa de l'estructura de C++ \acro{devmode}, definida a \fitx{wingdi.h}.
-Aquest nom ve de l'acrònim anglès de \est{Device Mode}, i serveix per a
+Aquest nom ve de l'acrònim anglès de \est{Device Mode} i serveix per
 interactuar tant amb pantalles com amb impressores \cite{WinDevMode}.
 
-Hi ha diverses formes d'implementar un petit programa per què utilitzi el
-\acro{devmode} per a actualitzar la rotació de la pantalla, però la majoria
-de tutorials ho acostumen a fer en el llenguatge de \ord|C#|, com és el cas
+Hi ha diverses maneres d'implementar un petit programa perquè utilitzi el
+\acro{devmode} per actualitzar la rotació de la pantalla, però la majoria
+dels tutorials ho acostumen a fer en el llenguatge de \ord|C#|, com és el cas
 de l'exemple trobat a \cite{WinRotateOnline}. Tots els codis utilitzen
-\fitx{user32.dll} per a enviar l'estructura modificada al \est{kernel}.
+\fitx{user32.dll} per enviar l'estructura modificada al \est{kernel}.
 
-Per a demostrar la viabilitat d'aquesta alternativa s'ha creat un petit
+Per tal de demostrar la viabilitat d'aquesta alternativa s'ha creat un petit
 programa que inverteix l'orientació de la pantalla. Aquest codi ha funcionat
 sense gaires problemes, i s'ha vist que, utilitzant la llibreria \ord|ctypes|,
 es podria passar fàcilment el codi creat a Python.
@@ -84,76 +83,76 @@ es podria passar fàcilment el codi creat a Python.
 Finalment, un cop s'aconsegueixi que ambdues parts del programa funcionin
 correctament, es voldrà distribuir l'aplicació als usuaris. Els sistemes de
 Windows disposen d'un tipus de fitxer amb extensió \fitx{.msi} (de l'anglès
-\est{MicroSoft Installer}) per a insta\l.lar paquets (una analogia perfecta dels
+\est{MicroSoft Installer}) per insta\l.lar paquets (una analogia perfecta dels
 paquets de Debian).
 
-Un fitxer \fitx{.msi} té una estructura molt complexa, pel que es recomana
+Un fitxer \fitx{.msi} té una estructura molt complexa; és per això que es recomana
 utilitzar una aplicació externa que transformi un codi més llegible al fitxer
 d'insta\l.lació. El programa gratuït més popular és \est{Wix}. A la seva pàgina
-web hi ha tutorials molt ben detallats sobre com crear la interfície
-d'insta\l.lació i indicar al sistema quins fitxers s'han de copiar i a on
+web hi ha un seguit de tutorials molt ben detallats sobre com crear la interfície
+d'insta\l.lació i com indicar al sistema quins fitxers s'han de copiar i a on
 \cite{Wix}.
 
 \est{Wix} també ofereix la possibilitat d'insta\l.lar serveis de sistema o
-d'usuari afegint unes poques línies al fitxer de configuració de format
+d'usuari afegint unes quantes línies al fitxer de configuració de format
 \acro{xml}. A Windows és molt més senzill alternar entre un servei de sistema
-o un servei d'usuari, pel que és molt probable que tots els problemes que hi ha
-hagut a Linux per a que funcioni \est{xrandr} en un servei de sistema no hi
+i un servei d'usuari i, per tant, és molt probable que tots els problemes que hi ha
+hagut a Linux perquè funcioni \est{xrandr} en un servei de sistema no hi
 seran en l'equivalent de Windows.
 
 Finalment, de la mateixa forma que en els sistemes basats en Linux es pot crear
 un servidor \acro{apt}, a Windows hi ha el \est{Windows Package Manager}, que
 permet insta\l.lar aplicacions mitjançant l'ordre \ord|winget|. Aquest gestor
-és prou recent i poc conegut, pel que gairebé no s'acostuma a utilitzar. La
+és bastant recent i poc conegut; és per això que no s'acostuma a utilitzar. La
 majoria d'usuaris de Windows estan acostumats a haver de descarregar manualment
-l'insta\l.lador de la pàgina web de l'aplicació i no obren la línia de
-comandes per res.
+l'insta\l.lador de la pàgina web de l'aplicació i no obren gairebé mai la línia
+d'ordres.
 
-Tot i això, està bé publicar el paquet creat al \est{Windows Package Manager},
-per a facilitar l'insta\l.lació si mai no es disposa d'un navegador o es vol
-automatitzar el procés. A \cite{WPM} hi ha totes les instruccions per a
+Tot i això, publicar el paquet creat al \est{Windows Package Manager} pot ser positiu
+per facilitar la insta\l.lació si mai no es disposa d'un navegador o per si es vol
+automatitzar el procés. A \cite{WPM} hi ha totes les instruccions per
 penjar l'aplicació a la plataforma de Microsoft, i no sembla que sigui un
-procés molt llarg: penjar el fitxer \fitx{.msi}, omplir un parell de formularis
+procés gaire llarg: penjar el fitxer \fitx{.msi}, omplir un parell de formularis
 i confirmar una adreça de correu electrònic.
 
 \section{\est{Software} a MacOS}
 
-Finalment s'investigarà la viabilitat de portar l'aplicació en un \est{MacBook},
+Finalment, s'investigarà la viabilitat de portar l'aplicació a un \est{MacBook},
 la gamma de portàtils d'Apple que utilitza el sistema operatiu MacOS. Aquest
-sistema operatiu compleix les directives d'\acro{unix}, juntament amb els
-sistemes basats en Linux. Aquestes directives defineixen les funcions i
-programes que els sistemes operatius han d'implementar per a que les aplicacions
-s'hi puguin comunicar. Gràcies a \acro{unix}, una aplicació dissenyada per Linux
-podrà molt probablement funcionar també per MacOS.
+sistema operatiu compleix les directives d'\acro{unix} juntament amb els
+sistemes basats en Linux. Aquestes directives defineixen les funcions i els
+programes que els sistemes operatius han d'implementar perquè les aplicacions
+s'hi puguin comunicar. Gràcies a \acro{unix}, una aplicació dissenyada per Linux,
+és molt probable que també pugui funcionar per MacOS.
 
 El problema és que l'aplicació que s'ha dissenyat en el marc d'aquest \acro{tfg}
-no utilitza només funcions i llibreries d'\acro{unix}, sinó que utilitza
+no utilitza només funcions i llibreries d'\acro{unix}, sinó que també utilitza
 llibreries específiques de Linux, com \acro{iio} o \est{xrandr}. Això
 impossibilita la compatibilitat de l'aplicació a MacOS. En aquest capítol es
-mostren alternatives a aquestes dos llibreries per a aconseguir executar
+mostren alternatives a aquestes dues llibreries per aconseguir executar
 l'aplicació en un \est{MacBook}.
 
 \subsection{Comunicació amb el dispositiu}
 
 MacOS també disposa de \ord|libusb| i \ord|hidapi|, però si es vol treballar en
 una capa similar a la que s'ha estat treballant amb els altres sistemes
-operatius s'hauria d'utilitzar \est{\acro{Hid} Driver Kit}: és el seguit
-d'eines que proporciona Apple per a crear \est{drivers} de dispositius,
+operatius, s'hauria de fer servir \est{\acro{Hid} Driver Kit}: és el seguit
+d'eines que proporciona Apple per crear \est{drivers} de dispositius,
 enfocades a dispositius \acro{hid}. No s'ha trobat cap eina específica per als
 sensors.
 
 A \cite{HidDriverKit} hi ha tota la documentació referent a \est{\acro{Hid Driver Kit}}.
 Hi ha exemples que ensenyen com crear \est{drivers} per a teclats i ratolins,
-i aquests es poden extrapolar fàcilment al sensor d'aquest projecte. Per a
-demostrar la viabilitat d'aquesta eina s'ha dissenyat un petit codi per a
+que es poden extrapolar fàcilment al sensor d'aquest projecte. Per
+demostrar la viabilitat d'aquesta eina, s'ha dissenyat un petit codi per
 llegir les dades del sensor, que no es desvia gaire dels exemples referenciats.
 
-El llenguatge utilitzat és C++, però també es pot utilitzar \est{Objective C} o
-Python per a desenvolupar aquest programari.
+El llenguatge utilitzat és C++, però també es pot fer servir \est{Objective C} o
+Python per desenvolupar aquest programari.
 
 \subsection{Comunicació amb l'entorn gràfic}
 
-MacOS no disposa de cap aplicació ni \acro{api} per a actualitzar l'orientació
+MacOS no disposa de cap \acro{api} per actualitzar l'orientació
 d'una pantalla de forma directa. Tanmateix, Apple va dissenyar un llenguatge anomenat
 \est{AppleScript}, que permet interactuar amb les aplicacions del sistema
 mitjançant petits \est{scripts} \cite{AppleScript}.
@@ -162,18 +161,18 @@ Aquest llenguatge és únic d'Apple i no és gaire complicat de dominar, però
 també és bastant susceptible a actualitzacions del sistema: sol ser complicat
 crear un programa d'\est{AppleScript} que duri diverses versions sense
 necessitar cap canvi. Així doncs, s'haurà de tenir present que el manteniment
-d'aquest programari esdevindria més costós si s'utilitza aquesta alternativa.
+d'aquest programari esdevindria més costós si s'utilitzés aquesta alternativa.
 
 Una altra opció és utilitzar algun paquet ja existent, creat per la comunitat.
 S'ha trobat el projecte \est{Fb-Rotate} \cite{FBRotate}, que utilitza una
-\acro{api} de més baix nivell, anomenada \est{IOKit}, per a arribar fins a
+\acro{api} de més baix nivell, anomenada \est{IOKit}, per arribar fins a
 la configuració de la pantalla. Tanmateix, aquest projecte sembla bastant
 abandonat, i perilla que un futur canvi en el \est{kernel} de MacOS faci que
 deixi de funcionar.
 
-Les dues alternatives són igual de viables, i tenen cadascuna d'elles punts
-forts i febles. S'ha aconseguit girar la pantalla en els dos casos mitjançant
-codis força senzills, pel que no hi ha gires diferències pel que fa al cost
+Les dues alternatives són igual de viables, i cadascuna té diversos punts
+forts i punts febles. S'ha aconseguit girar la pantalla en tots dos casos mitjançant
+codis força senzills. Per tant, no hi ha gaires diferències respecte al cost
 de desenvolupament.
 
 \subsection{Execució en segon pla i insta\l.lació}
@@ -186,18 +185,18 @@ petit codi d'\est{AppleScript} \cite{AppleService}.
 Tanmateix, es pot configurar un servei automàticament en el moment
 d'insta\l.lació d'un paquet. L'extensió de fitxers per a paquets de MacOS és
 \fitx{.pkg} i, de la mateixa forma que amb la resta de sistemes operatius,
-es recomana utilitzar alguna eina externa per a crear-los de forma senzilla.
-En aquest cas es recomana l'eina de \cite{ApplePackage}, que mitjançant un
-seguit d'entrades a través de la línia de comandes genera el fitxer \fitx{.pkg}
+es recomana utilitzar alguna eina externa per crear-los de manera senzilla.
+En aquest cas, es recomana l'eina de \cite{ApplePackage} que, mitjançant un
+seguit d'entrades a través de la línia d'ordres, genera el fitxer \fitx{.pkg}
 de l'aplicació.
 
 Finalment, també es voldrà distribuir aquesta aplicació. Apple disposa de la
 seva pròpia botiga d'aplicacions, l'\est{App Store}, però s'ha de pagar una
-quota anual per a tenir penjada l'aplicació. En cas que no es vulgui assumir
-aquest cost, es pot penjar l'aplicació a \est{HomeBrew}, una
+quota anual per penjar l'aplicació. En cas que no es vulgui assumir
+aquest cost, també es pot penjar a \est{HomeBrew}, una
 analogia a \acro{apt} amb l'excepció que aquesta no rep el suport oficial
 d'Apple (ha sigut una eina creada per la comunitat). \est{HomeBrew} permet
-insta\l.lar aplicacions des de la línia de comandes i és una eina molt popular
+insta\l.lar aplicacions des de la línia d'ordres i és molt popular
 entre els usuaris de MacOS.
 
 \section{Alternativa compatible amb tots els sistemes operatius}
@@ -205,43 +204,43 @@ entre els usuaris de MacOS.
 
 Tal com s'ha vist en aquest capítol, portar l'aplicació a la resta de sistemes
 operatius és una tasca repetitiva i tediosa. S'ha intentat desenvolupar el codi
-per a que sigui el màxim compatible amb els estàndards del sistema operatiu en
+perquè sigui el màxim compatible amb els estàndards del sistema operatiu en
 qüestió, i això ha fet que cada implementació divergís l'una de l'altra. Un clar
 exemple és l'ús de \ord|libiio|, que només és disponible, de moment, en sistemes
 basats en Linux.
 
-A la taula \ref{tab:os-comparison} es mostren els les diferents eines
-utilitzades en funció del sistema operatiu. Com es pot veure, s'ha de dominar
-moltes més tecnologies per a aconseguir que l'aplicació d'aquest projecte arribi
+A la taula \ref{tab:os-comparison} es mostren les diferents eines
+utilitzades en funció del sistema operatiu. Com es pot veure, s'haurien de dominar
+moltes més tecnologies per aconseguir que l'aplicació d'aquest projecte arribés
 a la majoria d'usuaris, i els costos de desenvolupament i de manteniment
 augmentarien considerablement.
 
 \input{misc/os_comparison.tex}
 
 En aquest apartat es vol proposar una alternativa de disseny del programari. En
-aquest cas, no es buscarà treballar amb la capa d'abstracció més alta, sinó en
-la que està disponible en el màxim nombre de sistemes operatius. En el cas del
-projecte, aquesta capa seria \ord|libusb|, tal i com s'ha explicat en l'apartat
-\ref{subsubsec:libusb}. D'aquesta forma, al crear un programa que utilitzi
-\ord|libusb| i no \ord|libiio|, s'aconsegueix que aquest pugui funcionar també
+aquest cas, no es buscarà treballar amb la capa d'abstracció més alta, sinó amb
+la que estigui disponible en el màxim nombre de sistemes operatius. En el cas
+d'aquest projecte, la capa en qüestió seria \ord|libusb|, tal com s'ha explicat
+en l'apartat \ref{subsubsec:libusb}. D'aquesta manera, en crear un programa que
+utilitzi \ord|libusb| i no \ord|libiio|, s'aconsegueix que també pugui funcionar
 a Windows i MacOS.
 
-Dissenyar el programari per a treballar amb \ord|libusb| requereix realitzar
+Dissenyar el programari per treballar amb \ord|libusb| requereix acomplir
 les tasques que realitzaven \ord|libhid| i \ord|libiio|. Això significarà que
-probablement quedi un codi resultant més llarg i complexe, però només hi haurà
-un únic programa i no tres. Haver de mantenir només una peça de programari
-també ajudaria a reduir les hores de dedicació al manteniment del projecte, i
+probablement quedarà un codi resultant més llarg i complex; però en comptes d'haver-hi
+tres programes, només n'hi haurà un. Haver de mantenir només una peça de programari
+també ajudaria a reduir les hores de dedicació al manteniment del projecte i
 tots els costos associats.
 
-Fer la part de la rotació de la pantalla compatible amb tots els sistemes
+Fer que la part de la rotació de la pantalla sigui compatible amb tots els sistemes
 operatius no serà una tasca igual de senzilla, ja que encara no existeix cap
 llibreria o aplicació disponible per a diferents sistemes operatius. Tanmateix,
 es pot crear, per exemple, un mòdul de Python amb tres implementacions
-diferents: una per Windows, una per MacOS, i una per Linux. En funció del
-sistema operatiu es carrega una implementació o una altra i, al compartir
-totes la mateixa \acro{api}, el programa podria funcionar correctament en tots
-els entorns.
+diferents: una per Windows, una per MacOS i una per Linux. En funció del
+sistema operatiu es carrega una implementació o una altra i, com que totes
+compartirien la mateixa \acro{api}, el programa podria funcionar correctament en
+tots els entorns.
 
-Ara que el projecte ja està fet no es realitzarà aquest canvi, ja que suposaria
-començar de nou una de les parts més grans del \acro{tfg}. Tanmateix, es tindrà
-en compte aquestes conclusions per a futurs treballs o projectes.
+Ara que el projecte ja està fet, no es durà a terme aquest canvi, ja que suposaria
+començar de nou una de les parts més grans del \acro{tfg}. Tanmateix, aquestes
+conclusions es tindran en compte per a futurs treballs o projectes.
