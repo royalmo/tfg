@@ -1,0 +1,19 @@
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{p{0.2\linewidth} | >{\centering\arraybackslash}m{0.2\linewidth} >{\centering\arraybackslash}m{0.2\linewidth} >{\centering\arraybackslash}m{0.2\linewidth}}
+        \toprule
+        \textbf{Tasca} & \textbf{Linux (Debian)}  & \textbf{Windows} & \textbf{MacOS} \\
+        \midrule
+
+        Lectura del sensor & \est{libiio} & \est{SensorApi} & \est{\acro{Hid} Driver Kit} \\
+        Rotació de la pantalla & \est{xrandr} & \est{\acro{Devmode}} & \est{AppleScript} / \est{IOKit} \\
+        Execució en segon pla & \est{systemd} & \est{Services} & \est{AppleScript} / \est{launchd} \\
+        Extensió de fitxer del paquet & \fitx{.deb} & \fitx{.msi} & \fitx{.pkg} \\
+        Eina per a crear el paquet & \est{debuild} & \est{Wix} & \est{MacOS Installer Builder} \\
+        Distribució del paquet & \acro{Apt} & \est{Windows Package Manager} & \est{App Store} / \est{HomeBrew} \\
+
+        \bottomrule
+    \end{tabular}
+    \caption{Tecnologies utilitzades en funció del sistema operatiu.}
+    \label{tab:os-comparison}
+\end{figure}

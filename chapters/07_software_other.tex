@@ -117,10 +117,88 @@ procés molt llarg: penjar el fitxer \fitx{.msi}, omplir un parell de formularis
 i confirmar una adreça de correu electrònic.
 
 \section{\est{Software} a MacOS}
+
+Finalment s'investigarà la viabilitat de portar l'aplicació en un \est{MacBook},
+la gamma de portàtils d'Apple que utilitza el sistema operatiu MacOS. Aquest
+sistema operatiu compleix les directives d'\acro{unix}, juntament amb els
+sistemes basats en Linux. Aquestes directives defineixen les funcions i
+programes que els sistemes operatius han d'implementar per a que les aplicacions
+s'hi puguin comunicar. Gràcies a \acro{unix}, una aplicació dissenyada per Linux
+podrà molt probablement funcionar també per MacOS.
+
+El problema és que l'aplicació que s'ha dissenyat en el marc d'aquest \acro{tfg}
+no utilitza només funcions i llibreries d'\acro{unix}, sinó que utilitza
+llibreries específiques de Linux, com \acro{iio} o \est{xrandr}. Això
+impossibilita la compatibilitat de l'aplicació a MacOS. En aquest capítol es
+mostren alternatives a aquestes dos llibreries per a aconseguir executar
+l'aplicació en un \est{MacBook}.
+
 \subsection{Comunicació amb el dispositiu}
+
+MacOS també disposa de \ord|libusb| i \ord|hidapi|, però si es vol treballar en
+una capa similar a la que s'ha estat treballant amb els altres sistemes
+operatius s'hauria d'utilitzar \est{\acro{Hid} Driver Kit}: és el seguit
+d'eines que proporciona Apple per a crear \est{drivers} de dispositius,
+enfocades a dispositius \acro{hid}. No s'ha trobat cap eina específica per als
+sensors.
+
+A \cite{HidDriverKit} hi ha tota la documentació referent a \est{\acro{Hid Driver Kit}}.
+Hi ha exemples que ensenyen com crear \est{drivers} per a teclats i ratolins,
+i aquests es poden extrapolar fàcilment al sensor d'aquest projecte. Per a
+demostrar la viabilitat d'aquesta eina s'ha dissenyat un petit codi per a
+llegir les dades del sensor, que no es desvia gaire dels exemples referenciats.
+
+El llenguatge utilitzat és C++, però també es pot utilitzar \est{Objective C} o
+Python per a desenvolupar aquest programari.
+
 \subsection{Comunicació amb l'entorn gràfic}
+
+MacOS no disposa de cap aplicació ni \acro{api} per a actualitzar l'orientació
+d'una pantalla de forma directa. Tanmateix, Apple va dissenyar un llenguatge anomenat
+\est{AppleScript}, que permet interactuar amb les aplicacions del sistema
+mitjançant petits \est{scripts} \cite{AppleScript}.
+
+Aquest llenguatge és únic d'Apple i no és gaire complicat de dominar, però
+també és bastant susceptible a actualitzacions del sistema: sol ser complicat
+crear un programa d'\est{AppleScript} que duri diverses versions sense
+necessitar cap canvi. Així doncs, s'haurà de tenir present que el manteniment
+d'aquest programari esdevindria més costós si s'utilitza aquesta alternativa.
+
+Una altra opció és utilitzar algun paquet ja existent, creat per la comunitat.
+S'ha trobat el projecte \est{Fb-Rotate} \cite{FBRotate}, que utilitza una
+\acro{api} de més baix nivell, anomenada \est{IOKit}, per a arribar fins a
+la configuració de la pantalla. Tanmateix, aquest projecte sembla bastant
+abandonat, i perilla que un futur canvi en el \est{kernel} de MacOS faci que
+deixi de funcionar.
+
+Les dues alternatives són igual de viables, i tenen cadascuna d'elles punts
+forts i febles. S'ha aconseguit girar la pantalla en els dos casos mitjançant
+codis força senzills, pel que no hi ha gires diferències pel que fa al cost
+de desenvolupament.
+
 \subsection{Execució en segon pla i insta\l.lació}
 
+L'execució de programes en segon pla a MacOS es fa mitjançant l'eina
+\est{launchd}. Es poden afegir serveis directament des de l'eina \est{Services}
+a través d'una interfície gràfica, però també es permet afegir-ne mitjançant un
+petit codi d'\est{AppleScript} \cite{AppleService}.
+
+Tanmateix, es pot configurar un servei automàticament en el moment
+d'insta\l.lació d'un paquet. L'extensió de fitxers per a paquets de MacOS és
+\fitx{.pkg} i, de la mateixa forma que amb la resta de sistemes operatius,
+es recomana utilitzar alguna eina externa per a crear-los de forma senzilla.
+En aquest cas es recomana l'eina de \cite{ApplePackage}, que mitjançant un
+seguit d'entrades a través de la línia de comandes genera el fitxer \fitx{.pkg}
+de l'aplicació.
+
+Finalment, també es voldrà distribuir aquesta aplicació. Apple disposa de la
+seva pròpia botiga d'aplicacions, l'\est{App Store}, però s'ha de pagar una
+quota anual per a tenir penjada l'aplicació. En cas que no es vulgui assumir
+aquest cost, es pot penjar l'aplicació a \est{HomeBrew}, una
+analogia a \acro{apt} amb l'excepció que aquesta no rep el suport oficial
+d'Apple (ha sigut una eina creada per la comunitat). \est{HomeBrew} permet
+insta\l.lar aplicacions des de la línia de comandes i és una eina molt popular
+entre els usuaris de MacOS.
 
 \section{Alternativa compatible amb tots els sistemes operatius}
 \label{sec:winmac-conclusions}
@@ -131,6 +209,14 @@ per a que sigui el màxim compatible amb els estàndards del sistema operatiu en
 qüestió, i això ha fet que cada implementació divergís l'una de l'altra. Un clar
 exemple és l'ús de \ord|libiio|, que només és disponible, de moment, en sistemes
 basats en Linux.
+
+A la taula \ref{tab:os-comparison} es mostren els les diferents eines
+utilitzades en funció del sistema operatiu. Com es pot veure, s'ha de dominar
+moltes més tecnologies per a aconseguir que l'aplicació d'aquest projecte arribi
+a la majoria d'usuaris, i els costos de desenvolupament i de manteniment
+augmentarien considerablement.
+
+\input{misc/os_comparison.tex}
 
 En aquest apartat es vol proposar una alternativa de disseny del programari. En
 aquest cas, no es buscarà treballar amb la capa d'abstracció més alta, sinó en
