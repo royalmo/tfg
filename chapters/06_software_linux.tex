@@ -1,74 +1,74 @@
 \chapter{Disseny del software a Linux}
 
-La darrera peça del puzzle per a que el sistema pugui funcionar és el
-programari del cantó de l'ordinador. Tal i com s'ha comentat al capítol
+La darrera peça del puzle perquè el sistema pugui funcionar és el
+programari del cantó de l'ordinador. Tal com s'ha comentat al capítol
 \ref{cap:estat-de-l-art}, el fet d'utilitzar \acro{iio} implica que el
-programari que es disseny per Linux no serà compatible amb la resta de
+programari que es dissenyi per Linux no serà compatible amb la resta de
 sistemes operatius. També s'ha vist que \est{Xorg} només existeix en sistemes
 basats en Linux.
 
 Així doncs, aquest capítol té per objectiu dissenyar un programari senzill però
-robust per a poder utilitzar el sistema en dispositius basats en Linux. Es
+robust per poder utilitzar el sistema en dispositius basats en Linux. Se
 centraran les proves en la distribució de Linux Ubuntu, concretament en
 les versions 18.04 i 24.04 \acro{lts} (\est{Long-Term Support}), però tot hauria
-de funcionar de la mateixa forma amb la resta de distribucions.
+de funcionar de la mateixa manera amb la resta de distribucions.
 
 \section{Requisits mínims del programari}
 
 Un bon inici per a aquesta part del projecte és identificar què és el que
 s'espera del programa: com s'ha d'insta\l.lar, com ha de funcionar i com
-s'ha de configurar. D'aquesta forma, es veu els requisits del programa des del
+s'ha de configurar. D'aquesta forma, es veuen els requisits del programa des del
 punt de vista d'un usuari, fent sovint més senzill l'ús de l'aplicació.
 
-Després de donar-hi algunes voltes s'ha decidit utilitzar Python per a
-desenvolupar l'aplicació, degut a la gran disponibilitat de llibreries, el fet
-que ja es troba insta\l.lat per defecte en moltes distribucions de Linux, i
+Després de donar-hi algunes voltes, s'ha decidit utilitzar Python per
+desenvolupar l'aplicació, gràcies a la gran disponibilitat de llibreries, el fet
+que ja es troba insta\l.lat per defecte en moltes distribucions de Linux i
 la simplicitat de programació (en comparació als llenguatges de baix nivell).
-S'ha decidit també que s'utilitzarà un servei de Linux per al programa principal.
-Això implicarà alguna configuració addicional, però de ben segur que facilitarà
+També s'ha decidit que s'utilitzarà un servei de Linux per al programa principal.
+Això implicarà alguna configuració addicional, però de segur que facilitarà
 la vida als usuaris.
 
 Un altre aspecte important del programa és la manera de configurar-lo. Tot i que,
 idealment, el millor per als usuaris finals seria una interfície interactiva,
 Linux sol funcionar amb fitxers per tot. Així doncs, s'ha decidit crear un fitxer
-\fitx{.conf} per a guardar les configuracions de l'aplicació. Aquest fitxer té
+\fitx{.conf} per guardar les configuracions de l'aplicació. Aquest fitxer té
 un format pactat i descrit a la documentació del programa, i es podrà guardar en
 diferents llocs específics del sistema, on el programa els buscarà. Crear una
 interfície interactiva que modifiqui aquest fitxer no hauria de ser una tasca
-gens complicada, i podria ser una perfecta ampliació al sistema.
+gens complicada, i podria ser una perfecta ampliació per al sistema.
 
-Pel que fa a l'insta\l.lació, es dissenyarà un paquet de Debian (una de les
+Pel que fa a la insta\l.lació, es dissenyarà un paquet de Debian (una de les
 distribucions de Linux més populars) que insta\l.larà els requisits i configurarà
 el que faci falta per al bon funcionament del programa, fent aquesta tasca
-possible per a persones que no dominin tant la línia de comandes.
+possible per a persones que no dominin tant la línia d'ordres.
 
 \section{Llibreries utilitzades}
 
-Un cop es sap les tasques que s'haurà de fer és el moment de cercar si hi ha
-alguna eina que pugui simplificar la tasca de desenvolupament. Tal i com s'ha dit
+Un cop se saben les tasques que s'hauran de fer, és el moment de cercar si hi ha
+alguna eina que pugui simplificar el treball de desenvolupament. Tal com s'ha dit
 a l'apartat anterior, Python té moltes llibreries (o mòduls) creats per la
-comunitat i disponibles per tothom. Coneixent les parts més difícils de
+comunitat i disponibles per a tothom. Coneixent les parts més difícils de
 l'aplicació, es pot cercar si algú ja les ha implementat.
 
 \subsection{\est{PyLibiio}}
 
 El primer mòdul cercat és \est{PyLibiio}, que consisteix en la llibreria de
 Linux \est{libiio} portada a Python \cite{Libiio}. La llibreria compilada acostuma
-a estar insta\l.lada per defecte en la majoria de sistemes basats en Linux, però
+a estar insta\l.lada per defecte en la majoria dels sistemes basats en Linux, però
 la portabilitat a Python és un afegit que s'ha d'insta\l.lar.
 
 Ja s'ha comentat en el capítol \ref{cap:estat-de-l-art} la importància
-i beneficis d'utilitzar l'entorn de \acro{iio} per al programa d'aquest projecte,
+i els beneficis d'utilitzar l'entorn de \acro{iio} per al programa d'aquest projecte,
 així que si, a més a més, es pot fer des de l'alt nivell d'abstracció que ofereix
 Python, encara millor.
 
-Aquest mòdul no té molta complexitat, i menys si es segueix com a referència
-algun dels exemples llistats. La majoria dels exemples consistien en replicar
+Aquest mòdul no té massa complexitat, i encara menys si se segueix com a referència
+algun dels exemples llistats. La majoria dels exemples consistien a replicar
 amb Python les comandes d'exemple de la llibreria \est{libiio}.
 
 Tanmateix, durant les proves de l'exemple de la comanda \ord|iio_info| s'ha
 vist que aquesta no donava els mateixos resultats que el mateix programa implementat
-en C. Quan no s'especifica cap argument en la línia de comandes, s'hauria 
+en C. Quan no s'especifica cap argument en la línia d'ordres, s'hauria 
 d'utilitzar el primer grup de dispositius possible. En canvi, el programa d'exemple
 s'aturava sense mostrar cap error.
 
@@ -79,36 +79,36 @@ notificar de l'error i es va crear una \est{Pull Request}
     els canvis proposats en una branca d'un repositori. Si es creu convenient,
     es poden aplicar aquests canvis a la branca principal (acció de \est{merge})
     \cite{PullRequest}.
-}, \cite{LibiioPR}. Aquesta encara està pendent d'aprovació (ja que sembla que
-les persones encarregades de mantenir la llibreria no tenen molt de temps
+}, \cite{LibiioPR}, que encara està pendent d'aprovació (ja que sembla que
+les persones encarregades de mantenir la llibreria no tenen gaire temps
 disponible).
 
 \subsection{\est{PyUdev}}
 
-Durant el desenvolupament del programa es va veure la necessitat d'obtenir el
+Durant el desenvolupament del programa va sorgir la necessitat d'obtenir el
 número de sèrie a partir de l'adreça d'un dispositiu \acro{iio}. Després de fer
-recerca, es va veure que la forma més senzilla era utilitzant una comanda
-de \acro{udev}. I, com no podia ser d'una altra manera, es va cercar si es podia
-estalviar aquesta comanda i utilitzar una llibreria de Python en el seu lloc.
+recerca, es va veure que la forma més senzilla d'obtenir-lo era utilitzant una
+comanda d'\acro{udev} i, com no podia ser d'una altra manera, es va cercar si es
+podia estalviar aquesta comanda i, en canvi, utilitzar una llibreria de Python.
 
-És important evitar utilitzar comandes ja que aquestes són més propenses a
+És important evitar utilitzar comandes, ja que aquestes són més propenses a
 variar i deixar de funcionar que la pròpia interfície de desenvolupament que
 proporcionen les llibreries, com és el cas de \est{libudev}. Per aquest motiu,
-quan es va coneixer l'existència de \est{PyUdev} es va fer el canvi en la
+quan es va conèixer l'existència de \est{PyUdev} es va fer el canvi en la
 implementació \cite{Pyudev}.
 
-Aquesta llibreria també disposava d'exemples, i no s'hi ha trobat cap
-error aparent. Com també ha passat amb el mòdul anterior, la pròpia llibreria
+Aquesta llibreria també disposava d'exemples, i no s'ha trobat cap
+error aparent. Com també ha passat amb el mòdul anterior, la mateixa llibreria
 ja ve insta\l.lada, però la portabilitat a Python s'ha de llistar com una
 dependència del programa.
 
-Quan encara no es sabia del tot segur si es faria servir \acro{iio} o, una capa
+Quan encara no se sabia del cert si es faria servir \acro{iio} o, una capa
 més per sota, el protocol \acro{hid}, també es va cercar si hi havia una
 implementació per Python de la llibreria \est{libhid}. Es va trobar el mòdul
-\est{CPython-HidApi}, un projecte molt complet amb, fins i tot, eines per a
+\est{CPython-HidApi}, un projecte molt complet amb, fins i tot, eines per
 depurar de forma interactiva dispositius \acro{hid} \cite{CpythonHid}.
-Finalment es va descartar utilitzar
-aquest afegit, ja que es va passar a utilitzar \acro{iio}.
+Finalment, es va descartar utilitzar aquest afegit, ja que es va passar a
+utilitzar \acro{iio}.
 
 \subsection{\est{PyRandr}}
 \label{subsec:pyrandr}
@@ -116,64 +116,64 @@ aquest afegit, ja que es va passar a utilitzar \acro{iio}.
 Finalment, la tercera i última contribució externa de l'aplicació és el
 mòdul \est{PyRandr}. A diferència de la resta, aquest mòdul no es troba
 disponible al repositori oficial de Python \est{PyPi} i, per tant, no es pot
-insta\l.lar amb la comanda \ord|pip3| o marcar com a dependència quan es crei
+insta\l.lar amb la comanda \ord|pip3| ni marcar-lo com a dependència quan es creï
 l'aplicació final.
 
 Aquest projecte, disponible a \est{GitHub}, és una abstracció de la comanda
 \ord|xrandr| \cite{Pyrandr}. S'ha vist en l'apartat \ref{subsec:xrandr} que la
 llibreria
 \est{Xlib} pot ser una mica complicada d'utilitzar, i aquesta comanda no ha
-canviat gaire en bastant temps. Així doncs, es considera una bona alternativa
+canviat gaire en bastant de temps. Així doncs, es considera una bona alternativa
 per a l'aplicació.
 
 La persona que va desenvolupar \est{PyRandr} en un primer moment ha deixat de
-mantenir el projecte. A més a més, aquest no va tenir en compte tots els casos
+mantenir el projecte. A més a més, no va tenir en compte tots els casos
 d'ús, deixant en el codi alguns errors. Ja hi ha gent que ha creat \est{forks}
-(còpies del projecte) i \est{pull reuquests} per a proposar millores, però
+(còpies del projecte) i \est{pull requests} per proposar millores, però
 l'autor se n'ha despreocupat.
 
-Així doncs, s'ha realitzat també una còpia del projecte i s'ha fusionat diversos
-canvis proposats per a la comunitat. També s'ha afegit alguna correcció pròpia,
-com el canvi d'orientació per a pantalles principals \cite{PyrandrOwn}. Tanmateix, el canvi més
-gran que s'ha fet per a que pugui tot funcionar per a aquest projecte es veurà
-en l'apartat \ref{subsec:systemd_system}.
+Així doncs, també s'ha realitzat una còpia del projecte i s'han fusionat diversos
+canvis proposats per la comunitat. També s'ha afegit alguna correcció pròpia,
+com el canvi d'orientació per a pantalles principals \cite{PyrandrOwn}. Tanmateix,
+el canvi més gran que s'ha fet perquè tot funcioni es veurà en l'apartat 
+\ref{subsec:systemd_system}.
 
 Com que no es pot llistar aquest programa com a dependència, el més sensat és
-afegir el codi (d'unes 300 línies) al propi repositori del projecte. inicialment
-es va implementar com a un submòdul de \est{git}, però al fer tantes
-modificacions i al voler fusionar tot el programa en un fitxer es va acabar
+afegir el codi (d'unes 300 línies) al repositori del projecte. Inicialment,
+es va implementar com a un submòdul de \est{git}, però en fer tantes
+modificacions i en voler fusionar tot el programa en un fitxer, es va acabar
 copiant i enganxant el contingut necessari.
 
 \section{Desenvolupament del programa}
 
-Un cop conegudes totes les peces del programa només falta unir-les entre sí. En
+Un cop conegudes totes les peces del programa, només falta unir-les entre si. En
 aquest capítol es detallen només alguns aspectes rellevants en referència al codi
 creat específicament per a aquest programa. Es recomana tenir a proximitat el
-codi font del projecte per a poder entendre millor aquest apartat.
+codi font del projecte per poder entendre millor aquest apartat.
 
 \subsection{Funcionalitats addicionals implementades}
 
 Tot i que la funcionalitat principal del programa ja és coneguda, s'ha decidit
-dur aquest programa una mica més enllà, afegint una mica de robustesa i
-escalabilitat. Hi ha moltes petites millores, però en aquest apartat es vol
-destacar-ne només tres de més rellevants:
+dur-lo una mica més enllà, afegint-hi robustesa i escalabilitat. Hi ha moltes
+petites millores, però en aquest apartat només se'n vol destacar tres de les més
+rellevants:
 
 \begin{itemize}
-    \item El sistema s'ha dissenyat per a suportar diversos dispositius a la
+    \item El sistema s'ha dissenyat per suportar diversos dispositius a la
     vegada. Basant-se en el número de sèrie de cada dispositiu i els codis
     identificadors de \ord|xrandr| per a les pantalles, es pot associar una
     orientació d'un dispositiu a una pantalla en concret. Així doncs, més
-    d'una pantalla es pot beneficiar del projecte a la vegada.
+    d'una pantalla es pot beneficiar alhora del projecte.
     \item S'ha realitzat el concepte de mitjana mòbil o filtre de pas baix per
-    a aplicar les rotacions: fins que no hi hagi $x$ lectures consecutives amb
-    una orientació diferent no s'aplica el canvi. El valor de $x$ no
+    aplicar les rotacions: fins que no hi hagi $x$ lectures consecutives amb
+    una orientació diferent, no s'aplica el canvi. El valor de $x$ no
     s'especifica, ja que l'usuari el pot configurar al seu gust.
     \item S'ha aplicat el concepte d'\est{offset}. Pot ser que algunes persones
     insta\l.lin el dispositiu físic amb el cable mirant cap amunt, algunes cap
     avall, i no es pretén obligar-los a fer-ho d'una única manera. En canvi,
-    s'ha deixat configurable l'orientació en la que es troba el sensor en
+    s'ha deixat configurable l'orientació en què es troba el sensor en
     referència a la pantalla, i cada cop que es llegeixi una lectura s'aplicarà
-    un \est{offset} per a obtenir l'orientació real.
+    un \est{offset} per obtenir l'orientació real.
 \end{itemize}
 
 Aquestes millores, juntament amb els detalls mencionats en aquest capítol, han
@@ -182,64 +182,63 @@ convertit un programa que feia la seva tasca en un de robust, escalable i segur.
 \subsection{Conversió de les mesures d'acceleració a orientació}
 
 Durant tot el document s'ha parlat d'utilitzar un sensor d'acceleració quan el
-que es vol obtenir és l'orientació del dispositiu. No és pas un error, més bé
-un avançament al que s'explicarà en aquest apartat.
+que es vol obtenir és l'orientació del dispositiu. No és pas un error, més aviat
+un avançament que s'explicarà en aquest apartat.
 
-Tots els dispositius mòbils utilitzen un acceleròmetre per a esbrinar en quina
-orientació està el dispositiu, tal i com s'ha avançat a l'apartat
+Tots els dispositius mòbils utilitzen un acceleròmetre per esbrinar en quina
+orientació està el dispositiu, tal com s'ha avançat a l'apartat
 \ref{sec:sensor_selection}. El que no s'ha dit encara és com es passa d'una
 mesura a una altra.
 
 La forma de fer-ho és ben senzilla: sabent que la gravetat de la terra sempre
 apunta cap avall, i que l'acceleració quan el dispositiu està quiet és únicament
 la de la gravetat, només cal saber cap a quina direcció s'està mesurant aquesta
-acceleració per a detectar l'orientació del sensor. A \cite{PedleyTilt} es
+acceleració per detectar l'orientació del sensor. A \cite{PedleyTilt} es
 detalla tota la
 trigonometria que hi ha darrere d'aquesta explicació, que no s'afegeix en aquest
-document ja que no és rellevant pel producte final.
+document, ja que no és rellevant per al producte final.
 
-Com s'ha dit al paràgraf anterior, no serà possible utilitzar aquest sistema en
-llocs on no hi hagi gravetat, o el dispositiu estigui rebent acceleracions en
-alguna altra direcció. Per exemple, durant l'enlairament d'un avió els
+Com s'ha dit en el paràgraf anterior, no serà possible utilitzar aquest sistema en
+llocs on no hi hagi gravetat o el dispositiu estigui rebent acceleracions en
+alguna altra direcció. Per exemple, durant l'enlairament d'un avió, els
 dispositius mòbils no responen bé als canvis d'orientació, però un cop
-s'assoleix la velocitat de creuer (i per tant no hi ha acceleració) ja torna
+s'assoleix la velocitat de creuer (i, per tant, no hi ha acceleració), ja torna
 a funcionar amb normalitat.
 
-Si mai es volgués mesurar l'orientació d'una forma més robusta es pot combinar
+Si mai es volgués mesurar l'orientació d'una forma més robusta es podria combinar
 l'acceleròmetre amb un sensor de velocitat angular. L'acceleròmetre ajuda a
-calibrar el sensor, determinant sempre la direcció de la gravetat. Però un
-cop ca\l.librat, qui dona més precisió és el sensor giroscopic o de velocitat
+calibrar el sensor, determinant la direcció de la gravetat. Però un
+cop calibrat, qui dona més precisió és el sensor giroscòpic o de velocitat
 angular. Es pot consultar un exemple de sensor amb més precisió a
-\cite{6702711}, però no
-s'implementarà en aquest projecte degut a la complexitat afegida i els propòsits
-del projecte (no es cerca precisió).
+\cite{6702711}, però no s'implementarà en aquest projecte a causa de la complexitat
+afegida i dels propòsits del projecte (no se cerca precisió).
 
 \subsection{Configuració del programa}
 
 La forma principal (i gairebé única, tret d'alguns detalls) de configurar
 l'aplicació és mitjançant un fitxer de configuració. Quan s'executi el programa
-es cercarà en diferents llocs el fitxer de configuració. Si no es troba cap
-fitxer el programa s'aturarà amb un codi d'error. Si el fitxer que es troba
+se cercarà en diferents llocs el fitxer de configuració. Si no es troba cap
+fitxer, el programa s'aturarà amb un codi d'error. Si el fitxer que es troba
 conté un error, també s'aturarà el programa.
 
 En el repositori del projecte hi ha un exemple de fitxer de configuració molt
 ben documentat i detallat. Aquest fitxer es pot dividir en dues parts:
 
 \begin{itemize}
-    \item La part global, que conté paràmetres (tots amb valors per defecte) per
-    a, per exemple, canviar el temps d'espera entre lectures del sensor, canviar
-    el nombre de mostres per la mitjana mòbil o canviar el llindar en què es
-    considera que el dispositiu està rotat o estirat. Totes aquestes opcions es
-    poden obviar i s'utilitzarà els valors per defectes.
-    \item En segon lloc hi ha un bloc específic per a cada grup sensor-pantalla.
+    \item En primer lloc, la part global, que conté paràmetres (tots amb valors
+    per defecte) per, per exemple, canviar el temps d'espera entre lectures
+    del sensor, canviar el nombre de mostres per la mitjana mòbil o canviar
+    el llindar en què es considera que el dispositiu està rotat o estirat.
+    Totes aquestes opcions es poden obviar i s'utilitzaran els valors per defecte.
+    \item En segon lloc, hi ha un bloc específic per a cada grup sensor-pantalla.
     Cada bloc necessita l'identificador sèrie del sensor i el connector de la
     pantalla, així com l'orientació inicial del dispositiu en referència a la
-    pantalla. Totes aquestes opcions son obligatòries.
+    pantalla. Totes aquestes opcions són obligatòries.
 \end{itemize}
 
 Cada cop que l'usuari modifiqui el fitxer de configuracions haurà de reiniciar
-el programa. Això significa que si una modificació temporal o a mitges es guarda
-no afectarà al funcionament del programa fins que aquest es reinicii.
+el programa. Això significa que si una modificació temporal o a mitges es guarda,
+no afectarà el funcionament del programa fins que aquest es reiniciï.
 
 Un exemple de fitxer de configuració senzill podria ser el següent:
 
@@ -270,42 +269,42 @@ display = eDP-0
 connector_facing = Left
 \end{verbatim}
 
-Al repositori del projecte hi ha el mateix fitxer d'exemple però molt més ben
-documentat. Aquí només s'ha posat els mínims comentaris per a entendre'l.
+Al repositori del projecte hi ha el mateix fitxer d'exemple, però molt més ben
+documentat. Aquí només s'ha posat els mínims comentaris per entendre'l.
 
 \subsection{Preparació del codi per a la distribució}
 
 A diferència dels programes en C, que almenys els programes de característiques
 similars a les d'aquest projecte es compilen en un únic fitxer executable, els
 \est{scripts} de Python no s'interpreten en el mateix moment d'execució. Això
-significa que, per a portar un programa d'un lloc a un altre s'ha de moure tot
+significa que, per portar un programa d'un lloc a un altre, s'ha de moure tot
 el projecte, i no només l'executable.
 
 Moure més d'un fitxer afegeix complexitat en el moment d'insta\l.lació i
-configuració del projecte. Si aquest projecte fós molt gran s'assumirien les
-conseqüències, però degut que si s'ajunten tots els fitxers quedaria un únic
+configuració del projecte. Si aquest projecte fos molt gran, s'assumirien les
+conseqüències, però com que si s'ajuntessin tots els fitxers quedaria un únic
 fitxer de no més de 700 línies, s'ha considerat oportú agrupar tots els mòduls
 en un únic fitxer.
 
 Cal remarcar que els sistemes operatius basats en Linux ja tenen uns directoris
-separats dels dels executables per a posar mòduls extres \cite{InstallPython3},
+separats dels executables per posar mòduls extres \cite{InstallPython3},
 però es considera que
-s'afegeix molta dificultat en quant a insta\l.lar el programa (sobretot en un
-context d'usuari) i s'hi guanya poc.
+s'afegeix molta dificultat quant a insta\l.lar el programa (sobretot en un
+context d'usuari) i, a més, s'hi guanya poc.
 
 \section{Execució del programa en segon pla: \est{systemd}}
 
-Un cop el programa funcionava correctament amb la línia de comandes és el moment
-de fer-lo funcionar en un segon pla. Tal i com s'ha detallat a l'apartat
+Un cop el programa funciona correctament amb la línia d'ordres, és el moment
+de fer-lo funcionar en un segon pla. Tal com s'ha detallat en l'apartat
 \ref{subsec:systemd}, hi ha dos tipus de serveis que es poden crear, els dos
-amb propòsits diferents. Per a oferir més possibilitats a l'usuari i, sobretot,
-coneixer millor les diferències entre aquests dos tipus, s'ha decidit crear
-un servei per usuari i un servei per al sistema.
+amb propòsits diferents. Per oferir més possibilitats a l'usuari i, sobretot,
+conèixer millor les diferències entre aquests dos tipus, s'ha decidit crear
+un servei per a l'usuari i un servei per al sistema.
 
 \subsection{Servei d'usuari}
 
-El procediment per a crear un servei de Linux a partir d'un programa de Python
-no és un camí senzill, i s'ha optat per a seguir un tutorial molt ben cuidat i
+El procediment per crear un servei de Linux a partir d'un programa de Python
+no és un camí senzill, i s'ha optat per seguir un tutorial molt ben cuidat i
 detallat \cite{PythonSystemdTutorial}. Es recomana fortament utilitzar aquest
 tutorial si es vol crear un servei per Python.
 
@@ -313,82 +312,82 @@ Tanmateix, hi ha un parell de coses que s'han acabat fent diferent en referènci
 al servei d'usuari. La intenció de crear un servei d'usuari és permetre que els
 usuaris no administradors puguin utilitzar aquest programa encara que no estigui
 insta\l.lat. Com que totes les dependències no insta\l.lades es poden baixar
-sense permisos d'administrador amb la comanda \ord|pip3| això esdevé una tasca
+sense permisos d'administrador amb la comanda \ord|pip3|, això esdevé una tasca
 molt senzilla.
 
-Només s'ha canviat el lloc on estarà l'executable, a \fitx{~/.local/bin} i el
+Només s'ha canviat el lloc on estarà l'executable, a \fitx{~/.local/bin}, i el
 fitxer de configuracions, a \fitx{~/.config/gyroscreen}. La resta es mantindrà
-tot igual. Els fitxers de servei utilitzen una notació específica per a
+tot igual. Els fitxers de servei utilitzen una notació específica per
 definir variables per al temps d'execució. Aquesta documentació es pot consultar
 a \cite{mansystemd}.
 
 També s'ha fet que el programa només informi a \est{systemd} que s'ha carregat
 correctament el servei si aquest s'executa amb l'argument \ord|--daemon| a la
-línia de comandes. Així es manté la funcionalitat del programa en entorns fora
-de serveis.
+línia d'ordres. Així es manté la funcionalitat del programa en entorns fora
+de servei.
 
 \subsection{Servei de sistema}
 \label{subsec:systemd_system}
 
 Si es pretén insta\l.lar el programa per a tots els usuaris només cal seguir
 els darrers passos del tutorial citat en l'apartat anterior. S'ha de moure de
-lloc l'executable (a \fitx{/usr/bin}), i el servei (al lloc on indica el
+lloc l'executable (a \fitx{/usr/bin}) i el servei (al lloc on indica el
 tutorial). El fitxer de configuracions també es pot moure a \fitx{/etc} en funció
 de si es vol que les configuracions siguin idèntiques per a tots els usuaris o
 puguin canviar entre usuaris.
 
-Tanmateix, la dificultat més gran per a utilitzar el programa com un servei de
-sistema és que no hi ha les variables d'entorn de la sessió, i en conseqüència
-\ord|xrandr| no funciona. S'ha explicat quines variables són i la importància
-que tenen en l'apartat \ref{subsec:xrandr}.
+Tanmateix, la dificultat més gran per utilitzar el programa com un servei de
+sistema és que no hi ha les variables d'entorn de la sessió i, en conseqüència,
+\ord|xrandr| no funciona. en l'apartat \ref{subsec:xrandr} s'ha explicat quines
+variables són i la importància que tenen.
 
 Així doncs, toca modificar considerablement la part de les comandes del
-projecte \est{PyRandr}, tal i com s'ha mencionat a l'apartat \ref{subsec:pyrandr}.
-El procediment que s'implementarà per a buscar les variables d'entorn encertades
-no és molt professional, però completament funcional: s'anirà provant per diferents
-opcions de \verb|$DISPLAY| (concretament \verb|:0| i \verb|:1|) i es cercarà
+projecte \est{PyRandr}, tal com s'ha mencionat en l'apartat \ref{subsec:pyrandr}.
+El procediment que s'implementarà per buscar les variables d'entorn encertades
+no és gaire professional, però completament funcional: s'anirà provant per diferents
+opcions de \verb|$DISPLAY| (concretament \verb|:0| i \verb|:1|) i se cercarà
 en diferents directoris predefinits el fitxer \fitx{.Xauthority}, com pot ser
 en els directoris de cada usuari o a \fitx{/run}.
 
 \input{misc/xrandr_program_schema.tex}
 
 A la Figura \ref{fig:xrandr-program-schema} es pot veure l'arbre de decisions
-per a obtenir el context necessari per a \ord|xrandr|. El primer cop que es
-vulgui executar l'ordre s'executarà el codi equivalent a aquest diagrama.
-Un cop trobat el context necessari per a obtenir l'entorn de l'usuari es guardarà
-en una variable per a no haver de repetir cada cop el procés. Si mai en algun
-moment donat salta un error durant l'execució de \ord|xrandr| amb el context
-guardat es tornarà a executar el codi anterior per a determinar de nou el
-context necessari.
+per obtenir el context necessari per a \ord|xrandr|. El primer cop que es
+vulgui executar l'ordre, s'executarà el codi equivalent a aquest diagrama.
+Un cop trobat el context necessari per obtenir l'entorn de l'usuari, es guardarà
+en una variable per no haver de repetir cada cop el mateix procés. Si mai, en algun
+moment donat, salta un error durant l'execució de \ord|xrandr| amb el context
+guardat, es tornarà a executar el codi anterior per determinar una altra vegada
+el context necessari.
 
 Com es pot intuir a la figura, és possible que aquest esquema de decisió no
 s'acabi mai, és a dir, que es quedi en un bucle infinit. Això està fet a
-propòsit: quan no es troba el context de cap manera sol ser perquè l'usuari ha
+propòsit: quan no es troba el context de cap manera, sol ser perquè l'usuari ha
 engegat l'ordinador però encara no ha iniciat la sessió. En aquests casos s'ha
 decidit esperar mig minut i tornar a fer les comprovacions per veure si ja
-s'ha inicialitzat un entorn gràfic. En el cas d'aquest programa no serviria de
-res aturar-se amb un codi d'error, ja que al ser un servei el \est{kernel}
+s'ha inicialitzat un entorn gràfic. En el cas d'aquest programa, no serviria de
+res aturar-se amb un codi d'error ja que, en ser un servei, el \est{kernel}
 tornaria a executar el programa just quan s'aturés.
 
 Així doncs, és possible que no es pugui recuperar el context de \est{xrandr}
 després de tots aquests intents. Tanmateix, s'ha provat el
 sistema amb diferents versions de Debian i Ubuntu i en totes ha acabat funcionant.
-En un cas extrem, cal recordar que sempre es pot insta\l.lar l'aplicació per a
-que funcioni en el context de la sessió, mitjançant un servei d'usuari.
+En un cas extrem, cal recordar que sempre es pot insta\l.lar l'aplicació perquè
+funcioni en el context de la sessió, mitjançant un servei d'usuari.
 
 \section{Insta\l.lació del programa}
 
-Tal i com s'ha vist en l'apartat anterior, el servei de sistema necessita guardar
-els fitxer de configuració i els fitxers executables en llocs molt específics.
+Tal com s'ha vist en l'apartat anterior, el servei de sistema necessita guardar
+els fitxers de configuració i els fitxers executables en llocs molt específics.
 Insta\l.lar el programa a mà, quan es tracta de fer-ho per a tot el sistema,
-pot ser fins i tot una tasca perillosa. Per aquest motiu s'ha decidit crear un
-paquet de Debian per a facilitar el procés d'insta\l.lació.
+pot ser fins i tot una tasca perillosa. Per aquest motiu, s'ha decidit crear un
+paquet de Debian per facilitar el procés d'insta\l.lació.
 
 \subsection{Creació del paquet de Debian}
 
 El més important durant la creació d'un paquet és saber quines dependències
 necessita el programa i quina és la versió més baixa amb la que poden funcionar.
-Per sort, s'ha desenvolupat el programa en un entorn de Ubuntu 18.04, que fa
+Per sort, s'ha desenvolupat el programa en un entorn d'Ubuntu 18.04, que fa
 pocs mesos que ha deixat de rebre suport gratuït \cite{UbuntuSupport}. Per tant,
 aquest sistema
 operatiu es considerarà com el més antic que suporta aquesta aplicació. En altres
@@ -396,57 +395,59 @@ paraules, les versions de les dependències insta\l.lades en aquest sistema sera
 les que es posaran en el llistat de dependències del paquet.
 
 A la Figura \ref{fig:software-dependency-graph} es pot veure el diagrama de
-dependències de l'aplicació creada. Com es pot veure, hi ha dependències que
-son directes o de primer nivell, però aquests programes amb els que depèn també
-tenen al seu torn altres dependències. Tot plegat acaba amb un arbre de
-dependències que, per a evitar fer molt gran l'esquema, s'ha retallat a només
-les dependències més properes. Al paquet de Debian només s'hi haurà d'incloure
-les de primer nivell (ja que aquestes ja inclouran al seu torn la resta).
+dependències de l'aplicació creada. Tal com es pot veure, hi ha dependències que
+són directes o de primer nivell, però aquests programes també tenen altres
+dependències. Tot plegat acaba amb un arbre de dependències que, per evitar fer
+molt gran l'esquema, s'ha retallat a només les dependències més properes. Al
+paquet de Debian només s'hi haurà d'incloure les de primer nivell (ja que aquestes
+ja inclouran al seu torn la resta).
 
 \input{misc/software_dependency_graph.tex}
 
 Segurament que, després de consultar l'arbre de dependències de la Figura
-\ref{fig:software-dependency-graph}, un es preguntarà perquè la dependència
-de \texttt{python3} està de color gris en els dos paquets de Python. El motiu
-d'aquest color rau en que aquesta dependència ja ha estat satisfeta durant el
-primer nivell, pel que no s'ha de tornar a insta\l.lar. Tanmateix, convé seguir
-tenint-la present, ja que si mai es desinsta\l.la el programa principal però es
-vol mantenir \texttt{python3-libiio} no es podrà desinsta\l.lar \texttt{python3}.
+\ref{fig:software-dependency-graph}, un es preguntarà per què la dependència
+de \texttt{python3} és de color gris en els dos paquets de Python. El motiu
+d'aquest color rau en el fet que aquesta dependència ja ha estat satisfeta durant
+el primer nivell i, per tant, no s'ha de tornar a insta\l.lar. Tanmateix, convé
+seguir tenint-la present, ja que si mai es desinsta\l.la el programa principal
+però es vol mantenir \texttt{python3-libiio}, no es podrà desinsta\l.lar
+\texttt{python3}.
 
 També és essencial saber determinar per a quines arquitectures és compatible el
 programa creat. Per exemple, si s'hagués implementat el projecte en C, s'hauria
-de compilar per a cada arquitectura separadament, i crear un paquet per a cada
+de compilar per a cada arquitectura separadament i crear un paquet per a cada
 una d'elles. En el cas de Python, en canvi, és compatible per a totes les
-plataformes. Per això es posarà \texttt{all} enlloc de una arquitectura específica,
+plataformes. Per això es posarà \texttt{all} en lloc d'una arquitectura específica,
 com podria ser \texttt{amd64}.
 
-La següent tasca més important és saber què s'ha d'insta\l.lar i a on. Per sort,
-Debian facilita molt aquesta tasca, i per programes senzills gairebé que és
+La següent tasca més important és saber què i on s'ha d'insta\l.lar. Per sort,
+Debian facilita molt aquesta tasca i, per programes senzills, gairebé és
 bufar i fer ampolles: només cal indicar a on es copia cada fitxer i l'empaquetador
-fa la resta. Per exemple, si es copia un servei de sistema s'encarrega d'arrancar
-el servei, si es copia un fitxer de configuració es mira que no s'estigui
-sobreescrivint una versió anterior, o si es copia una pàgina de manual s'encarrega
-de recarregar la base de dades dels manuals.
+s'encarrega de fer la resta. Per exemple, si es copia un servei de sistema,
+arranca el servei; si es copia un fitxer de configuració, es mira
+que no s'estigui sobreescrivint una versió anterior; si es copia una pàgina de
+manual, recarrega la base de dades dels manuals.
 
 La resta de tasques, en canvi, són més aviat diplomàtiques: indicar la llicència
-amb la que es distribueix el programa, l'autor, canvis que s'ha fet des d'una
-versió anterior i organitzar-ho tot en carpetes, tal i com ho vol Debian.
-Es recomana veure el tutorial de \cite{DebCreation} si es vol replicar aquests passos.
+amb la qual es distribueix el programa, l'autor, canvis que s'han fet des d'una
+versió anterior i organitzar-ho tot en carpetes, tal com ho vol Debian.
+Es recomana veure el tutorial de \cite{DebCreation} si es volen replicar aquests
+passos.
 
-Finalment, s'ha creat un \est{shell script} per a poder crear fàcilment el
-paquet. Tot i que el nombre de comandes a recordar son poques, és una tasca que
-no es fa sovint, i es prefereix deixar-ho apuntat i ben preparat en algun lloc.
+Finalment, s'ha creat un \est{shell script} per poder crear fàcilment el
+paquet. Tot i que el nombre de comandes a recordar són poques, és una tasca que
+no es fa sovint i es prefereix deixar-ho apuntat i ben preparat en algun lloc.
 Es pot consultar en el repositori del treball aquest \est{script}.
 
 \subsection{Creació d'una pàgina de manual}
 
-Quan el paquet de Debian ja va funcionar correctament s'hagués pogut considerar
-la part de programari per Linux completa. Tanmateix, mentre es creava el paquet,
+Quan el paquet de Debian ja va funcionar correctament, s'hagués pogut considerar
+la part de programari completa per a Linux. Tanmateix, mentre es creava el paquet,
 l'eina de creació mostrava una alerta indicant que el programa no tenia cap
 pàgina de manual. Això va portar al desig personal d'aprendre com es creaven
 i com s'afegien en un paquet de Debian.
 
-Per això es va cercar en diferents llocs fins que es va trobar l'eina
+És per això que es va cercar en diferents llocs fins que es va trobar l'eina
 \ord|pandoc| \cite{PandocTutorial},
 que converteix un fitxer en \est{Markdown} en una pàgina de manual amb el
 format que aquesta necessita. El format de les pàgines de manual es considera
@@ -454,8 +455,8 @@ editable a mà, però la corba d'aprenentatge és prou alta i, segons moltes fon
 no val la pena per a pàgines petites o projectes poc ambiciosos \cite{Manpage}.
 
 Un cop creada la pàgina de manual, s'ha d'afegir en les comandes d'insta\l.lació
-que es copiï al directori pertinent aquesta pàgina, i un cop insta\l.lat el
-paquet de nou, només cal executar \ord|man gyroscreen| per a consultar el
+que es copiï al directori pertinent aquesta pàgina, i un cop reinsta\l.lat el
+paquet, només cal executar \ord|man gyroscreen| per consultar el
 manual d'ús del programa, en anglès.
 
 \subsection{Possible ampliació: creació d'un repositori APT}
@@ -463,18 +464,18 @@ manual d'ús del programa, en anglès.
 Insta\l.lar el paquet generat es pot fer utilitzant l'eina \ord|dpkg| sense cap
 problema. L'únic inconvenient d'aquesta eina és que no insta\l.la automàticament
 les dependències, però en el \acro{readme} del repositori es detallen tots els
-passos per a seguir en aquests casos, que ve a ser la solució proposada a
+passos a seguir en aquests casos, que ve a ser la solució proposada a
 \cite{dpkgHelp}.
 
-Si es volgués distribuir més fàcilment el programa el pas a seguir seria
+Si es volgués distribuir més fàcilment el programa, el pas a seguir seria
 penjar el paquet en algun repositori \acro{apt}. Això implicaria tenir un servidor
-web estàtic on poder descarregar els programes. Els usuaris haurien de, en primer
-lloc, afegir la clau pública amb la que es signa el paquet al seu ordinador, i
-llavors podrien afegir el repositori \acro{apt} en el seu llistat de repositoris
+web estàtic on poder descarregar els programes. Els usuaris hi haurien de, en primer
+lloc, afegir la clau pública amb què se signa el paquet al seu ordinador i,
+llavors, podrien afegir el repositori \acro{apt} en el seu llistat de repositoris
 on buscar programes. Finalment, es podria descarregar i insta\l.lar el programa
 utilitzant l'ordre \ord|apt| o \ord|apt-get|.
 
-Tanmateix, el que sobre paper sembla molt senzill implica la configuració d'un
-servidor, domini, i haver de signar amb una clau privada els paquets que es
-generi. Per falta de temps s'ha decidit deixar aquesta tasca com a pendent, i
-recuperar-la en un futur si el projecte té prou de suport.
+Tanmateix, el que sobre paper sembla molt senzill, implica la configuració d'un
+servidor, d'un domini, i haver de signar amb una clau privada els paquets que es
+generin. Per falta de temps, s'ha decidit deixar aquesta tasca com a pendent i
+recuperar-la en un futur si el projecte té prou suport.
